@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#08110b">
+    <meta name="description" content="Pubcrawl fodboldquiz – en fodboldquiz til vennerne på farten.">
+    <title>Pubcrawl fodboldquiz</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="screen screen--start" id="start-screen" aria-labelledby="start-title">
+        <div class="masthead">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span>
+          </div>
+          <span class="match-badge"><span aria-hidden="true"></span> Quiz night</span>
+        </div>
+
+        <p class="eyebrow">Kampen starter her</p>
+        <h1 id="start-title">Pubcrawl<br><span>fodboldquiz</span></h1>
+        <p class="subtitle">Saml holdet, find kampformen og gør hvert pubstop til en udekamp.</p>
+
+        <div class="entry-card">
+          <div class="entry-card__heading" aria-hidden="true">
+            <span>Spillerkort</span>
+            <span>Matchday 01</span>
+          </div>
+          <form id="player-form" novalidate>
+            <label for="player-name">Dit spillernavn</label>
+            <input
+              id="player-name"
+              name="playerName"
+              type="text"
+              maxlength="30"
+              autocomplete="nickname"
+              enterkeyhint="go"
+              placeholder="Skriv dit navn"
+              aria-describedby="name-error"
+            >
+            <p class="error-message" id="name-error" role="alert" aria-live="polite"></p>
+            <button class="button button--primary" type="submit">Gå til lobby <span aria-hidden="true">→</span></button>
+          </form>
+        </div>
+      </section>
+
+      <section class="screen screen--lobby" id="lobby-screen" aria-labelledby="lobby-title" hidden>
+        <button class="back-button" id="back-button" type="button">
+          <span aria-hidden="true">←</span> Tilbage
+        </button>
+
+        <p class="eyebrow">Omklædningsrummet</p>
+        <h2 id="lobby-title">Lobby</h2>
+        <p class="welcome" id="welcome-message"></p>
+
+        <div class="player-panel">
+          <div class="panel-accent" aria-hidden="true"></div>
+          <div class="panel-heading">
+            <h3>Spillere i lobbyen</h3>
+            <span class="player-count" aria-label="1 spiller">1/1</span>
+          </div>
+          <div class="player-row">
+            <span class="player-avatar" id="player-initial" aria-hidden="true"></span>
+            <span class="player-name" id="lobby-player-name"></span>
+            <span class="status-dot"><span aria-hidden="true"></span> Klar</span>
+          </div>
+        </div>
+
+        <button class="button button--secondary" id="create-game-button" type="button">
+          Opret spil og invitér venner
+        </button>
+        <p class="coming-soon" id="coming-soon-message" aria-live="polite">Denne funktion kommer i en senere version.</p>
+      </section>
+    </main>
+
+    <footer>90 minutter. Flere stop. Én vinder.</footer>
+    <script src="js/app.js"></script>
+  </body>
+</html>
