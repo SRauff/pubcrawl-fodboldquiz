@@ -74,9 +74,136 @@
         <button class="button button--secondary" id="create-game-button" type="button">
           Opret spil og invitér venner
         </button>
-        <p class="coming-soon" id="coming-soon-message" aria-live="polite">Denne funktion kommer i en senere version.</p>
+        <p class="connection-message" id="lobby-action-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="screen" id="format-screen" aria-labelledby="format-title" hidden>
+        <button class="back-button" id="format-back-button" type="button">
+          <span aria-hidden="true">←</span> Til lobby
+        </button>
+
+        <p class="eyebrow">Næste kamp</p>
+        <h2 class="screen-title" id="format-title">Vælg quizformat</h2>
+        <p class="screen-intro">Hvilken disciplin skal vennerne dyste i?</p>
+
+        <div class="choice-grid">
+          <button class="choice-card" type="button" data-format="classic">
+            <span class="choice-card__number" aria-hidden="true">01</span>
+            <span class="choice-card__content">
+              <strong>Klassisk quiz</strong>
+              <span>Spørgsmål med fire svarmuligheder</span>
+            </span>
+            <span class="choice-card__arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="choice-card" type="button" data-format="whoAmI">
+            <span class="choice-card__number" aria-hidden="true">02</span>
+            <span class="choice-card__content">
+              <strong>Gæt hvem jeg er</strong>
+              <span>Gæt spilleren ud fra ledetråde</span>
+            </span>
+            <span class="choice-card__arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="screen" id="settings-screen" aria-labelledby="settings-title" hidden>
+        <button class="back-button" id="settings-back-button" type="button">
+          <span aria-hidden="true">←</span> Tilbage
+        </button>
+
+        <p class="eyebrow">Kampformat</p>
+        <h2 class="screen-title" id="settings-title">Spilindstillinger</h2>
+        <p class="screen-intro" id="settings-format-description"></p>
+
+        <div class="setting-card">
+          <label id="game-count-label" for="game-count"></label>
+          <select id="game-count" aria-describedby="game-count-help"></select>
+          <p class="field-help" id="game-count-help"></p>
+        </div>
+
+        <button class="button button--primary" id="continue-to-invites-button" type="button">
+          <span>Vælg spillere</span><span aria-hidden="true">→</span>
+        </button>
+      </section>
+
+      <section class="screen" id="invite-screen" aria-labelledby="invite-title" hidden>
+        <button class="back-button" id="invite-back-button" type="button">
+          <span aria-hidden="true">←</span> Tilbage
+        </button>
+
+        <p class="eyebrow">Saml holdet</p>
+        <h2 class="screen-title" id="invite-title">Invitér spillere</h2>
+        <p class="screen-intro">Vælg mindst én spiller fra den aktuelle lobby.</p>
+
+        <div class="player-panel invite-panel">
+          <div class="panel-accent" aria-hidden="true"></div>
+          <div class="panel-heading">
+            <h3>Online spillere</h3>
+            <span class="player-count" id="invite-player-count" aria-label="0 spillere">0</span>
+          </div>
+          <div class="invite-list" id="invite-player-list" aria-live="polite"></div>
+        </div>
+
+        <p class="error-message error-message--action" id="invite-error" role="alert" aria-live="polite"></p>
+        <button class="button button--primary" id="send-invitations-button" type="button">
+          <span>Send invitationer</span><span aria-hidden="true">→</span>
+        </button>
+      </section>
+
+      <section class="screen" id="pregame-screen" aria-labelledby="pregame-title" hidden>
+        <p class="eyebrow">Holdopstilling</p>
+        <h2 class="screen-title" id="pregame-title">Klar til kamp</h2>
+        <div class="game-summary" id="pregame-summary"></div>
+
+        <div class="player-panel">
+          <div class="panel-accent" aria-hidden="true"></div>
+          <div class="panel-heading">
+            <h3>Deltagere</h3>
+            <span class="player-count" id="pregame-player-count">0</span>
+          </div>
+          <div class="game-player-list" id="pregame-player-list" aria-live="polite"></div>
+        </div>
+
+        <p class="connection-message" id="pregame-message" role="status" aria-live="polite"></p>
+        <div class="host-actions" id="host-actions" hidden>
+          <button class="button button--primary" id="start-game-button" type="button" disabled>
+            <span>Start spil</span><span aria-hidden="true">→</span>
+          </button>
+          <button class="text-button text-button--danger" id="cancel-game-button" type="button">Annuller spil</button>
+        </div>
+        <p class="waiting-note" id="guest-waiting-message" hidden>Venter på, at værten starter spillet…</p>
+      </section>
+
+      <section class="screen" id="ready-screen" aria-labelledby="ready-title" hidden>
+        <div class="ready-mark" aria-hidden="true">✓</div>
+        <p class="eyebrow">Holdene er klar</p>
+        <h2 class="screen-title" id="ready-title">Spillet er klar!</h2>
+        <p class="screen-intro">Quizzen bliver implementeret i næste milepæl.</p>
+        <div class="game-summary" id="ready-summary"></div>
+        <div class="player-panel">
+          <div class="panel-accent" aria-hidden="true"></div>
+          <div class="panel-heading">
+            <h3>Deltagere</h3>
+          </div>
+          <div class="game-player-list" id="ready-player-list"></div>
+        </div>
       </section>
     </main>
+
+    <div class="modal-backdrop" id="invitation-modal" hidden>
+      <section class="invitation-card" role="dialog" aria-modal="true" aria-labelledby="invitation-title">
+        <p class="eyebrow">Du er inviteret</p>
+        <h2 class="modal-title" id="invitation-title"></h2>
+        <div class="invitation-details" id="invitation-details"></div>
+        <p class="error-message error-message--action" id="invitation-error" role="alert" aria-live="polite"></p>
+        <div class="invitation-actions">
+          <button class="button button--secondary" id="decline-invitation-button" type="button">Afvis</button>
+          <button class="button button--primary" id="accept-invitation-button" type="button">
+            <span>Accepter</span><span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </section>
+    </div>
 
     <footer>90 minutter. Flere stop. Én vinder.</footer>
     <script type="module" src="js/app.js"></script>

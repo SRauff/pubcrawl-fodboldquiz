@@ -41,7 +41,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -293,7 +294,11 @@ input[aria-invalid="true"] {
 }
 
 .button:focus-visible,
-.back-button:focus-visible {
+.back-button:focus-visible,
+.choice-card:focus-visible,
+.invite-option:focus-within,
+.text-button:focus-visible,
+select:focus-visible {
   outline: 3px solid rgba(230, 173, 69, 0.56);
   outline-offset: 3px;
 }
@@ -458,6 +463,331 @@ input[aria-invalid="true"] {
   color: var(--muted);
   font-size: 0.8rem;
   text-align: center;
+}
+
+.screen-title {
+  max-width: 10ch;
+  font-size: clamp(2.8rem, 13vw, 4.25rem);
+  line-height: 0.98;
+}
+
+.screen-intro {
+  margin: 1rem 0 2rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.choice-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.choice-card {
+  width: 100%;
+  min-height: 6.5rem;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(230, 173, 69, 0.055), transparent 45%),
+    var(--surface);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.16);
+  transition: border-color 160ms ease, transform 130ms ease, background-color 160ms ease;
+}
+
+.choice-card:hover {
+  border-color: rgba(230, 173, 69, 0.55);
+}
+
+.choice-card:active {
+  transform: translateY(1px);
+}
+
+.choice-card__number {
+  color: var(--gold);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.choice-card__content {
+  min-width: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.choice-card__content strong {
+  font-size: 1.05rem;
+}
+
+.choice-card__content span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.choice-card__arrow {
+  color: var(--gold);
+  font-size: 1.25rem;
+}
+
+.setting-card {
+  margin-bottom: 1rem;
+  padding: 1.1rem;
+  display: grid;
+  border: 1px solid var(--border);
+  border-top-color: rgba(230, 173, 69, 0.52);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+select {
+  width: 100%;
+  min-height: 3.6rem;
+  padding: 0.85rem 2.6rem 0.85rem 1rem;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  background: #0a120d;
+}
+
+.field-help {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.invite-panel {
+  margin-bottom: 0;
+}
+
+.invite-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.invite-option {
+  min-height: 3.65rem;
+  padding: 0.6rem 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+}
+
+.invite-option:has(input:checked) {
+  border-color: rgba(230, 173, 69, 0.45);
+  background: rgba(230, 173, 69, 0.07);
+}
+
+.invite-option input {
+  width: 1.25rem;
+  height: 1.25rem;
+  min-height: auto;
+  padding: 0;
+  flex: 0 0 auto;
+  accent-color: var(--gold);
+}
+
+.invite-option__name {
+  min-width: 0;
+  flex: 1;
+  font-weight: 750;
+}
+
+.invite-option__status {
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.error-message--action {
+  min-height: 1.3rem;
+  margin: 0.65rem 0;
+  text-align: center;
+}
+
+.game-summary {
+  margin: 1.4rem 0 1rem;
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(230, 173, 69, 0.25);
+  border-radius: 10px;
+  background: rgba(230, 173, 69, 0.055);
+}
+
+.game-summary strong,
+.game-summary span {
+  display: block;
+}
+
+.game-summary strong {
+  margin-bottom: 0.2rem;
+  font-size: 0.95rem;
+}
+
+.game-summary span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.game-summary__badge {
+  flex: 0 0 auto;
+  color: var(--gold) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.game-player-list {
+  display: grid;
+}
+
+.game-player-row {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.game-player-row + .game-player-row {
+  border-top: 1px solid var(--border);
+}
+
+.game-player-row__name {
+  min-width: 0;
+  flex: 1;
+  font-weight: 750;
+}
+
+.game-player-row__status {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.game-player-row__status--accepted {
+  color: var(--green);
+}
+
+.game-player-row__status--declined {
+  color: var(--danger);
+}
+
+.host-actions {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.host-actions[hidden] {
+  display: none;
+}
+
+.text-button {
+  min-height: 3rem;
+  padding: 0.65rem;
+  border: 0;
+  background: transparent;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.text-button--danger {
+  color: var(--danger);
+}
+
+.waiting-note {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.ready-mark {
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-bottom: 2rem;
+  display: grid;
+  place-items: center;
+  color: var(--gold-ink);
+  border-radius: 50%;
+  background: var(--gold);
+  font-size: 1.4rem;
+  font-weight: 950;
+  box-shadow: 0 0 0 5px rgba(230, 173, 69, 0.1);
+}
+
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+.modal-backdrop {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  padding: 1.25rem;
+  display: grid;
+  place-items: center;
+  background: rgba(3, 8, 5, 0.84);
+  backdrop-filter: blur(5px);
+}
+
+.invitation-card {
+  width: min(100%, 27rem);
+  padding: 1.25rem;
+  border: 1px solid rgba(230, 173, 69, 0.48);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(230, 173, 69, 0.08), transparent 42%),
+    var(--surface);
+  box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, 0.5);
+}
+
+.modal-title {
+  font-size: clamp(2rem, 10vw, 3rem);
+  line-height: 1;
+}
+
+.invitation-details {
+  margin: 1.25rem 0 0.6rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.invitation-details strong,
+.invitation-details span {
+  display: block;
+}
+
+.invitation-details span {
+  margin-top: 0.3rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.invitation-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 0.7rem;
 }
 
 footer {

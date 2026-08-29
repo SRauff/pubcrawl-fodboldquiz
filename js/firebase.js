@@ -8,10 +8,12 @@ import {
   getDatabase,
   onDisconnect,
   onValue,
+  push,
   ref,
   remove,
   serverTimestamp,
   set,
+  update,
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -102,6 +104,7 @@ export function joinLobbyPresence(user, playerName, onError) {
   const connectedRef = ref(database, ".info/connected");
 
   let activeDisconnectOperation;
+  let presenceRegistration = Promise.resolve();
   let hasLeftLobby = false;
   let hasJoinedLobby = false;
 
@@ -151,6 +154,14 @@ export function joinLobbyPresence(user, playerName, onError) {
               joinedAt: serverTimestamp(),
             });
 
+            // Hvis spilleren trykkede "Tilbage", mens set() stadig var i gang,
+            // må den sene skrivning ikke oprette lobby-posten igen.
+            if (hasLeftLobby) {
+              await remove(playerRef);
+              await disconnectOperation.cancel();
+              return;
+            }
+
             if (!hasJoinedLobby) {
               hasJoinedLobby = true;
               window.clearTimeout(connectionTimeout);
@@ -159,6 +170,10 @@ export function joinLobbyPresence(user, playerName, onError) {
                 leave: async () => {
                   hasLeftLobby = true;
                   stopConnectionListener();
+
+                  // Vent på en eventuel igangværende reconnect-registrering,
+                  // før den afsluttende oprydning udføres.
+                  await presenceRegistration.catch(() => {});
 
                   // Fjern først online-posten. Hvis det fejler, bevares
                   // onDisconnect som sikkerhedsnet.
@@ -172,9 +187,140 @@ export function joinLobbyPresence(user, playerName, onError) {
           }
         };
 
-        registerPresence();
+        presenceRegistration = registerPresence();
       },
       handlePresenceError,
     );
   });
+}
+
+export async function createGame(user, hostName, gameDraft, invitedPlayers) {
+  const newGameRef = push(ref(database, "games"));
+  const gameId = newGameRef.key;
+  const createdAt = serverTimestamp();
+  const invitedPlayersData = {};
+
+  invitedPlayers.forEach((player) => {
+    invitedPlayersData[player.uid] = {
+      name: player.name,
+      status: "pending",
+    };
+  });
+
+  const game = {
+    hostUid: user.uid,
+    hostName,
+    format: gameDraft.format,
+    status: "waiting",
+    createdAt,
+    invitedPlayers: invitedPlayersData,
+  };
+
+  if (gameDraft.format === "classic") {
+    game.questionCount = gameDraft.count;
+  } else {
+    game.roundCount = gameDraft.count;
+  }
+
+  const updates = {
+    [`games/${gameId}`]: game,
+  };
+
+  invitedPlayers.forEach((player) => {
+    updates[`invitations/${player.uid}/${gameId}`] = {
+      gameId,
+      hostUid: user.uid,
+      hostName,
+      format: gameDraft.format,
+      createdAt,
+      ...(gameDraft.format === "classic"
+        ? { questionCount: gameDraft.count }
+        : { roundCount: gameDraft.count }),
+    };
+  });
+
+  await update(ref(database), updates);
+
+  return { gameId };
+}
+
+export function subscribeToInvitations(userUid, onInvitations, onError) {
+  const invitationsRef = ref(database, `invitations/${userUid}`);
+
+  return onValue(
+    invitationsRef,
+    (snapshot) => {
+      const invitations = [];
+
+      snapshot.forEach((invitationSnapshot) => {
+        const invitation = invitationSnapshot.val();
+
+        if (invitation?.gameId && invitation?.hostName) {
+          invitations.push({
+            ...invitation,
+            gameId: invitationSnapshot.key,
+          });
+        }
+      });
+
+      invitations.sort((firstInvitation, secondInvitation) => {
+        return (Number(firstInvitation.createdAt) || 0) - (Number(secondInvitation.createdAt) || 0);
+      });
+
+      onInvitations(invitations);
+    },
+    onError,
+  );
+}
+
+export function respondToInvitation(userUid, gameId, response) {
+  const updates = {
+    [`games/${gameId}/invitedPlayers/${userUid}/status`]: response,
+    [`invitations/${userUid}/${gameId}`]: null,
+  };
+
+  return update(ref(database), updates);
+}
+
+export function subscribeToGame(gameId, onGame, onError) {
+  const gameRef = ref(database, `games/${gameId}`);
+
+  return onValue(
+    gameRef,
+    (snapshot) => {
+      onGame(snapshot.exists() ? { id: gameId, ...snapshot.val() } : null);
+    },
+    onError,
+  );
+}
+
+export function startGame(gameId, game) {
+  const updates = {
+    [`games/${gameId}/status`]: "started",
+  };
+
+  Object.entries(game.invitedPlayers || {}).forEach(([uid, player]) => {
+    if (player.status === "pending") {
+      updates[`invitations/${uid}/${gameId}`] = null;
+    }
+  });
+
+  return update(ref(database), updates);
+}
+
+export function cancelGame(gameId, game) {
+  const updates = {
+    [`games/${gameId}`]: null,
+  };
+
+  Object.entries(game.invitedPlayers || {}).forEach(([uid, player]) => {
+    // Accepterede og afviste invitationer er allerede fjernet, når spilleren
+    // svarer. En null-skrivning til en sti, der ikke findes, afvises af de
+    // afgrænsede Security Rules og ville annullere hele multi-path-opdateringen.
+    if (player.status === "pending") {
+      updates[`invitations/${uid}/${gameId}`] = null;
+    }
+  });
+
+  return update(ref(database), updates);
 }
