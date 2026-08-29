@@ -40,7 +40,11 @@
               aria-describedby="name-error"
             >
             <p class="error-message" id="name-error" role="alert" aria-live="polite"></p>
-            <button class="button button--primary" type="submit">Gå til lobby <span aria-hidden="true">→</span></button>
+            <button class="button button--primary" id="lobby-button" type="submit">
+              <span id="lobby-button-label">Gå til lobby</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <p class="connection-message" id="start-connection-message" role="status" aria-live="polite"></p>
           </form>
         </div>
       </section>
@@ -58,14 +62,14 @@
           <div class="panel-accent" aria-hidden="true"></div>
           <div class="panel-heading">
             <h3>Spillere i lobbyen</h3>
-            <span class="player-count" aria-label="1 spiller">1/1</span>
+            <span class="player-count" id="player-count" aria-label="0 spillere">0</span>
           </div>
-          <div class="player-row">
-            <span class="player-avatar" id="player-initial" aria-hidden="true"></span>
-            <span class="player-name" id="lobby-player-name"></span>
-            <span class="status-dot"><span aria-hidden="true"></span> Klar</span>
+          <div class="players-list" id="players-list" aria-live="polite">
+            <p class="players-loading">Henter spillere…</p>
           </div>
         </div>
+
+        <p class="connection-message connection-message--lobby" id="lobby-connection-message" role="status" aria-live="polite"></p>
 
         <button class="button button--secondary" id="create-game-button" type="button">
           Opret spil og invitér venner
@@ -75,6 +79,6 @@
     </main>
 
     <footer>90 minutter. Flere stop. Én vinder.</footer>
-    <script src="js/app.js"></script>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
