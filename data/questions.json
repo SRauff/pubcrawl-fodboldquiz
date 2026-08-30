@@ -1,92 +1,1822 @@
 [
   {
-    "id": "TEST-001",
+    "id": "PL-E-001",
     "league": "Premier League",
     "difficulty": "easy",
-    "season": "2015/16",
-    "question": "Hvilken klub vandt Premier League i sæsonen 2015/16?",
-    "options": ["Arsenal", "Chelsea", "Leicester City", "Manchester City"],
-    "correctAnswerIndex": 2
-  },
-  {
-    "id": "TEST-002",
-    "league": "Champions League",
-    "difficulty": "easy",
-    "season": "1998/99",
-    "question": "Hvilken klub vandt Champions League-finalen i 1999?",
-    "options": ["Bayern München", "Juventus", "Manchester United", "Real Madrid"],
-    "correctAnswerIndex": 2
-  },
-  {
-    "id": "TEST-003",
-    "league": "La Liga",
-    "difficulty": "medium",
-    "season": "Testdata",
-    "question": "På hvilket stadion spiller FC Barcelona traditionelt sine hjemmekampe?",
-    "options": ["Mestalla", "Camp Nou", "San Mamés", "Benito Villamarín"],
-    "correctAnswerIndex": 1
-  },
-  {
-    "id": "TEST-004",
-    "league": "Landshold",
-    "difficulty": "easy",
-    "season": "1992",
-    "question": "Hvilket land vandt EM i fodbold i 1992?",
-    "options": ["Danmark", "Tyskland", "Nederlandene", "Sverige"],
-    "correctAnswerIndex": 0
-  },
-  {
-    "id": "TEST-005",
-    "league": "Serie A",
-    "difficulty": "medium",
-    "season": "Testdata",
-    "question": "Hvilken klub spiller sine hjemmekampe på San Siro sammen med AC Milan?",
-    "options": ["Inter", "Napoli", "Roma", "Lazio"],
-    "correctAnswerIndex": 0
-  },
-  {
-    "id": "TEST-006",
-    "league": "Bundesliga",
-    "difficulty": "medium",
-    "season": "Testdata",
-    "question": "Hvilken tysk klub kaldes ofte BVB?",
-    "options": ["Bayer Leverkusen", "Borussia Dortmund", "Bayern München", "Werder Bremen"],
-    "correctAnswerIndex": 1
-  },
-  {
-    "id": "TEST-007",
-    "league": "Premier League",
-    "difficulty": "hard",
-    "season": "2003/04",
-    "question": "Hvilken klub gik ubesejret gennem Premier League-sæsonen 2003/04?",
-    "options": ["Liverpool", "Manchester United", "Chelsea", "Arsenal"],
+    "season": "2025/26",
+    "question": "Hvem vandt Premier League i 2025/26?",
+    "options": [
+      "Manchester United",
+      "Manchester City",
+      "Liverpool",
+      "Arsenal"
+    ],
     "correctAnswerIndex": 3
   },
   {
-    "id": "TEST-008",
-    "league": "Landshold",
-    "difficulty": "medium",
-    "season": "2018",
-    "question": "Hvilket land vandt VM i fodbold i 2018?",
-    "options": ["Kroatien", "Frankrig", "Belgien", "Argentina"],
+    "id": "PL-E-002",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2015/16",
+    "question": "Hvilken klub stod for den sensationelle Premier League-titel i 2015/16?",
+    "options": [
+      "Tottenham Hotspur",
+      "Manchester City",
+      "Arsenal",
+      "Leicester City"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-E-003",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2003/04",
+    "question": "Hvilken klub vandt Premier League i 2003/04 uden at tabe en ligakamp?",
+    "options": [
+      "Arsenal",
+      "Chelsea",
+      "Liverpool",
+      "Manchester United"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-E-004",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2022/23",
+    "question": "Hvem vandt Premier League Golden Boot i 2022/23?",
+    "options": [
+      "Ivan Toney",
+      "Harry Kane",
+      "Mohamed Salah",
+      "Erling Haaland"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-E-005",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2024/25",
+    "question": "Hvem vandt Premier League Golden Boot i 2024/25?",
+    "options": [
+      "Alexander Isak",
+      "Mohamed Salah",
+      "Chris Wood",
+      "Erling Haaland"
+    ],
     "correctAnswerIndex": 1
   },
   {
-    "id": "TEST-009",
-    "league": "Champions League",
-    "difficulty": "hard",
-    "season": "2004/05",
-    "question": "Hvilken klub vandt Champions League-finalen i Istanbul i 2005?",
-    "options": ["AC Milan", "Barcelona", "Liverpool", "Chelsea"],
+    "id": "PL-E-006",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "Pr. 2026",
+    "question": "Hvem er Premier Leagues all-time topscorer med 260 mål?",
+    "options": [
+      "Wayne Rooney",
+      "Mohamed Salah",
+      "Alan Shearer",
+      "Harry Kane"
+    ],
     "correctAnswerIndex": 2
   },
   {
-    "id": "TEST-010",
-    "league": "Superligaen",
-    "difficulty": "medium",
-    "season": "Testdata",
-    "question": "Hvilken by kommer fodboldklubben AGF fra?",
-    "options": ["Aalborg", "Odense", "Aarhus", "Esbjerg"],
+    "id": "PL-E-007",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "Pr. 2026",
+    "question": "Hvem har rekorden for flest assists i Premier League?",
+    "options": [
+      "Ryan Giggs",
+      "Wayne Rooney",
+      "Cesc Fàbregas",
+      "Kevin De Bruyne"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-E-008",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2011/12",
+    "question": "Hvem vandt Premier League i 2011/12 efter Sergio Agüeros berømte overtidsmål i sidste spillerunde?",
+    "options": [
+      "Manchester City",
+      "Tottenham Hotspur",
+      "Arsenal",
+      "Manchester United"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-E-009",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "Karriere",
+    "question": "Hvilken klub spillede Steven Gerrard hele sin Premier League-karriere for?",
+    "options": [
+      "Manchester City",
+      "Everton",
+      "Liverpool",
+      "Chelsea"
+    ],
     "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-E-010",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "1999/00-2006/07",
+    "question": "Hvilken klub forbindes Thierry Henry først og fremmest med i Premier League?",
+    "options": [
+      "Liverpool",
+      "Chelsea",
+      "Arsenal",
+      "Manchester United"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-E-011",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2002/03-2017/18",
+    "question": "Hvilken klub spillede Wayne Rooney flest Premier League-kampe for?",
+    "options": [
+      "Newcastle United",
+      "Tottenham Hotspur",
+      "Everton",
+      "Manchester United"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-E-012",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2006",
+    "question": "Hvilken klub flyttede fra Highbury til Emirates Stadium i 2006?",
+    "options": [
+      "Chelsea",
+      "West Ham United",
+      "Arsenal",
+      "Tottenham Hotspur"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-E-013",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2016",
+    "question": "Hvilken klub flyttede fra Boleyn Ground til London Stadium i 2016?",
+    "options": [
+      "Tottenham Hotspur",
+      "West Ham United",
+      "Arsenal",
+      "Fulham"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-E-014",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2018/19",
+    "question": "Hvilken London-klub spillede sin første Premier League-kamp på sit nye stadion mod Crystal Palace i april 2019?",
+    "options": [
+      "Brentford",
+      "Arsenal",
+      "West Ham United",
+      "Tottenham Hotspur"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-E-015",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2015/16",
+    "question": "Hvem var manager for Leicester City, da klubben sensationelt vandt Premier League i 2015/16?",
+    "options": [
+      "Claudio Ranieri",
+      "Mauricio Pochettino",
+      "Arsène Wenger",
+      "Manuel Pellegrini"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-E-016",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2011/12",
+    "question": "Hvem var Manchester City-manager, da klubben vandt Premier League i 2011/12 efter Agüeros mål mod QPR?",
+    "options": [
+      "Harry Redknapp",
+      "Sir Alex Ferguson",
+      "Arsène Wenger",
+      "Roberto Mancini"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-E-017",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2013",
+    "question": "Hvem afløste Sir Alex Ferguson som Manchester United-manager i sommeren 2013?",
+    "options": [
+      "Roberto Martínez",
+      "David Moyes",
+      "Manuel Pellegrini",
+      "José Mourinho"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-E-018",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2003",
+    "question": "Fra hvilken klub hentede Manchester United Cristiano Ronaldo i 2003?",
+    "options": [
+      "Benfica",
+      "Sporting CP",
+      "Porto",
+      "Braga"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-E-019",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2017",
+    "question": "Fra hvilken klub hentede Liverpool Mohamed Salah i 2017?",
+    "options": [
+      "Fiorentina",
+      "Roma",
+      "Basel",
+      "Chelsea"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-E-020",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2016",
+    "question": "Hvilken klub forlod N'Golo Kanté, da han skiftede til Chelsea i sommeren 2016?",
+    "options": [
+      "Everton",
+      "West Ham United",
+      "Leicester City",
+      "Southampton"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-001",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2022/23",
+    "question": "Hvor mange Premier League-mål scorede Erling Haaland i sin rekordstore debutsæson 2022/23?",
+    "options": [
+      "34",
+      "36",
+      "38",
+      "32"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-M-002",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2025/26",
+    "question": "Hvem blev kåret til Premier League Player of the Season i 2025/26?",
+    "options": [
+      "Declan Rice",
+      "Erling Haaland",
+      "Bruno Fernandes",
+      "Bukayo Saka"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-003",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2025/26",
+    "question": "Hvor mange assists lavede Bruno Fernandes, da han satte Premier League-rekord i 2025/26?",
+    "options": [
+      "20",
+      "22",
+      "21",
+      "18"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-004",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2025/26",
+    "question": "Hvor mange point sluttede Arsenal på som mestre i 2025/26?",
+    "options": [
+      "85",
+      "91",
+      "88",
+      "82"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-M-005",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2018/19",
+    "question": "Hvem delte Golden Boot med Mohamed Salah og Sadio Mané i 2018/19?",
+    "options": [
+      "Harry Kane",
+      "Sergio Agüero",
+      "Pierre-Emerick Aubameyang",
+      "Raheem Sterling"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-006",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2013/14",
+    "question": "Hvem vandt Golden Boot med 31 mål i 2013/14?",
+    "options": [
+      "Yaya Touré",
+      "Daniel Sturridge",
+      "Luis Suárez",
+      "Sergio Agüero"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-007",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2017/18",
+    "question": "Hvor mange point fik Manchester City i deres rekordstore mesterskabssæson 2017/18?",
+    "options": [
+      "98",
+      "96",
+      "102",
+      "100"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-M-008",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2004/05",
+    "question": "Hvor mange mål lukkede Chelsea ind i hele Premier League-sæsonen 2004/05?",
+    "options": [
+      "20",
+      "15",
+      "22",
+      "18"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-M-009",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2004",
+    "question": "Fra hvilken klub hentede Chelsea Didier Drogba i sommeren 2004?",
+    "options": [
+      "Lyon",
+      "Paris Saint-Germain",
+      "Monaco",
+      "Marseille"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-M-010",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2019/20",
+    "question": "Hvor mange kampe resterede der, da Liverpool sikrede Premier League-titlen i 2019/20?",
+    "options": [
+      "6",
+      "7",
+      "5",
+      "4"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-M-011",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2018/19",
+    "question": "Hvem blev Premier League Player of the Season i 2018/19?",
+    "options": [
+      "Sergio Agüero",
+      "Mohamed Salah",
+      "Virgil van Dijk",
+      "Raheem Sterling"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-012",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2016/17",
+    "question": "Hvem blev Premier League Player of the Season i 2016/17?",
+    "options": [
+      "Eden Hazard",
+      "Harry Kane",
+      "N'Golo Kanté",
+      "Dele Alli"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-013",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2011/12",
+    "question": "Hvem blev Premier League Player of the Season i 2011/12?",
+    "options": [
+      "Yaya Touré",
+      "Robin van Persie",
+      "Vincent Kompany",
+      "Wayne Rooney"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-014",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2014/15",
+    "question": "Hvilken klub lå sidst i Premier League ved jul i 2014/15, overlevede – og blev mester sæsonen efter?",
+    "options": [
+      "Burnley",
+      "Queens Park Rangers",
+      "Leicester City",
+      "Sunderland"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-015",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "Pr. 2026",
+    "question": "Hvilken målmand har holdt flest clean sheets i Premier League-historien?",
+    "options": [
+      "David de Gea",
+      "Petr Čech",
+      "Mark Schwarzer",
+      "David James"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-M-016",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2002/03",
+    "question": "Hvem vandt Golden Boot med 25 mål i 2002/03?",
+    "options": [
+      "Ruud van Nistelrooy",
+      "Thierry Henry",
+      "James Beattie",
+      "Mark Viduka"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-M-017",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2002/03",
+    "question": "Hvem lavede 20 assists for Arsenal i 2002/03 – en Premier League-rekord, som senere blev matchet af Kevin De Bruyne og slået af Bruno Fernandes?",
+    "options": [
+      "Robert Pirès",
+      "Ryan Giggs",
+      "David Beckham",
+      "Thierry Henry"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-M-018",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2003",
+    "question": "Hvad hed Manchester Citys hjemmebane før klubben flyttede til det nuværende Etihad Stadium i 2003?",
+    "options": [
+      "Burnden Park",
+      "Roker Park",
+      "Maine Road",
+      "Ayresome Park"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-M-019",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2016/17",
+    "question": "Hvem var Chelsea-manager, da klubben vandt Premier League i 2016/17?",
+    "options": [
+      "Pep Guardiola",
+      "Jürgen Klopp",
+      "Mauricio Pochettino",
+      "Antonio Conte"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-M-020",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2003/04",
+    "question": "Hvem var manager for Arsenals 'Invincibles' i 2003/04?",
+    "options": [
+      "Claudio Ranieri",
+      "Sir Alex Ferguson",
+      "Gérard Houllier",
+      "Arsène Wenger"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-M-021",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2011",
+    "question": "Fra hvilken klub hentede Manchester City Sergio Agüero i 2011?",
+    "options": [
+      "Valencia",
+      "Villarreal",
+      "Sevilla",
+      "Atlético Madrid"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-M-022",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2015",
+    "question": "Fra hvilken klub hentede Manchester City Kevin De Bruyne i 2015?",
+    "options": [
+      "Bayer Leverkusen",
+      "Werder Bremen",
+      "Borussia Dortmund",
+      "VfL Wolfsburg"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-M-023",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2018",
+    "question": "Fra hvilken klub hentede Liverpool Virgil van Dijk i januar 2018?",
+    "options": [
+      "Celtic",
+      "Southampton",
+      "FC Groningen",
+      "Ajax"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-M-024",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2000/01",
+    "question": "Hvem blev Premier League-topscorer med 23 mål i 2000/01?",
+    "options": [
+      "Jimmy Floyd Hasselbaink",
+      "Michael Owen",
+      "Marcus Stewart",
+      "Thierry Henry"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-M-025",
+    "league": "Premier League",
+    "difficulty": "medium",
+    "season": "2017/18",
+    "question": "Med hvor mange point vandt Manchester City Premier League i 2017/18?",
+    "options": [
+      "19",
+      "16",
+      "18",
+      "21"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-H-001",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2000/01",
+    "question": "Hvem scorede sejrsmålet i Southamptons sidste Premier League-kamp på The Dell i 2001?",
+    "options": [
+      "James Beattie",
+      "Marian Pahars",
+      "Jo Tessem",
+      "Matt Le Tissier"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-H-002",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2002/03",
+    "question": "Hvem scorede det sidste Manchester City-mål på Maine Road?",
+    "options": [
+      "Robbie Fowler",
+      "Shaun Goater",
+      "Nicolas Anelka",
+      "Marc-Vivien Foé"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-H-003",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2005/06",
+    "question": "Hvem scorede hattrick i Arsenals sidste Premier League-kamp på Highbury?",
+    "options": [
+      "Robin van Persie",
+      "Thierry Henry",
+      "Robert Pirès",
+      "Freddie Ljungberg"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-H-004",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2000/01",
+    "question": "Hvem blev kåret til Premier League Manager of the Season i 2000/01 efter at have ført oprykkerne Ipswich til femtepladsen?",
+    "options": [
+      "George Burley",
+      "Peter Taylor",
+      "Bobby Robson",
+      "Alan Curbishley"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-H-005",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2004/05",
+    "question": "Hvem var manager for Bolton, da klubben sluttede som nummer seks i Premier League i 2004/05?",
+    "options": [
+      "Sam Allardyce",
+      "Alan Curbishley",
+      "Steve McClaren",
+      "David Moyes"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-H-006",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2005/06",
+    "question": "Hvilken manager forlod Charlton i 2006 efter 15 år som chef for klubben?",
+    "options": [
+      "Alan Curbishley",
+      "David O'Leary",
+      "Harry Redknapp",
+      "Steve McClaren"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-H-007",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2004",
+    "question": "Hvem afløste Gérard Houllier som Liverpool-manager i sommeren 2004?",
+    "options": [
+      "José Mourinho",
+      "Rafael Benítez",
+      "Paul Sturrock",
+      "Jacques Santini"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-H-008",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2002",
+    "question": "Fra hvilken klub hentede Manchester United Rio Ferdinand i 2002?",
+    "options": [
+      "West Ham United",
+      "Leeds United",
+      "Aston Villa",
+      "Newcastle United"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-H-009",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2003",
+    "question": "Fra hvilken klub hentede Chelsea Claude Makélélé i 2003?",
+    "options": [
+      "Deportivo La Coruña",
+      "Real Madrid",
+      "Valencia",
+      "Celta Vigo"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-H-010",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2004",
+    "question": "Fra hvilken klub hentede Liverpool Xabi Alonso i 2004?",
+    "options": [
+      "Athletic Bilbao",
+      "Real Sociedad",
+      "Valencia",
+      "Deportivo La Coruña"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "PL-H-011",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2006",
+    "question": "Fra hvilken klub hentede Tottenham Dimitar Berbatov i 2006?",
+    "options": [
+      "Bayer Leverkusen",
+      "Hamburger SV",
+      "Werder Bremen",
+      "Schalke 04"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-H-012",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2004/05",
+    "question": "Hvilken klub sluttede som nummer fire i Premier League i 2004/05 og kvalificerede sig til Champions League foran Liverpool?",
+    "options": [
+      "Tottenham Hotspur",
+      "Bolton Wanderers",
+      "Middlesbrough",
+      "Everton"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-H-013",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2002/03",
+    "question": "Hvilken klub rykkede ud af Premier League i 2002/03 på trods af hele 42 point?",
+    "options": [
+      "Birmingham City",
+      "Fulham",
+      "Bolton Wanderers",
+      "West Ham United"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-H-014",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2007/08",
+    "question": "Hvilken klub sluttede Premier League-sæsonen 2007/08 med blot 11 point?",
+    "options": [
+      "Reading",
+      "Fulham",
+      "Birmingham City",
+      "Derby County"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "PL-H-015",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2009/10",
+    "question": "Hvem scorede fem mål i én halvleg i Tottenhams 9-1-sejr over Wigan i 2009?",
+    "options": [
+      "Jermain Defoe",
+      "Dimitar Berbatov",
+      "Wayne Rooney",
+      "Didier Drogba"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-H-016",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "Pr. 2026",
+    "question": "Hvem har scoret Premier Leagues hurtigste hattrick?",
+    "options": [
+      "Jermain Defoe",
+      "Robbie Fowler",
+      "Sadio Mané",
+      "Sergio Agüero"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-H-017",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2015",
+    "question": "Hvem scorede i rekordmange 11 Premier League-kampe i træk i 2015?",
+    "options": [
+      "Sergio Agüero",
+      "Romelu Lukaku",
+      "Jamie Vardy",
+      "Harry Kane"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-H-018",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2018/19",
+    "question": "Hvilken klub satte i 2018/19 rekord for flest point i en Premier League-sæson uden at blive mester?",
+    "options": [
+      "Liverpool",
+      "Chelsea",
+      "Tottenham Hotspur",
+      "Arsenal"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "PL-H-019",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2023/24",
+    "question": "Hvilken Manchester City-spiller lavede fire assists i 6-1-sejren over Bournemouth i november 2023?",
+    "options": [
+      "Bernardo Silva",
+      "Phil Foden",
+      "Jérémy Doku",
+      "Jack Grealish"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "PL-H-020",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2025/26",
+    "question": "Hvem blev i marts 2026 den yngste målscorer i Premier League-historien?",
+    "options": [
+      "Max Dowman",
+      "Estêvão",
+      "Rio Ngumoha",
+      "Ethan Nwaneri"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-E-001",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "Generelt",
+    "question": "Hvilke to klubber mødes i opgøret, der traditionelt kaldes New Firm?",
+    "options": [
+      "FC Midtjylland og Viborg FF",
+      "Brøndby IF og FC København",
+      "OB og Sønderjyske",
+      "AGF og AaB"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-E-002",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "1999",
+    "question": "Hvilken klub blev dannet i 1999 ved en fusion mellem Ikast FS og Herning Fremad?",
+    "options": [
+      "FC Midtjylland",
+      "Sønderjyske",
+      "FC Nordsjælland",
+      "Randers FC"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-E-003",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2003",
+    "question": "Hvilken klub blev stiftet i 2003 og overtog Superliga-licensen fra Farum Boldklub?",
+    "options": [
+      "Randers FC",
+      "FC Midtjylland",
+      "HB Køge",
+      "FC Nordsjælland"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-E-004",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2003",
+    "question": "Hvilken klub blev i 2003 skabt som en overbygning af seks lokale fodboldklubber?",
+    "options": [
+      "Randers FC",
+      "FC Midtjylland",
+      "FC Vestsjælland",
+      "FC Nordsjælland"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-E-005",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2004",
+    "question": "Hvilken Superliga-klub etablerede Danmarks første talentakademi i 2004?",
+    "options": [
+      "Brøndby IF",
+      "FC Nordsjælland",
+      "FC København",
+      "FC Midtjylland"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-E-006",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2000'erne",
+    "question": "Hvilken senere dansk landsholdsanfører var med på et af de første kuld på FC Midtjyllands akademi?",
+    "options": [
+      "Thomas Delaney",
+      "Simon Kjær",
+      "Daniel Agger",
+      "Andreas Christensen"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-E-007",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2019",
+    "question": "Hvilken Superliga-klub spillede Nicklas Bendtner for i efteråret 2019?",
+    "options": [
+      "Brøndby IF",
+      "FC København",
+      "FC Midtjylland",
+      "AGF"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-E-008",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2019-2026",
+    "question": "Hvilken klub spillede Patrick Mortensen for fra 2019 til sommeren 2026?",
+    "options": [
+      "Randers FC",
+      "AGF",
+      "OB",
+      "AaB"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-E-009",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "Pr. 2026",
+    "question": "Hvem er Superligaens all-time topscorer?",
+    "options": [
+      "Steffen Højer",
+      "Morten 'Duncan' Rasmussen",
+      "Søren Frederiksen",
+      "Peter Møller"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-E-010",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "Pr. 2026",
+    "question": "Hvem har spillet flest kampe i Superligaens historie?",
+    "options": [
+      "Per Nielsen",
+      "Rasmus Würtz",
+      "Jesper Hansen",
+      "Jakob Poulsen"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-E-011",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2006-2011/2013-2020",
+    "question": "Hvilken klub forbindes træneren Ståle Solbakken især med i Superligaen?",
+    "options": [
+      "FC Midtjylland",
+      "FC København",
+      "Brøndby IF",
+      "AaB"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-E-012",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2008-2011 og 2016-2019",
+    "question": "Hvilken Superliga-klub var Kasper Hjulmand cheftræner for i to perioder?",
+    "options": [
+      "AGF",
+      "OB",
+      "FC Nordsjælland",
+      "Brøndby IF"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-E-013",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2019-2022",
+    "question": "Hvilken klub var Niels Frederiksen cheftræner for fra 2019 til 2022?",
+    "options": [
+      "AaB",
+      "FC Midtjylland",
+      "AGF",
+      "Brøndby IF"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-E-014",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2019-",
+    "question": "Hvilken klub blev Kent Nielsen cheftræner for i 2019 og har siden været stærkt forbundet med?",
+    "options": [
+      "OB",
+      "Viborg FF",
+      "Randers FC",
+      "Silkeborg IF"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-E-015",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2000/01",
+    "question": "Hvilken placering opnåede FC Midtjylland i klubbens første Superliga-sæson?",
+    "options": [
+      "6. plads",
+      "3. plads",
+      "2. plads",
+      "4. plads"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-E-016",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2010/11",
+    "question": "Hvilken dansk klub blev i 2010/11 den første fra Danmark til at nå Champions Leagues ottendedelsfinaler?",
+    "options": [
+      "FC København",
+      "Brøndby IF",
+      "FC Midtjylland",
+      "AaB"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-E-017",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "Generelt",
+    "question": "Hvilken klub spiller sine hjemmekampe i Parken?",
+    "options": [
+      "FC København",
+      "FC Nordsjælland",
+      "Brøndby IF",
+      "AGF"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-E-018",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2025/26",
+    "question": "Hvilken klub blev dansk mester i Superligaen i 2025/26?",
+    "options": [
+      "FC København",
+      "AGF",
+      "FC Midtjylland",
+      "Brøndby IF"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-E-019",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2004/05",
+    "question": "Hvilket resultat vandt Brøndby med over FC København i det berømte derby i maj 2005?",
+    "options": [
+      "3-0",
+      "5-1",
+      "5-0",
+      "4-0"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-E-020",
+    "league": "Superliga",
+    "difficulty": "easy",
+    "season": "2005/06",
+    "question": "Hvilken klub vandt pokalturneringen i 2006 samtidig med, at klubben sikrede oprykning til Superligaen?",
+    "options": [
+      "Esbjerg fB",
+      "Randers FC",
+      "AC Horsens",
+      "Viborg FF"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-M-001",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2007/08",
+    "question": "Hvem var cheftræner for AaB, da klubben vandt mesterskabet i 2007/08?",
+    "options": [
+      "Lars Olsen",
+      "Erik Hamrén",
+      "Colin Todd",
+      "Ståle Solbakken"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-M-002",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2004/05",
+    "question": "Hvem scorede det første mål, da Brøndby slog FC København 5-0 i maj 2005?",
+    "options": [
+      "Daniel Agger",
+      "Thomas Kahlenberg",
+      "Morten Skoubo",
+      "Johan Elmander"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-M-003",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2003/04",
+    "question": "Hvem var cheftræner for Esbjerg, da klubben vandt bronze i Superligaen i 2003/04?",
+    "options": [
+      "Hans Backe",
+      "Erik Hamrén",
+      "Ove Pedersen",
+      "Michael Laudrup"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-M-004",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2006",
+    "question": "Hvem var Ståle Solbakkens forgænger som cheftræner i FC København, da nordmanden tiltrådte i januar 2006?",
+    "options": [
+      "Erik Hamrén",
+      "Ove Pedersen",
+      "Hans Backe",
+      "Michael Laudrup"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-M-005",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2000/01",
+    "question": "Hvilken klub vandt pokalturneringen og bronze i Superligaen i 2000/01?",
+    "options": [
+      "Viborg FF",
+      "AB",
+      "Brøndby IF",
+      "Silkeborg IF"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-006",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2004/05",
+    "question": "Hvem scorede Brøndbys sejrsmål til 3-2 i den forlængede spilletid i pokalfinalen mod FC Midtjylland i 2005?",
+    "options": [
+      "Johan Elmander",
+      "Kim Daugaard",
+      "Morten Skoubo",
+      "Ruben Bagger"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-007",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2005",
+    "question": "Hvilken fransk klub købte Thomas Kahlenberg fra Brøndby i 2005?",
+    "options": [
+      "Rennes",
+      "Lille",
+      "Sochaux",
+      "Auxerre"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-008",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "1999/2000",
+    "question": "Hvilken klub vandt Viborg FF 7-2 over i Superligaen i maj 2000?",
+    "options": [
+      "AGF",
+      "Brøndby IF",
+      "Herfølge BK",
+      "AaB"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-009",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2020",
+    "question": "Hvilken italiensk klub købte Mikkel Damsgaard fra FC Nordsjælland i 2020?",
+    "options": [
+      "Bologna",
+      "Sampdoria",
+      "Genoa",
+      "Udinese"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-M-010",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2001/02",
+    "question": "Hvilken klub sluttede på tredjepladsen i Superligaen i 2001/02 bag Brøndby og FC København?",
+    "options": [
+      "FC Midtjylland",
+      "Esbjerg fB",
+      "OB",
+      "AaB"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-M-011",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2006",
+    "question": "Hvilken hollandsk storklub blev elimineret af FC København i Champions League-kvalifikationen i 2006?",
+    "options": [
+      "Ajax",
+      "AZ",
+      "PSV",
+      "Feyenoord"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-M-012",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2010/11",
+    "question": "Hvilken engelsk klub slog FC København ud af Champions Leagues ottendedelsfinale i 2010/11?",
+    "options": [
+      "Arsenal",
+      "Tottenham Hotspur",
+      "Manchester United",
+      "Chelsea"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-013",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2008/09",
+    "question": "Hvilken skotsk klub vandt AaB 2-1 over i Aalborg i Champions League i 2008/09?",
+    "options": [
+      "Celtic",
+      "Hearts",
+      "Rangers",
+      "Aberdeen"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-M-014",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2006/07",
+    "question": "Hvem scorede kampens eneste mål, da FC København besejrede Manchester United 1-0 i Champions League i 2006?",
+    "options": [
+      "Atiba Hutchinson",
+      "Jesper Grønkjær",
+      "Fredrik Berglund",
+      "Marcus Allbäck"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-015",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2012/13",
+    "question": "Hvilken oprykker vandt bronze i Superligaen i 2012/13?",
+    "options": [
+      "Randers FC",
+      "Esbjerg fB",
+      "OB",
+      "AGF"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-M-016",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2007/08",
+    "question": "Hvem blev Superliga-topscorer i 2007/08?",
+    "options": [
+      "Martin Bernburg",
+      "Peter Graulund",
+      "Henrik Hansen",
+      "Jeppe Curth"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-017",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2008/09-2010/11",
+    "question": "Hvilken klub sluttede som nummer to i Superligaen tre sæsoner i træk fra 2008/09 til 2010/11?",
+    "options": [
+      "FC Midtjylland",
+      "AaB",
+      "OB",
+      "Brøndby IF"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-M-018",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2001/02",
+    "question": "Brøndby og en anden klub sluttede begge på 69 point i 2001/02, men Brøndby blev mestre på bedre målscore. Hvilken klub blev nummer to?",
+    "options": [
+      "AaB",
+      "OB",
+      "FC København",
+      "Esbjerg fB"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-M-019",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2013/14",
+    "question": "AaB vandt The Double i 2013/14. Hvem besejrede de 4-2 i pokalfinalen?",
+    "options": [
+      "FC Midtjylland",
+      "Esbjerg fB",
+      "Randers FC",
+      "FC København"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-020",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "1999/2000",
+    "question": "Hvilken klub besejrede Viborg FF 1-0 i pokalfinalen i 2000?",
+    "options": [
+      "Brøndby IF",
+      "FC København",
+      "Silkeborg IF",
+      "AaB"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-021",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2007/08",
+    "question": "Hvilken klub vandt Randers FC 5-0 over i 2007/08 – fortsat Randers FC's største Superliga-sejr?",
+    "options": [
+      "Viborg FF",
+      "AGF",
+      "Lyngby BK",
+      "AaB"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-022",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2007/08",
+    "question": "Hvilken målmand holdt flest clean sheets i Superligaen 2007/08 med 16?",
+    "options": [
+      "Arek Onyszko",
+      "Jesper Christiansen",
+      "Kevin Stuhr Ellegaard",
+      "Karim Zaza"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-M-023",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2010/11",
+    "question": "Med hvor mange point vandt FC København Superligaen foran OB i 2010/11?",
+    "options": [
+      "20",
+      "24",
+      "22",
+      "26"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-M-024",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2007/08",
+    "question": "Hvilken klub blev nummer to i Superligaen i 2007/08 bag AaB?",
+    "options": [
+      "FC Midtjylland",
+      "OB",
+      "AC Horsens",
+      "FC København"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-M-025",
+    "league": "Superliga",
+    "difficulty": "medium",
+    "season": "2000/01",
+    "question": "Hvilken nuværende klub rykkede i 2000 op under navnet Haderslev FK og blev senere til SønderjyskE?",
+    "options": [
+      "HB Køge",
+      "FC Nordsjælland",
+      "Randers FC",
+      "Sønderjyske"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-H-001",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2000/01",
+    "question": "Hvem scorede FC Københavns første mål i 3-1-sejren over Brøndby i juni 2001, hvor FCK sikrede mesterskabet?",
+    "options": [
+      "Todi Jónsson",
+      "Sibusiso Zuma",
+      "Christian Poulsen",
+      "Pascal Simpson"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-H-002",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2000/01",
+    "question": "Hvilken klub sluttede Superligaen 2000/01 med blot 11 point?",
+    "options": [
+      "HFK Sønderjylland",
+      "Lyngby BK",
+      "Herfølge BK",
+      "Viborg FF"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-H-003",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2001/02",
+    "question": "Hvor mange mål lukkede Lyngby ind i Superliga-sæsonen 2001/02?",
+    "options": [
+      "82",
+      "92",
+      "87",
+      "97"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-H-004",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2003/04",
+    "question": "Fire spillere delte topscorertitlen med 19 mål i 2003/04. Hvilken klub havde to af de fire spillere?",
+    "options": [
+      "AaB",
+      "OB",
+      "FC Midtjylland",
+      "Esbjerg fB"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-H-005",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2004/05",
+    "question": "Hvem scorede to gange, da Brøndby besejrede Herfølge 7-0 og sikrede mesterskabet i 2004/05?",
+    "options": [
+      "Johan Elmander",
+      "Thomas Kahlenberg",
+      "Morten Skoubo",
+      "Daniel Agger"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-H-006",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2000/01",
+    "question": "Hvem var FC Københavns cheftræner, da klubben vandt Superligaen i 2000/01?",
+    "options": [
+      "Åge Hareide",
+      "Peter Rudbæk",
+      "Roy Hodgson",
+      "Viggo Jensen"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-H-007",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2006/07",
+    "question": "Hvilken klub sluttede som nummer to efter FC København i Superligaen 2006/07?",
+    "options": [
+      "AaB",
+      "FC Midtjylland",
+      "OB",
+      "Brøndby IF"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-H-008",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2008/09",
+    "question": "Hvem blev Superliga-topscorer med 16 mål for Randers FC i 2008/09?",
+    "options": [
+      "Morten Nordstrand",
+      "Peter Utaka",
+      "Marc Nygaard",
+      "Frank Kristensen"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-H-009",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2005",
+    "question": "Hvilken tysk klub skiftede Mohamed Zidan til fra FC Midtjylland i januar 2005?",
+    "options": [
+      "Borussia Dortmund",
+      "Schalke 04",
+      "Hamburger SV",
+      "Werder Bremen"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-H-010",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2006",
+    "question": "Hvilken fransk klub købte Johan Elmander fra Brøndby i sommeren 2006?",
+    "options": [
+      "Rennes",
+      "Toulouse",
+      "Bordeaux",
+      "Auxerre"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-H-011",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2013/14",
+    "question": "Hvem scorede AaB's første to mål i 4-2-sejren over FC København i pokalfinalen i 2014?",
+    "options": [
+      "Søren Frederiksen",
+      "Rasmus Thelander",
+      "Jakob Ahlmann",
+      "Kasper Kusk"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-H-012",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2016/17",
+    "question": "Hvor mange Superliga-kampe tabte FC København i hele mesterskabssæsonen 2016/17?",
+    "options": [
+      "2",
+      "0",
+      "1",
+      "3"
+    ],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "SL-H-013",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2017/18",
+    "question": "Hvem scorede målet til 1-0 mod AC Horsens i sidste spillerunde, som sikrede FC Midtjylland mesterskabet i 2017/18?",
+    "options": [
+      "Jakob Poulsen",
+      "Marc Dal Hende",
+      "Paul Onuachu",
+      "Bubacarr Sanneh"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-H-014",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2018/19",
+    "question": "Robert Skov scorede 29 mål i 2018/19. Hvilke to spillere delte andenpladsen på topscorerlisten med 22 mål?",
+    "options": [
+      "Viktor Fischer og Kamil Wilczek",
+      "Paul Onuachu og Andreas Skov Olsen",
+      "Kamil Wilczek og Paul Onuachu",
+      "Dame N'Doye og Andreas Skov Olsen"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-H-015",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2019/20",
+    "question": "Med hvor mange point vandt FC Midtjylland Superligaen foran FC København i 2019/20?",
+    "options": [
+      "16",
+      "10",
+      "12",
+      "14"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-H-016",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2020/21",
+    "question": "Hvem scorede FC Midtjyllands første mål nogensinde i Champions League-gruppespillet i 2020?",
+    "options": [
+      "Awer Mabil",
+      "Pione Sisto",
+      "Sory Kaba",
+      "Anders Dreyer"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-H-017",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2012/13",
+    "question": "Hvem scorede FC Nordsjællands første Champions League-mål nogensinde i 2012?",
+    "options": [
+      "Andreas Laudrup",
+      "Mikkel Beckmann",
+      "Joshua John",
+      "Nicolai Stokholm"
+    ],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "SL-H-018",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2006/07",
+    "question": "Hvem scorede FC Københavns første mål i 2-0-sejren ude mod Ajax i 2006, som sendte klubben i Champions League-gruppespillet?",
+    "options": [
+      "Jesper Grønkjær",
+      "Marcus Allbäck",
+      "Atiba Hutchinson",
+      "Michael Silberbauer"
+    ],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "SL-H-019",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2006/07",
+    "question": "Hvor mange point fik FC København i klubbens første Champions League-gruppespil i 2006/07?",
+    "options": [
+      "5",
+      "4",
+      "7",
+      "9"
+    ],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "SL-H-020",
+    "league": "Superliga",
+    "difficulty": "hard",
+    "season": "2017/18",
+    "question": "Hvilken klub sluttede på tredjepladsen i Superligaen 2017/18 bag FC Midtjylland og Brøndby?",
+    "options": [
+      "FC Nordsjælland",
+      "AaB",
+      "FC København",
+      "AC Horsens"
+    ],
+    "correctAnswerIndex": 0
   }
 ]

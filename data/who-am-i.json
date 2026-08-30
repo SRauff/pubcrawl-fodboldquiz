@@ -1,104 +1,890 @@
 [
   {
-    "id": "WHO-001",
-    "player": "Anders Bjelland",
-    "aliases": ["Anders Bjelland", "Bjelland"],
+    "id": "WAI-PL-001",
+    "player": "Thierry Henry",
+    "aliases": [
+      "Thierry Henry",
+      "Henry"
+    ],
+    "league": "Premier League",
     "clues": [
-      "Jeg er født i København",
-      "Jeg er forsvarsspiller",
-      "Jeg har spillet landskampe for Danmark",
-      "Jeg begyndte min seniorkarriere i Lyngby",
-      "Jeg har spillet for FC Nordsjælland",
-      "Jeg har været dansk mester",
-      "Jeg har spillet i både Holland og England",
-      "Jeg spillede for Brentford",
-      "Mit fornavn er Anders",
-      "Mit efternavn starter med Bj"
+      "Jeg havde et kort ophold i Serie A tidligt i min karriere, uden at det blev dér, jeg for alvor slog igennem.",
+      "Jeg afsluttede min klubkarriere uden for Europa.",
+      "Jeg vandt Champions League relativt sent i min klubkarriere – med en anden klub end den, jeg oftest forbindes med.",
+      "Jeg blev verdensmester med mit land i 1998 og europamester i 2000.",
+      "Jeg kom til engelsk fodbold fra Juventus i 1999.",
+      "Arsène Wenger flyttede mig fra kanten ind som central angriber.",
+      "Jeg vandt Premier League to gange og var med på et ubesejret mesterhold.",
+      "Jeg blev Premier League Player of the Season to gange.",
+      "Jeg er Arsenals all-time topscorer.",
+      "Jeg er den franske Arsenal-legende, der især forbindes med trøje nummer 14."
     ]
   },
   {
-    "id": "WHO-002",
-    "player": "Peter Schmeichel",
-    "aliases": ["Peter Schmeichel", "Schmeichel"],
+    "id": "WAI-PL-002",
+    "player": "Wayne Rooney",
+    "aliases": [
+      "Wayne Rooney",
+      "Rooney",
+      "Wazza"
+    ],
+    "league": "Premier League",
     "clues": [
-      "Jeg er dansker",
-      "Jeg var målmand",
-      "Jeg har spillet mere end 100 landskampe",
-      "Jeg har været anfører for Danmark",
-      "Jeg har spillet i Portugal",
-      "Jeg vandt EM i 1992",
-      "Jeg har vundet Champions League",
-      "Jeg spillede størstedelen af min karriere i Manchester United",
-      "Min søn er også professionel målmand",
-      "Mit fornavn er Peter"
+      "Jeg sluttede min aktive karriere i en klub, hvor jeg også nåede at få en trænerrolle.",
+      "Jeg havde et ophold i MLS sent i karrieren.",
+      "Før mit største klubskifte havde jeg allerede fået et gennembrud i landets bedste række som teenager.",
+      "Jeg brød igennem som teenager i Everton.",
+      "Jeg skiftede til Manchester United som 18-årig i 2004.",
+      "Jeg vandt fem Premier League-titler.",
+      "Jeg scorede 208 mål i Premier League.",
+      "Jeg blev Manchester Uniteds all-time topscorer med 253 mål i alle turneringer.",
+      "Jeg var i mange år Englands mest scorende landsholdsspiller, før Harry Kane overtog rekorden.",
+      "Jeg er Manchester United-legenden, der scorede det berømte saksesparksmål mod Manchester City i 2011."
     ]
   },
   {
-    "id": "WHO-003",
-    "player": "Christian Eriksen",
-    "aliases": ["Christian Eriksen", "Eriksen"],
+    "id": "WAI-PL-003",
+    "player": "Steven Gerrard",
+    "aliases": [
+      "Steven Gerrard",
+      "Gerrard",
+      "Stevie G"
+    ],
+    "league": "Premier League",
     "clues": [
-      "Jeg er dansk landsholdsspiller",
-      "Jeg spiller på midtbanen",
-      "Jeg forlod Danmark som ungdomsspiller",
-      "Jeg har spillet i både Holland, England og Italien",
-      "Jeg blev hollandsk mester med Ajax",
-      "Jeg har spillet for Inter",
-      "Jeg nåede en Champions League-finale med Tottenham",
-      "Jeg har også spillet for Brentford",
-      "Jeg har båret nummer 10 for Danmark",
-      "Mit efternavn er Eriksen"
+      "Jeg tilbragte hele min karriere i landets bedste række hos den samme klub.",
+      "Jeg nåede mere end 500 ligakampe, men vandt aldrig selve ligamesterskabet.",
+      "Jeg scorede mere end 100 ligamål, selv om min primære rolle var på midtbanen.",
+      "Jeg leverede 92 assists i Premier League.",
+      "Jeg vandt aldrig Premier League som spiller.",
+      "Jeg vandt både UEFA Cup, FA Cup, League Cup og Champions League med min engelske klub.",
+      "Jeg var anfører i den berømte Champions League-finale i Istanbul i 2005.",
+      "Jeg spillede hele min Premier League-karriere for Liverpool.",
+      "Jeg var i mange år Liverpools anfører og blev kendt for langskud og store øjeblikke.",
+      "Jeg er Liverpool-legenden, der bar trøje nummer 8 og var anfører i Istanbul-finalen i 2005."
     ]
   },
   {
-    "id": "WHO-004",
-    "player": "Lionel Messi",
-    "aliases": ["Lionel Messi", "Messi", "Leo Messi"],
+    "id": "WAI-PL-004",
+    "player": "Frank Lampard",
+    "aliases": [
+      "Frank Lampard",
+      "Lampard",
+      "Frank Lampard Jr"
+    ],
+    "league": "Premier League",
     "clues": [
-      "Jeg er sydamerikaner",
-      "Jeg er venstrebenet offensivspiller",
-      "Jeg flyttede til Europa som teenager",
-      "Jeg har vundet Champions League flere gange",
-      "Jeg har spillet i både Spanien og Frankrig",
-      "Jeg vandt Copa América med mit land",
-      "Jeg blev verdensmester i 2022",
-      "Jeg spillede det meste af min karriere for Barcelona",
-      "Jeg kommer fra Argentina",
-      "Mit efternavn er Messi"
+      "Jeg sluttede min karriere i landets bedste række hos en anden klub end den, jeg klart forbindes mest med.",
+      "Mit store klubskifte tidligt i 00'erne kostede omkring 11 millioner pund.",
+      "Jeg endte med over 600 kampe i landets bedste række.",
+      "Jeg nåede over 600 Premier League-kampe.",
+      "Jeg blev Premier League Player of the Season i 2004/05.",
+      "Jeg vandt Premier League tre gange.",
+      "Jeg var anfører i Champions League-finalen i 2012, fordi klubbens normale anfører var suspenderet.",
+      "Jeg er den mest scorende midtbanespiller i Premier League-historien.",
+      "Jeg er Chelsea-historiens topscorer med 211 mål i alle turneringer.",
+      "Jeg er den engelske Chelsea-legende, som senere også blev manager for klubben."
     ]
   },
   {
-    "id": "WHO-005",
+    "id": "WAI-PL-005",
+    "player": "Didier Drogba",
+    "aliases": [
+      "Didier Drogba",
+      "Drogba"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Efter min første lange periode i England spillede jeg klubfodbold på to andre kontinenter.",
+      "Jeg vendte senere tilbage til en tidligere klub og vandt ligaen igen.",
+      "Jeg kom først til engelsk fodbold, efter at jeg allerede havde spillet flere år som professionel i Frankrig.",
+      "Jeg vandt Golden Boot to gange.",
+      "Jeg scorede 104 Premier League-mål.",
+      "Jeg vandt Premier League fire gange.",
+      "Jeg scorede udligningen i Champions League-finalen i 2012.",
+      "Jeg sparkede også det afgørende straffespark i samme Champions League-finale.",
+      "Jeg er ivoriansk angriber og en af Chelseas største profiler nogensinde.",
+      "Jeg er den Chelsea-legende, der især forbindes med store mål i finaler."
+    ]
+  },
+  {
+    "id": "WAI-PL-006",
+    "player": "Cristiano Ronaldo",
+    "aliases": [
+      "Cristiano Ronaldo",
+      "Ronaldo",
+      "CR7",
+      "Cristiano"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Mit første ligamål i England kom mod en klub fra den engelske sydkyst.",
+      "Jeg blev hentet til England som teenager efter kun én fuld seniorsæson i hjemlandet.",
+      "Jeg arvede et ikonisk trøjenummer efter en meget kendt engelsk midtbanespiller.",
+      "Jeg er født på Madeira og begyndte min seniorkarriere i Portugal.",
+      "Jeg vandt Premier League Player of the Season i både 2006/07 og 2007/08.",
+      "Jeg scorede 31 ligamål i 2007/08.",
+      "Jeg vandt Champions League med Manchester United i 2008.",
+      "Jeg skiftede til Real Madrid i 2009.",
+      "Jeg vendte tilbage til Manchester United i 2021.",
+      "Jeg er portugiseren, der vandt tre Premier League-titler og Ballon d'Or som Manchester United-spiller."
+    ]
+  },
+  {
+    "id": "WAI-PL-007",
+    "player": "Sergio Agüero",
+    "aliases": [
+      "Sergio Agüero",
+      "Sergio Aguero",
+      "Agüero",
+      "Aguero",
+      "Kun Agüero",
+      "Kun Aguero"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg scorede to mål både i min første og min sidste ligakamp for den klub, jeg forbindes mest med i England.",
+      "Før England spillede jeg flere sæsoner i den spanske hovedstad.",
+      "Jeg vandt ligaens topscorerpris én gang.",
+      "Jeg vandt fem Premier League-titler.",
+      "Jeg scorede 184 Premier League-mål for én klub.",
+      "Jeg var i mange år den mest scorende udenlandske spiller i Premier League.",
+      "Mit mest berømte mål blev scoret dybt inde i overtiden i sidste spillerunde.",
+      "Målet sikrede Manchester City mesterskabet i 2011/12.",
+      "Kommentatorråbet med mit efternavn er blevet et af Premier Leagues mest ikoniske øjeblikke.",
+      "Jeg er argentineren, hvis overtidsmål mod QPR i 2012 blev et af Premier Leagues mest ikoniske øjeblikke."
+    ]
+  },
+  {
+    "id": "WAI-PL-008",
     "player": "Mohamed Salah",
-    "aliases": ["Mohamed Salah", "Salah", "Mo Salah"],
+    "aliases": [
+      "Mohamed Salah",
+      "Mo Salah",
+      "Salah"
+    ],
+    "league": "Premier League",
     "clues": [
-      "Jeg er afrikansk landsholdsspiller",
-      "Jeg er venstrebenet offensivspiller",
-      "Jeg har spillet professionelt i Schweiz",
-      "Jeg har spillet i både England og Italien",
-      "Jeg har repræsenteret Roma",
-      "Jeg har vundet Champions League",
-      "Jeg spiller for Liverpool",
-      "Jeg kommer fra Egypten",
-      "Jeg bliver ofte kaldt Mo",
-      "Mit efternavn er Salah"
+      "Mit første ophold i England blev langt mindre succesfuldt end mit andet.",
+      "Mellem mine to perioder i England spillede jeg for to italienske klubber.",
+      "Jeg vendte tilbage til England i sommeren 2017.",
+      "Jeg scorede 44 mål i alle turneringer i min første sæson for min nye engelske klub.",
+      "Jeg vandt Champions League i 2019.",
+      "Jeg vandt Premier League i 2019/20 og igen i 2024/25.",
+      "Jeg vandt fire Premier League Golden Boots i min tid i Liverpool.",
+      "Jeg blev Liverpools mest scorende spiller i Premier League.",
+      "Jeg er egypter og spillede primært fra højre side af angrebet.",
+      "Jeg er Liverpool-profilen kendt som 'The Egyptian King'."
     ]
   },
   {
-    "id": "WHO-006",
-    "player": "Pernille Harder",
-    "aliases": ["Pernille Harder", "Harder"],
+    "id": "WAI-PL-009",
+    "player": "Kevin De Bruyne",
+    "aliases": [
+      "Kevin De Bruyne",
+      "De Bruyne",
+      "KDB"
+    ],
+    "league": "Premier League",
     "clues": [
-      "Jeg er dansk landsholdsspiller",
-      "Jeg er offensivspiller",
-      "Jeg har spillet professionelt i Sverige",
-      "Jeg har været anfører for Danmark",
-      "Jeg har spillet i både Tyskland og England",
-      "Jeg har repræsenteret Wolfsburg",
-      "Jeg har spillet for Chelsea",
-      "Jeg har vundet flere nationale mesterskaber",
-      "Mit fornavn er Pernille",
-      "Mit efternavn er Harder"
+      "Jeg fik mit første professionelle gennembrud i hjemlandets liga.",
+      "Mit første ophold i England blev afbrudt af et lejeophold i Bundesligaen.",
+      "Før mit store comeback til England blev jeg kåret til en af Bundesligaens største profiler.",
+      "Jeg vendte tilbage til Premier League i 2015.",
+      "Jeg blev Premier League Player of the Season i både 2019/20 og 2021/22.",
+      "Jeg blev kendt som en af ligaens bedste oplæggere og chance-skabere.",
+      "Jeg vandt adskillige Premier League-titler under Pep Guardiola.",
+      "Jeg spillede 422 kampe og scorede 108 mål for Manchester City i alle turneringer.",
+      "Jeg er belgisk midtbanespiller og var især kendt for mine præcise indlæg og stikninger.",
+      "Jeg er den belgiske playmaker, der tilbragte ti sæsoner i Manchester City fra 2015 til 2025."
+    ]
+  },
+  {
+    "id": "WAI-PL-010",
+    "player": "Harry Kane",
+    "aliases": [
+      "Harry Kane",
+      "Kane"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Mine første seniorminutter kom på leje i de lavere engelske rækker.",
+      "Jeg havde fire forskellige lejeophold, før jeg for alvor slog igennem på øverste niveau.",
+      "Jeg scorede først mit første ligamål for min moderklub flere år efter min seniordebut.",
+      "Jeg vandt PFA Young Player of the Year i 2014/15.",
+      "Jeg vandt Premier League Golden Boot tre gange.",
+      "I 2020/21 vandt jeg både Golden Boot og Playmaker-prisen.",
+      "Jeg scorede 213 Premier League-mål for Tottenham.",
+      "Jeg blev Tottenhams all-time topscorer med 280 mål i alle turneringer.",
+      "Jeg blev Englands all-time topscorer i 2023.",
+      "Jeg er den engelske angriber, der i mange år bar Tottenham-angrebet og anførerbindet for England."
+    ]
+  },
+  {
+    "id": "WAI-PL-011",
+    "player": "Jamie Vardy",
+    "aliases": [
+      "Jamie Vardy",
+      "Vardy"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg spillede semiprofessionel fodbold langt op i 20'erne.",
+      "Min vej mod toppen gik gennem flere klubber uden for de øverste professionelle rækker.",
+      "Jeg var 27 år, da jeg fik debut i den bedste engelske række.",
+      "Jeg kom til Leicester City i 2012.",
+      "Jeg scorede i 11 Premier League-kampe i træk i 2015.",
+      "Jeg var en nøglespiller på et af de største overraskelsesmesterhold i engelsk fodbold.",
+      "Som 33-årig blev jeg den ældste vinder af Premier League Golden Boot.",
+      "Jeg scorede 143 Premier League-mål for Leicester.",
+      "Jeg vandt Premier League med Leicester City i 2015/16.",
+      "Jeg er den engelske angriber, hvis karriere gik fra non-league til Premier League-mester."
+    ]
+  },
+  {
+    "id": "WAI-PL-012",
+    "player": "Virgil van Dijk",
+    "aliases": [
+      "Virgil van Dijk",
+      "Van Dijk",
+      "Virgil"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg blev frigivet af en ungdomsafdeling som 18-årig.",
+      "Mit professionelle gennembrud kom i en klub, der ikke var blandt de traditionelle storklubber i hjemlandet.",
+      "Før England vandt jeg to nationale mesterskaber i en anden britisk liga.",
+      "Jeg kom til Premier League gennem Southampton i 2015.",
+      "I januar 2018 blev jeg solgt for omkring £75 mio.",
+      "Jeg scorede sejrsmålet i min Liverpool-debut mod Everton i FA Cup'en.",
+      "Jeg blev PFA Players' Player of the Year i 2019.",
+      "Jeg vandt Champions League i 2019 og Premier League i 2019/20.",
+      "Jeg blev Liverpool-anfører i 2023.",
+      "Jeg er den hollandske midterforsvarer med trøje nummer 4 i Liverpool."
+    ]
+  },
+  {
+    "id": "WAI-PL-013",
+    "player": "N'Golo Kanté",
+    "aliases": [
+      "N'Golo Kanté",
+      "N’Golo Kanté",
+      "N'Golo Kante",
+      "Kanté",
+      "Kante"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg debuterede relativt sent på det allerhøjeste niveau sammenlignet med mange andre topspillere.",
+      "Mine første to sæsoner i England blev spillet for to forskellige klubber.",
+      "Begge de to første engelske sæsoner endte med et ligamesterskab.",
+      "Jeg vandt dermed ligaen med to forskellige klubber i mine to første sæsoner i England.",
+      "Mit første Chelsea-mål kom i en 4-0-sejr over Manchester United.",
+      "Jeg blev verdensmester med Frankrig i 2018.",
+      "Jeg vandt Champions League med Chelsea i 2021.",
+      "Jeg spillede for Chelsea fra 2016 til 2023.",
+      "Jeg er en fransk defensiv midtbanespiller kendt for min enorme arbejdsradius.",
+      "Jeg er spilleren, der vandt Premier League med både Leicester City og Chelsea."
+    ]
+  },
+  {
+    "id": "WAI-PL-014",
+    "player": "Cesc Fàbregas",
+    "aliases": [
+      "Cesc Fàbregas",
+      "Cesc Fabregas",
+      "Fàbregas",
+      "Fabregas",
+      "Cesc"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg lavede fire assists i én ligakamp i 2009.",
+      "Jeg satte en markant rekord for antal ligastarter som teenager.",
+      "Jeg forlod mit hjemlands mest berømte talentakademi som teenager for at flytte til England.",
+      "Jeg blev uddannet på La Masia sammen med blandt andre Lionel Messi og Gerard Piqué.",
+      "Jeg vendte tilbage til Barcelona i 2011.",
+      "Tre år senere kom jeg tilbage til Premier League, men til en anden London-klub.",
+      "Jeg vandt Premier League to gange.",
+      "Jeg lavede 111 assists i Premier League.",
+      "Jeg spillede i Premier League for både Arsenal og Chelsea.",
+      "Jeg er spanieren, der spillede Premier League for både Arsenal og Chelsea og sluttede med 111 assists."
+    ]
+  },
+  {
+    "id": "WAI-PL-015",
+    "player": "Robin van Persie",
+    "aliases": [
+      "Robin van Persie",
+      "Van Persie",
+      "RVP",
+      "Robin Van Persie"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg begyndte seniorkarrieren i hjemlandets bedste række.",
+      "Jeg kom til England i sommeren 2004.",
+      "Et af mine tidlige kendte ligamål i England var en akrobatisk afslutning i 2006.",
+      "Jeg vandt Golden Boot med 30 ligamål i 2011/12.",
+      "Efter otte år i Arsenal skiftede jeg til en direkte rival i 2012.",
+      "Jeg vandt Golden Boot igen i min første sæson i min nye klub.",
+      "Jeg blev Premier League-mester i 2012/13.",
+      "Jeg spillede senere for Fenerbahçe.",
+      "Jeg er hollandsk venstrefodet angriber og spillede for både Arsenal og Manchester United.",
+      "Jeg er den venstrefodede hollænder, der vandt Golden Boot for Arsenal og Manchester United i to sæsoner i træk."
+    ]
+  },
+  {
+    "id": "WAI-PL-016",
+    "player": "Peter Crouch",
+    "aliases": [
+      "Peter Crouch",
+      "Crouch"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg scorede ligamål for seks forskellige klubber i England.",
+      "Den klub, jeg scorede flest ligamål for, var ikke den klub, hvor jeg vandt flest trofæer.",
+      "Jeg nåede præcis 100 mål i landets bedste række sent i karrieren.",
+      "Jeg nåede præcis 100 Premier League-mål i 2017.",
+      "Jeg spillede blandt andet for Southampton, Liverpool, Portsmouth og Tottenham.",
+      "Jeg scorede 53 hovedstødsmål i Premier League.",
+      "Det er rekord for flest hovedstødsmål i ligaens historie.",
+      "Jeg var kendt for at være usædvanligt høj for en offensiv spiller.",
+      "Jeg er en engelsk angriber på omkring 2 meter.",
+      "Jeg er den cirka to meter høje engelske angriber, der har Premier League-rekorden for flest mål på hovedstød."
+    ]
+  },
+  {
+    "id": "WAI-PL-017",
+    "player": "Son Heung-min",
+    "aliases": [
+      "Son Heung-min",
+      "Heung-min Son",
+      "Son",
+      "Sonny",
+      "Heung Min Son",
+      "Heungmin Son"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg flyttede fra Asien til Europa som teenager og blev udviklet i tysk klubfodbold.",
+      "Jeg nåede at repræsentere to Bundesliga-klubber, før jeg kom til England.",
+      "Jeg kom til Premier League i sommeren 2015.",
+      "Jeg vandt FIFA Puskás Award for et solomål scoret i 2019.",
+      "Jeg vandt Premier League Golden Boot i 2021/22.",
+      "Jeg blev den første asiatiske spiller til at vinde Premier League Golden Boot.",
+      "Jeg blev Tottenham-anfører.",
+      "Jeg løftede Europa League-trofæet som Tottenham-anfører i 2025.",
+      "Efter ti år i Tottenham forlod jeg klubben i 2025 som en af dens største moderne profiler.",
+      "Jeg er den sydkoreanske Tottenham-profil, der både vandt Golden Boot og senere løftede Europa League-trofæet som anfører."
+    ]
+  },
+  {
+    "id": "WAI-PL-018",
+    "player": "Gareth Bale",
+    "aliases": [
+      "Gareth Bale",
+      "Bale"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg begyndte seniorkarrieren i en klub uden for den absolutte engelske top.",
+      "Jeg kom til en større London-klub som 17-årig.",
+      "Tidligt i seniorkarrieren blev jeg primært brugt i en mere defensiv position end senere.",
+      "Et hattrick på San Siro mod Inter i 2010 gjorde mig kendt i hele Europa.",
+      "Jeg blev PFA Players' Player of the Year to gange i England.",
+      "I 2012/13 vandt jeg både PFA Player, PFA Young Player og FWA Player of the Year.",
+      "Jeg forlod Tottenham for Real Madrid i 2013.",
+      "Jeg vendte tilbage til Tottenham på leje i 2020/21.",
+      "Jeg er walisisk og blev berømt for fart, venstreben og langskud.",
+      "Jeg er den tidligere Tottenham-stjerne, der senere vandt Champions League flere gange med Real Madrid."
+    ]
+  },
+  {
+    "id": "WAI-PL-019",
+    "player": "Luis Suárez",
+    "aliases": [
+      "Luis Suárez",
+      "Luis Suarez",
+      "Suárez",
+      "Suarez"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Mit første europæiske klubophold var i Holland, men ikke i den klub jeg senere blev størst profil for dér.",
+      "Jeg kom til England på transfervinduets sidste dag i januar.",
+      "Jeg scorede allerede i min første kamp for min engelske klub.",
+      "Jeg vandt Copa América med Uruguay i 2011 og blev kåret til turneringens bedste spiller.",
+      "Jeg vandt League Cup med Liverpool i 2012.",
+      "Jeg scorede 31 Premier League-mål i 2013/14 uden at tage straffespark.",
+      "Jeg blev PFA Players' Player of the Year i 2013/14.",
+      "Jeg bar trøje nummer 7 i Liverpool.",
+      "Jeg skiftede fra Liverpool til Barcelona i 2014.",
+      "Jeg er den uruguayanske angriber, der dannede en frygtet duo med Daniel Sturridge."
+    ]
+  },
+  {
+    "id": "WAI-PL-020",
+    "player": "Erling Haaland",
+    "aliases": [
+      "Erling Haaland",
+      "Erling Braut Haaland",
+      "Haaland"
+    ],
+    "league": "Premier League",
+    "clues": [
+      "Jeg fik min seniordebut i en mindre klub i hjemlandet.",
+      "Mit første udenlandske klubskifte gik til en liga uden for Europas fem største.",
+      "Jeg scorede hattrick i min debut i Europas største klubturnering.",
+      "I januar 2020 skiftede jeg til Borussia Dortmund.",
+      "Jeg havde et ekstremt lavt antal minutter pr. mål i Bundesligaen.",
+      "Jeg skiftede til Manchester City i sommeren 2022.",
+      "Jeg scorede 36 Premier League-mål i min debutsæson.",
+      "Jeg vandt en treble med Manchester City i 2022/23.",
+      "Jeg er norsk angriber og søn af en tidligere Premier League-spiller.",
+      "Jeg er Manchester Citys store norske nummer 9."
+    ]
+  },
+  {
+    "id": "WAI-SL-001",
+    "player": "Daniel Agger",
+    "aliases": [
+      "Daniel Agger",
+      "Agger"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg repræsenterede kun to klubber gennem hele min seniorkarriere.",
+      "Jeg spillede en europæisk finale i 2007.",
+      "Jeg vandt en engelsk pokalturnering i 2012.",
+      "Jeg blev viceanfører i min engelske klub i 2013.",
+      "Jeg nåede 232 officielle kampe for Liverpool.",
+      "Jeg skiftede fra Brøndby til Liverpool i januar 2006.",
+      "Jeg vendte tilbage til Brøndby i 2014.",
+      "Jeg spillede midterforsvar og var kendt for et hårdt venstreben.",
+      "Jeg spillede 71 A-landskampe for Danmark.",
+      "Jeg er Brøndby- og Liverpool-forsvareren med 'YNWA' tatoveret på knoerne."
+    ]
+  },
+  {
+    "id": "WAI-SL-002",
+    "player": "Thomas Delaney",
+    "aliases": [
+      "Thomas Delaney",
+      "Delaney"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg begyndte organiseret klubfodbold allerede som treårig.",
+      "Jeg fik førsteholdsdebut som 17-årig i en dansk pokalkamp.",
+      "Jeg nåede at blive anfører i min barndomsklub, før jeg tog til udlandet.",
+      "Jeg skiftede til Werder Bremen i 2017.",
+      "Jeg spillede senere for Borussia Dortmund.",
+      "Jeg har også spillet for Sevilla, Hoffenheim og Anderlecht.",
+      "Jeg vendte tilbage til FC København i 2024.",
+      "Jeg er dansk central midtbanespiller.",
+      "Jeg har spillet over 300 officielle kampe for FC København.",
+      "Jeg er den danske FCK-midtbanespiller, der senere spillede for blandt andre Werder Bremen, Dortmund og Sevilla."
+    ]
+  },
+  {
+    "id": "WAI-SL-003",
+    "player": "Simon Kjær",
+    "aliases": [
+      "Simon Kjær",
+      "Kjær",
+      "Simon Kjaer",
+      "Kjaer"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg nåede færre end 20 førsteholdskampe i Danmark, før jeg blev solgt til udlandet.",
+      "Mit første udenlandske ophold var i Serie A.",
+      "Inden jeg fyldte 25 år havde jeg allerede spillet klubfodbold i tre forskellige europæiske topligaer.",
+      "Min karriere førte mig også til Lille, Fenerbahçe, Sevilla og Atalanta.",
+      "Jeg sluttede den europæiske klubkarriere i AC Milan.",
+      "Jeg nåede 132 A-landskampe for Danmark.",
+      "Jeg var dansk landsholdsanfører fra 2016 til 2024.",
+      "Jeg var anfører under Danmarks vej til EM-semifinalen i 2021.",
+      "Jeg er midterforsvarer og kom gennem FC Midtjyllands akademi.",
+      "Jeg er den danske midterforsvarer, der var landsholdsanfører under EM-semifinalen i 2021 og senere spillede for AC Milan."
+    ]
+  },
+  {
+    "id": "WAI-SL-004",
+    "player": "Pione Sisto",
+    "aliases": [
+      "Pione Sisto",
+      "Sisto"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg blev kåret til årets akademispiller i min klub, før jeg for alvor slog igennem på førsteholdet.",
+      "Jeg fik seniordebut som 17-årig.",
+      "Jeg blev kåret til Årets Profil i Superligaen, før jeg fyldte 20.",
+      "Før mit første udlandsskifte nåede jeg 113 kampe og 31 mål for min klub.",
+      "Jeg skiftede til Spanien i 2016.",
+      "Min spanske klub var Celta Vigo.",
+      "Jeg nåede 135 kampe for Celta Vigo.",
+      "Jeg vendte tilbage til FC Midtjylland i 2020.",
+      "Jeg er en dansk kantspiller kendt for driblinger og gennembrud.",
+      "Jeg er den driblestærke danske kantspiller, der blev Årets Profil i Superligaen og senere skiftede til Celta Vigo."
+    ]
+  },
+  {
+    "id": "WAI-SL-005",
+    "player": "Andreas Cornelius",
+    "aliases": [
+      "Andreas Cornelius",
+      "Cornelius",
+      "Corner"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg fik min førsteholdsdebut i foråret 2012.",
+      "Mit første udlandseventyr blev kortere end forventet.",
+      "Efter det første udlandseventyr vendte jeg hurtigt tilbage til den klub, jeg var blevet solgt fra.",
+      "Jeg vendte hurtigt tilbage til FC København.",
+      "Jeg var med til at vinde The Double med FCK i både 2016 og 2017.",
+      "Jeg skiftede senere til Atalanta i Serie A.",
+      "Jeg spillede også for Parma og Trabzonspor.",
+      "Jeg blev tyrkisk mester med Trabzonspor.",
+      "Jeg vendte endnu en gang hjem til FC København i 2022.",
+      "Jeg er den høje danske angriber, der er vendt tilbage til FC København efter flere forskellige udlandseventyr."
+    ]
+  },
+  {
+    "id": "WAI-SL-006",
+    "player": "Rasmus Højlund",
+    "aliases": [
+      "Rasmus Højlund",
+      "Rasmus Hojlund",
+      "Højlund",
+      "Hojlund"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg spillede 19 ligakampe for min første seniorklub uden at score i ligaen.",
+      "Mine første fem seniormål for samme klub kom alle i europæiske kampe.",
+      "Mit første udenlandsskifte skete som 18-årig.",
+      "Kun syv måneder senere skiftede jeg videre til Atalanta.",
+      "Jeg er venstrefodet og omkring 191 cm høj.",
+      "Jeg skiftede til Manchester United i 2023.",
+      "Jeg vandt FA Cup'en med Manchester United i 2024.",
+      "Jeg kom til Napoli på leje i 2025, og skiftet blev gjort permanent i juni 2026.",
+      "Jeg er dansk landsholdsangriber og begyndte seniorkarrieren i FCK.",
+      "Jeg er den danske angriber, der gik fra FC København via Sturm Graz og Atalanta til Manchester United og Napoli."
+    ]
+  },
+  {
+    "id": "WAI-SL-007",
+    "player": "Mikkel Damsgaard",
+    "aliases": [
+      "Mikkel Damsgaard",
+      "Damsgaard"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg blev scoutet til et eliteakademi allerede som barn.",
+      "Jeg fik førsteholdsdebut som 17-årig.",
+      "I min sidste hele sæson i Danmark lavede jeg tocifret antal mål i alle turneringer.",
+      "Mit første udlandsskifte gik til Sampdoria.",
+      "Jeg blev Danmarks yngste målscorer ved en EM-slutrunde, da jeg scorede mod Rusland.",
+      "Jeg scorede på frispark mod England i EM-semifinalen i 2021.",
+      "Jeg skiftede til Brentford i 2022.",
+      "Jeg kan spille både centralt og på kanten.",
+      "Jeg er dansk offensivspiller og slog igennem i FC Nordsjælland.",
+      "Jeg er danskeren, der scorede frisparksmålet mod England i EM-semifinalen i 2021."
+    ]
+  },
+  {
+    "id": "WAI-SL-008",
+    "player": "Gustav Isaksen",
+    "aliases": [
+      "Gustav Isaksen",
+      "Isaksen",
+      "Gustav Tang Isaksen"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg skiftede til et eliteakademi som 12-årig fra en mindre lokal klub.",
+      "Jeg var med i min danske klubs første Champions League-gruppespil.",
+      "Jeg er født i 2001.",
+      "Jeg slog for alvor igennem som målfarlig kantspiller i 2022/23.",
+      "Jeg scorede 18 mål og blev Superliga-topscorer i 2022/23.",
+      "Jeg blev solgt til de italienske vicemestre i sommeren 2023.",
+      "Min italienske klub ligger i Rom.",
+      "Jeg skiftede direkte fra FC Midtjylland til Lazio.",
+      "Jeg er dansk offensivspiller og tidligere FCM-akademispiller.",
+      "Jeg er den tidligere FC Midtjylland-topscorer, der skiftede direkte til Lazio i 2023."
+    ]
+  },
+  {
+    "id": "WAI-SL-009",
+    "player": "Nicklas Bendtner",
+    "aliases": [
+      "Nicklas Bendtner",
+      "Bendtner",
+      "Lord Bendtner"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg spillede ungdomsfodbold i to københavnske klubmiljøer.",
+      "Et af mine første seniorlejeophold var i den næstbedste engelske række.",
+      "Jeg blev i løbet af karrieren udlejet til klubber i både England og Italien.",
+      "Jeg spillede senere for Wolfsburg og Nottingham Forest.",
+      "Jeg blev norsk mester med Rosenborg.",
+      "I september 2019 vendte jeg tilbage til København for at spille klubfodbold.",
+      "Jeg nåede ni officielle kampe og ét mål for FC København.",
+      "Langt størstedelen af min engelske karriere var i Arsenal.",
+      "Jeg er dansk angriber og blev kendt for både selvtillid og store øjeblikke på landsholdet.",
+      "Jeg er den danske angriber, der har spillet for blandt andre Arsenal, Juventus, Rosenborg og FC København."
+    ]
+  },
+  {
+    "id": "WAI-SL-010",
+    "player": "Jesper Grønkjær",
+    "aliases": [
+      "Jesper Grønkjær",
+      "Jesper Gronkjaer",
+      "Grønkjær",
+      "Gronkjaer"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg fik debut i landets bedste række allerede i midten af 1990'erne.",
+      "Min første seniorklub lå i Nordjylland.",
+      "Mit første store udlandseventyr gik til Holland.",
+      "Jeg spillede i England for både Chelsea og Birmingham City.",
+      "Jeg havde også ophold i Atlético Madrid og Stuttgart.",
+      "Jeg nåede mere end 500 klubkampe gennem karrieren.",
+      "Jeg spillede 80 A-landskampe for Danmark.",
+      "Jeg deltog ved fire VM- og EM-slutrunder.",
+      "Jeg afsluttede karrieren i FC København i 2011.",
+      "Jeg er den danske kantspiller, der nåede at spille for AaB, Ajax, Chelsea, Atlético Madrid, Stuttgart og FC København."
+    ]
+  },
+  {
+    "id": "WAI-SL-011",
+    "player": "Morten 'Duncan' Rasmussen",
+    "aliases": [
+      "Morten 'Duncan' Rasmussen",
+      "Morten Duncan Rasmussen",
+      "Morten Rasmussen",
+      "Duncan"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg fik debut i landets bedste række i 2002.",
+      "Jeg nåede at repræsentere fire forskellige klubber i samme nationale liga.",
+      "Jeg havde også kortere udlandsophold i både Storbritannien og Tyskland.",
+      "Jeg blev Årets U19-talent i Danmark i 2003.",
+      "Jeg skiftede fra AGF til Brøndby i januar 2006.",
+      "Jeg spillede senere for både AaB og FC Midtjylland.",
+      "Jeg sluttede min Superliga-karriere med 355 kampe.",
+      "Jeg scorede præcis 145 mål i Superligaen.",
+      "De 145 mål gør mig til Superligaens all-time topscorer.",
+      "Jeg er angriberen med Superliga-rekorden på 145 mål og har spillet i ligaen for AGF, Brøndby, AaB og FC Midtjylland."
+    ]
+  },
+  {
+    "id": "WAI-SL-012",
+    "player": "Rasmus Würtz",
+    "aliases": [
+      "Rasmus Würtz",
+      "Rasmus Wurtz",
+      "Würtz",
+      "Wurtz"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg skiftede fra en mindre jysk klub til en Superliga-klub i 2002.",
+      "Næsten hele min seniorkarriere blev spillet i Danmark.",
+      "Jeg havde kun en kort periode væk fra den klub, jeg forbindes klart mest med.",
+      "Jeg nåede 12 A-landskampe for Danmark.",
+      "Jeg spillede central midtbane og var kendt som en hårdtarbejdende type.",
+      "Jeg nåede 487 officielle kampe for AaB.",
+      "Jeg fik 102 gule kort i Superligaen.",
+      "Jeg spillede 452 Superliga-kampe i alt.",
+      "De 452 kampe er rekord i Superligaens historie.",
+      "Jeg er midtbanespilleren med rekordens 452 Superliga-kampe og næsten 500 officielle kampe for AaB."
+    ]
+  },
+  {
+    "id": "WAI-SL-013",
+    "player": "Dame N'Doye",
+    "aliases": [
+      "Dame N'Doye",
+      "Dame Ndoye",
+      "N'Doye",
+      "Ndoye",
+      "Dame N’Doye"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Min første officielle kamp for min mest kendte danske klub var en europæisk kamp i februar 2009.",
+      "Jeg scorede tocifret antal mål for klubben i Champions League.",
+      "Jeg scorede også tocifret antal mål for klubben i UEFA Cup/Europa League.",
+      "Jeg nåede 217 officielle kampe for FC København.",
+      "Jeg scorede 118 mål i alle turneringer for FCK.",
+      "Jeg scorede 90 mål i Superligaen for FCK.",
+      "Jeg havde to forskellige perioder i FC København.",
+      "Jeg er senegalesisk angriber.",
+      "Jeg bar trøje nummer 14 i FC København.",
+      "Jeg er den senegalesiske FC København-angriber, der scorede 90 Superliga-mål for klubben."
+    ]
+  },
+  {
+    "id": "WAI-SL-014",
+    "player": "Robert Skov",
+    "aliases": [
+      "Robert Skov",
+      "Skov",
+      "Robert Faxe Skov"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg er født uden for Danmark, men voksede op i dansk fodbold.",
+      "Jeg fik debut i Superligaen som 16-årig.",
+      "Mit gennembrud kom i en jysk klub.",
+      "Jeg skiftede til FC København i januar 2018.",
+      "Jeg scorede 33 mål i 72 officielle FCK-kampe.",
+      "Jeg satte Superliga-rekord med 29 mål i 2018/19.",
+      "Efter rekord-sæsonen blev jeg solgt til Hoffenheim.",
+      "Jeg spillede senere i Bundesligaen for Union Berlin.",
+      "Jeg er dansk venstrefodet spiller, der både er blevet brugt offensivt og som wingback.",
+      "Jeg er den venstrefodede danske spiller, der satte Superliga-rekord med 29 mål for FC København i 2018/19."
+    ]
+  },
+  {
+    "id": "WAI-SL-015",
+    "player": "Mikael Uhre",
+    "aliases": [
+      "Mikael Uhre",
+      "Uhre"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg havde et lejeophold i en lavere rangeret dansk klub tidligt i seniorkarrieren.",
+      "Jeg havde to separate perioder i den samme sønderjyske klub.",
+      "Jeg skiftede til en af landets største klubber i 2018.",
+      "Jeg blev dansk mester i 2020/21.",
+      "Jeg blev Superliga-topscorer i samme mesterskabssæson.",
+      "Jeg blev også kåret til Superliga Player of the Season.",
+      "Jeg skiftede til MLS i januar 2022.",
+      "Jeg blev den første dansker til at spille for Philadelphia Union.",
+      "Jeg er en dansk angriber fra Ribe-området.",
+      "Jeg er den danske Brøndby-angriber, der blev både dansk mester og Superliga-topscorer i 2020/21."
+    ]
+  },
+  {
+    "id": "WAI-SL-016",
+    "player": "Mohamed Zidan",
+    "aliases": [
+      "Mohamed Zidan",
+      "Zidan"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Mit første store europæiske gennembrud kom i Danmark.",
+      "Jeg blev solgt fra dansk fodbold til Bundesligaen midt i en sæson.",
+      "Jeg nåede senere at repræsentere tre forskellige Bundesliga-klubber.",
+      "Jeg blev solgt til Werder Bremen i januar 2005.",
+      "Jeg havde to forskellige perioder i Mainz.",
+      "Jeg spillede også for Hamburger SV.",
+      "Jeg spillede 73 officielle kampe for Borussia Dortmund.",
+      "Jeg blev tysk mester med Borussia Dortmund i 2010/11.",
+      "Jeg var en teknisk stærk offensivspiller med et efternavn, der minder om en fransk verdensstjerne.",
+      "Jeg er den egyptiske offensive profil, der gik fra FC Midtjylland til Werder Bremen og senere spillede for Borussia Dortmund."
+    ]
+  },
+  {
+    "id": "WAI-SL-017",
+    "player": "Johan Elmander",
+    "aliases": [
+      "Johan Elmander",
+      "Elmander"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg begyndte seniorkarrieren i Sverige.",
+      "Mit første store udlandsskifte gik til Holland.",
+      "Jeg havde to lejeophold, før jeg fandt en fast rolle i dansk fodbold.",
+      "Jeg spillede for Brøndby fra 2004 til 2006.",
+      "Jeg var med til at vinde The Double med Brøndby i 2005.",
+      "Efter Brøndby skiftede jeg til Toulouse.",
+      "Jeg spillede tre sæsoner i Premier League for Bolton.",
+      "Jeg spillede senere for Galatasaray og var udlejet til Norwich.",
+      "Jeg vendte tilbage til Brøndby i 2014.",
+      "Jeg er den svenske angriber, der blev en stor Brøndby-fanfavorit, vandt The Double i 2005 og senere spillede i Premier League for Bolton."
+    ]
+  },
+  {
+    "id": "WAI-SL-018",
+    "player": "Jesper Lindstrøm",
+    "aliases": [
+      "Jesper Lindstrøm",
+      "Jesper Lindstrom",
+      "Lindstrøm",
+      "Lindstrom",
+      "Jobbe"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg er opvokset vest for København.",
+      "Jeg kom gennem et dansk Superliga-akademi.",
+      "Min førsteholdsdebut kom i en pokalkamp i november 2018.",
+      "Mit Superliga-gennembrud kom for alvor i 2020/21.",
+      "Jeg lavede 10 mål og 11 assists i mesterskabssæsonen.",
+      "Jeg var med til at vinde Brøndbys første mesterskab i 16 år.",
+      "Jeg blev solgt til Eintracht Frankfurt i sommeren 2021.",
+      "Jeg vandt Europa League med Eintracht Frankfurt i 2022.",
+      "Jeg skiftede videre til Napoli i 2023.",
+      "Jeg er Brøndby-talentet, der blev dansk mester i 2021 og senere vandt Europa League med Eintracht Frankfurt."
+    ]
+  },
+  {
+    "id": "WAI-SL-019",
+    "player": "Atiba Hutchinson",
+    "aliases": [
+      "Atiba Hutchinson",
+      "Hutchinson",
+      "Atiba"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Min A-landsholdskarriere strakte sig over mere end to årtier.",
+      "Jeg nåede over 100 A-landskampe.",
+      "Jeg blev kåret til mit lands årets spiller seks gange.",
+      "Før dansk fodbold spillede jeg i Sverige.",
+      "Jeg kom til FC København i januar 2006 og debuterede mod Brøndby i Royal League.",
+      "Jeg nåede 215 officielle kampe og 29 mål for FC København.",
+      "Jeg vandt fire danske mesterskaber og en pokaltitel med FC København.",
+      "I 2010 forlod jeg Danmark til fordel for PSV Eindhoven.",
+      "Jeg spillede senere i mange år for Beşiktaş og deltog ved VM 2022.",
+      "Jeg er den canadiske midtbanespiller, der blev en stor profil i FC København i anden halvdel af 00'erne."
+    ]
+  },
+  {
+    "id": "WAI-SL-020",
+    "player": "Christian Poulsen",
+    "aliases": [
+      "Christian Poulsen",
+      "Poulsen"
+    ],
+    "league": "Superliga",
+    "clues": [
+      "Jeg kom til min første Superliga-klub som 20-årig fra en klub uden for landets bedste række.",
+      "Jeg fik førsteholdsdebut i foråret 2001.",
+      "Mit første udlandseventyr gik til Bundesligaen året efter.",
+      "Jeg spillede senere for Sevilla og Juventus.",
+      "Jeg havde også en periode i Liverpool.",
+      "Efter England spillede jeg for Evian og Ajax.",
+      "Jeg vendte tilbage til FC København i 2014.",
+      "Jeg spillede central/defensiv midtbane.",
+      "Jeg vandt det danske mesterskab i min første FCK-periode.",
+      "Jeg er den danske defensive midtbanespiller, der gik fra FC København til Schalke og senere spillede for Sevilla, Juventus, Liverpool og Ajax."
     ]
   }
 ]

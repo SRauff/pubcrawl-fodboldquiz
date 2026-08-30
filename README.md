@@ -9,8 +9,8 @@ index.html            Skærme, invitationsoverlay og quiz-UI
 css/style.css         Mobile-first design og layout
 js/app.js             Navigation, quizmotorer og brugerflade
 js/firebase.js        Firebase-login, presence og realtime game-state
-data/questions.json   Testpool til Klassisk quiz
-data/who-am-i.json    Testpool til Gæt hvem jeg er
+data/questions.json   Produktionspulje til Klassisk quiz
+data/who-am-i.json    Produktionspulje til Gæt hvem jeg er
 README.md             Projektdokumentation
 ```
 
@@ -35,11 +35,11 @@ python3 -m http.server 8000
 
 ## Klassisk quiz
 
-`data/questions.json` indeholder testspørgsmål med fire svarmuligheder og facit. Hosten vælger tilfældige ID'er uden dubletter. Alle ser samme spørgsmål og timer. Korrekte svar giver point efter svarhastighed. Efter hvert spørgsmål vises facit og stilling, og efter sidste spørgsmål vises slutstillingen.
+`data/questions.json` indeholder 130 produktionsspørgsmål med fire svarmuligheder og facit. Hosten vælger tilfældige ID'er uden dubletter. Alle ser samme spørgsmål og en fælles 15-sekunders timer. Korrekte svar giver point efter svarhastighed. Efter hvert spørgsmål vises facit og stilling, og efter sidste spørgsmål vises slutstillingen.
 
 ## Gæt hvem jeg er
 
-`data/who-am-i.json` indeholder seks testspillere med unikt ID, canonical navn, aliases og præcis 10 ledetråde. Et rundeantal over poolens størrelse begrænses automatisk.
+`data/who-am-i.json` indeholder 40 produktionsspillere med unikt ID, canonical navn, aliases og præcis 10 ledetråde. Et rundeantal over poolens størrelse begrænses automatisk.
 
 ```text
 phase: "clue" | "lastChance" | "reveal" | "standings" | "finished"
@@ -86,7 +86,7 @@ Kun rundens ene vinder får point.
 
 ## Kendte begrænsninger
 
-- Gæt hvem jeg er har kun seks testspillere, og Klassisk quiz har 10 testspørgsmål.
+- Produktionspuljen indeholder 40 Gæt hvem jeg er-spillere og 130 Klassisk-spørgsmål.
 - Der er ingen fuzzy matching eller host-migration.
 - Facit og logik ligger i frontend. Uden backend kan reglerne ikke afgøre, om et navn faktisk er korrekt.
 - Afsluttede game-noder bevares, så deltagerne kan forlade i eget tempo.
@@ -154,8 +154,8 @@ Erstat hele blokken under **Firebase → Realtime Database → Rules** og klik *
         "answers": {
           "$questionIndex": {
             "$uid": {
-              ".write": "auth != null && auth.uid === $uid && !data.exists() && root.child('games').child($gameId).child('status').val() === 'started' && root.child('games').child($gameId).child('phase').val() === 'question' && $questionIndex === root.child('games').child($gameId).child('currentQuestionIndex').val() + '' && now <= root.child('games').child($gameId).child('questionStartedAt').val() + 10000",
-              ".validate": "auth != null && auth.uid === $uid && !data.exists() && newData.hasChildren(['optionIndex', 'answeredAt']) && newData.child('optionIndex').isNumber() && newData.child('optionIndex').val() >= 0 && newData.child('optionIndex').val() <= 3 && newData.child('answeredAt').isNumber() && root.child('games').child($gameId).child('phase').val() === 'question' && $questionIndex === root.child('games').child($gameId).child('currentQuestionIndex').val() + '' && now <= root.child('games').child($gameId).child('questionStartedAt').val() + 10000"
+              ".write": "auth != null && auth.uid === $uid && !data.exists() && root.child('games').child($gameId).child('status').val() === 'started' && root.child('games').child($gameId).child('phase').val() === 'question' && $questionIndex === root.child('games').child($gameId).child('currentQuestionIndex').val() + '' && now <= root.child('games').child($gameId).child('questionStartedAt').val() + 15000",
+              ".validate": "auth != null && auth.uid === $uid && !data.exists() && newData.hasChildren(['optionIndex', 'answeredAt']) && newData.child('optionIndex').isNumber() && newData.child('optionIndex').val() >= 0 && newData.child('optionIndex').val() <= 3 && newData.child('answeredAt').isNumber() && root.child('games').child($gameId).child('phase').val() === 'question' && $questionIndex === root.child('games').child($gameId).child('currentQuestionIndex').val() + '' && now <= root.child('games').child($gameId).child('questionStartedAt').val() + 15000"
             }
           }
         },

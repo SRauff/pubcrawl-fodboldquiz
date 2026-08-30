@@ -1,6 +1,6 @@
 const STORAGE_KEY = "pubcrawlPlayerName";
 const CONNECTION_ERROR_MESSAGE = "Der kunne ikke oprettes forbindelse. Prøv igen.";
-const QUESTION_DURATION_MS = 10000;
+const QUESTION_DURATION_MS = 15000;
 const CLUE_DURATION_MS = 10000;
 const GUESS_DURATION_MS = 25000;
 const CLUES_PER_ROUND = 10;
