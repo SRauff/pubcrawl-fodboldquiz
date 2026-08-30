@@ -1,0 +1,104 @@
+[
+  {
+    "id": "WHO-001",
+    "player": "Anders Bjelland",
+    "aliases": ["Anders Bjelland", "Bjelland"],
+    "clues": [
+      "Jeg er født i København",
+      "Jeg er forsvarsspiller",
+      "Jeg har spillet landskampe for Danmark",
+      "Jeg begyndte min seniorkarriere i Lyngby",
+      "Jeg har spillet for FC Nordsjælland",
+      "Jeg har været dansk mester",
+      "Jeg har spillet i både Holland og England",
+      "Jeg spillede for Brentford",
+      "Mit fornavn er Anders",
+      "Mit efternavn starter med Bj"
+    ]
+  },
+  {
+    "id": "WHO-002",
+    "player": "Peter Schmeichel",
+    "aliases": ["Peter Schmeichel", "Schmeichel"],
+    "clues": [
+      "Jeg er dansker",
+      "Jeg var målmand",
+      "Jeg har spillet mere end 100 landskampe",
+      "Jeg har været anfører for Danmark",
+      "Jeg har spillet i Portugal",
+      "Jeg vandt EM i 1992",
+      "Jeg har vundet Champions League",
+      "Jeg spillede størstedelen af min karriere i Manchester United",
+      "Min søn er også professionel målmand",
+      "Mit fornavn er Peter"
+    ]
+  },
+  {
+    "id": "WHO-003",
+    "player": "Christian Eriksen",
+    "aliases": ["Christian Eriksen", "Eriksen"],
+    "clues": [
+      "Jeg er dansk landsholdsspiller",
+      "Jeg spiller på midtbanen",
+      "Jeg forlod Danmark som ungdomsspiller",
+      "Jeg har spillet i både Holland, England og Italien",
+      "Jeg blev hollandsk mester med Ajax",
+      "Jeg har spillet for Inter",
+      "Jeg nåede en Champions League-finale med Tottenham",
+      "Jeg har også spillet for Brentford",
+      "Jeg har båret nummer 10 for Danmark",
+      "Mit efternavn er Eriksen"
+    ]
+  },
+  {
+    "id": "WHO-004",
+    "player": "Lionel Messi",
+    "aliases": ["Lionel Messi", "Messi", "Leo Messi"],
+    "clues": [
+      "Jeg er sydamerikaner",
+      "Jeg er venstrebenet offensivspiller",
+      "Jeg flyttede til Europa som teenager",
+      "Jeg har vundet Champions League flere gange",
+      "Jeg har spillet i både Spanien og Frankrig",
+      "Jeg vandt Copa América med mit land",
+      "Jeg blev verdensmester i 2022",
+      "Jeg spillede det meste af min karriere for Barcelona",
+      "Jeg kommer fra Argentina",
+      "Mit efternavn er Messi"
+    ]
+  },
+  {
+    "id": "WHO-005",
+    "player": "Mohamed Salah",
+    "aliases": ["Mohamed Salah", "Salah", "Mo Salah"],
+    "clues": [
+      "Jeg er afrikansk landsholdsspiller",
+      "Jeg er venstrebenet offensivspiller",
+      "Jeg har spillet professionelt i Schweiz",
+      "Jeg har spillet i både England og Italien",
+      "Jeg har repræsenteret Roma",
+      "Jeg har vundet Champions League",
+      "Jeg spiller for Liverpool",
+      "Jeg kommer fra Egypten",
+      "Jeg bliver ofte kaldt Mo",
+      "Mit efternavn er Salah"
+    ]
+  },
+  {
+    "id": "WHO-006",
+    "player": "Pernille Harder",
+    "aliases": ["Pernille Harder", "Harder"],
+    "clues": [
+      "Jeg er dansk landsholdsspiller",
+      "Jeg er offensivspiller",
+      "Jeg har spillet professionelt i Sverige",
+      "Jeg har været anfører for Danmark",
+      "Jeg har spillet i både Tyskland og England",
+      "Jeg har repræsenteret Wolfsburg",
+      "Jeg har spillet for Chelsea",
+      "Jeg har vundet flere nationale mesterskaber",
+      "Mit fornavn er Pernille",
+      "Mit efternavn er Harder"
+    ]
+  }
+]

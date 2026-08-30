@@ -11,6 +11,7 @@ import {
   push,
   ref,
   remove,
+  runTransaction,
   serverTimestamp,
   set,
   update,
@@ -345,6 +346,216 @@ export function startClassicGame(gameId, game, selectedQuestionIds) {
 
   addPendingInvitationCleanup(updates, gameId, game);
   return update(ref(database), updates);
+}
+
+export function startWhoAmIGame(gameId, game, selectedPlayerIds) {
+  const players = {
+    [game.hostUid]: { name: game.hostName },
+  };
+
+  Object.entries(game.invitedPlayers || {}).forEach(([uid, player]) => {
+    if (player.status === "accepted") {
+      players[uid] = { name: player.name };
+    }
+  });
+
+  const scores = Object.fromEntries(Object.keys(players).map((uid) => [uid, 0]));
+  const attempts = Object.fromEntries(Object.keys(players).map((uid) => [uid, {
+    remainingLives: 2,
+    guessCount: 0,
+  }]));
+  const updates = {
+    [`games/${gameId}/status`]: "started",
+    [`games/${gameId}/phase`]: "clue",
+    [`games/${gameId}/selectedPlayerIds`]: selectedPlayerIds,
+    [`games/${gameId}/totalRounds`]: selectedPlayerIds.length,
+    [`games/${gameId}/currentRoundIndex`]: 0,
+    [`games/${gameId}/currentClueIndex`]: 0,
+    [`games/${gameId}/clueStartedAt`]: serverTimestamp(),
+    [`games/${gameId}/players`]: players,
+    [`games/${gameId}/scores`]: scores,
+    [`games/${gameId}/whoAmIAttempts/0`]: attempts,
+  };
+
+  addPendingInvitationCleanup(updates, gameId, game);
+  return update(ref(database), updates);
+}
+
+export async function claimWhoAmIRound(gameId, roundIndex, claim) {
+  const claimRef = ref(database, `games/${gameId}/roundClaims/${roundIndex}`);
+  const result = await runTransaction(claimRef, (currentClaim) => {
+    if (currentClaim) {
+      return;
+    }
+
+    return claim;
+  });
+
+  return result.committed;
+}
+
+export async function claimWhoAmIGuess(gameId, roundIndex, guessControl) {
+  const guessControlRef = ref(database, `games/${gameId}/guessControl/${roundIndex}`);
+  const result = await runTransaction(guessControlRef, (currentControl) => {
+    if (currentControl) {
+      return;
+    }
+
+    return guessControl;
+  });
+
+  return result.committed;
+}
+
+export async function markWhoAmIGuessWrong(gameId, roundIndex, userUid, guess, resolvedAt) {
+  const guessControlRef = ref(database, `games/${gameId}/guessControl/${roundIndex}`);
+  const result = await runTransaction(guessControlRef, (control) => {
+    if (!control || control.state !== "active" || control.uid !== userUid) {
+      return;
+    }
+
+    return {
+      ...control,
+      state: "wrong",
+      guess,
+      resolvedAt,
+    };
+  });
+
+  return result.committed;
+}
+
+export function resolveFailedWhoAmIGuess(gameId, game, resolution, resolvedAt) {
+  const roundIndex = game.currentRoundIndex;
+  const control = game.guessControl?.[roundIndex];
+  const attempt = game.whoAmIAttempts?.[roundIndex]?.[resolution.uid];
+
+  if (!control || !attempt || control.uid !== resolution.uid) {
+    return Promise.resolve();
+  }
+
+  const guessCount = Number(attempt.guessCount) || 0;
+  const remainingLives = Math.max(0, (Number(attempt.remainingLives) || 0) - 1);
+  const updates = {
+    [`games/${gameId}/whoAmIAttempts/${roundIndex}/${resolution.uid}/remainingLives`]: remainingLives,
+    [`games/${gameId}/whoAmIAttempts/${roundIndex}/${resolution.uid}/guessCount`]: guessCount + 1,
+    [`games/${gameId}/guessControl/${roundIndex}`]: null,
+  };
+
+  if (resolution.reason === "wrong") {
+    updates[`games/${gameId}/whoAmIAttempts/${roundIndex}/${resolution.uid}/guesses/${guessCount}`] = {
+      guess: control.guess,
+      guessedAt: Number(control.resolvedAt) || resolvedAt,
+      correct: false,
+      mode: "normal",
+    };
+  }
+
+  const activePlayerUids = Object.keys(game.players || {}).filter((uid) => {
+    if (uid === resolution.uid) {
+      return remainingLives > 0;
+    }
+    return Number(game.whoAmIAttempts?.[roundIndex]?.[uid]?.remainingLives) > 0;
+  });
+
+  if (activePlayerUids.length === 1 && Object.keys(game.players || {}).length > 1) {
+    updates[`games/${gameId}/phase`] = "lastChance";
+    updates[`games/${gameId}/lastPlayerStandingUid`] = activePlayerUids[0];
+    updates[`games/${gameId}/lastChanceStartedAt`] = resolvedAt;
+  } else {
+    const pausedMs = Math.max(0, Math.min(10000, Number(control.remainingClueMs) || 0));
+    updates[`games/${gameId}/clueStartedAt`] = resolvedAt - (10000 - pausedMs);
+  }
+
+  return update(ref(database), updates);
+}
+
+export async function submitWrongWhoAmIGuess(gameId, roundIndex, userUid, guess) {
+  const attemptRef = ref(database, `games/${gameId}/whoAmIAttempts/${roundIndex}/${userUid}`);
+  const result = await runTransaction(attemptRef, (attempt) => {
+    if (!attempt) {
+      return;
+    }
+
+    const guessCount = Number(attempt.guessCount) || 0;
+    const remainingLives = Number(attempt.remainingLives) || 0;
+    const isLastChance = guess.mode === "lastChance";
+
+    if ((isLastChance && attempt.lastChanceUsed) || (!isLastChance && remainingLives <= 0)) {
+      return;
+    }
+
+    return {
+      ...attempt,
+      remainingLives: isLastChance ? remainingLives : Math.max(0, remainingLives - 1),
+      guessCount: guessCount + 1,
+      ...(isLastChance ? { lastChanceUsed: true } : {}),
+      guesses: {
+        ...(attempt.guesses || {}),
+        [guessCount]: guess,
+      },
+    };
+  });
+
+  return result.committed;
+}
+
+export function advanceWhoAmIClue(gameId, clueIndex) {
+  return update(ref(database), {
+    [`games/${gameId}/currentClueIndex`]: clueIndex,
+    [`games/${gameId}/clueStartedAt`]: serverTimestamp(),
+  });
+}
+
+export function beginWhoAmILastChance(gameId, userUid) {
+  return update(ref(database), {
+    [`games/${gameId}/phase`]: "lastChance",
+    [`games/${gameId}/lastPlayerStandingUid`]: userUid,
+    [`games/${gameId}/lastChanceStartedAt`]: serverTimestamp(),
+  });
+}
+
+export function finalizeWhoAmIRound(gameId, roundIndex, scores, result) {
+  return update(ref(database), {
+    [`games/${gameId}/phase`]: "reveal",
+    [`games/${gameId}/scores`]: scores,
+    [`games/${gameId}/guessControl/${roundIndex}`]: null,
+    [`games/${gameId}/roundResults/${roundIndex}`]: {
+      ...result,
+      finalizedAt: serverTimestamp(),
+    },
+  });
+}
+
+export function showWhoAmIStandings(gameId) {
+  return update(ref(database), {
+    [`games/${gameId}/phase`]: "standings",
+  });
+}
+
+export function startNextWhoAmIRound(gameId, roundIndex, playerUids) {
+  const attempts = Object.fromEntries(playerUids.map((uid) => [uid, {
+    remainingLives: 2,
+    guessCount: 0,
+  }]));
+
+  return update(ref(database), {
+    [`games/${gameId}/phase`]: "clue",
+    [`games/${gameId}/currentRoundIndex`]: roundIndex,
+    [`games/${gameId}/currentClueIndex`]: 0,
+    [`games/${gameId}/clueStartedAt`]: serverTimestamp(),
+    [`games/${gameId}/lastPlayerStandingUid`]: null,
+    [`games/${gameId}/lastChanceStartedAt`]: null,
+    [`games/${gameId}/whoAmIAttempts/${roundIndex}`]: attempts,
+  });
+}
+
+export function finishWhoAmIGame(gameId) {
+  return update(ref(database), {
+    [`games/${gameId}/status`]: "finished",
+    [`games/${gameId}/phase`]: "finished",
+    [`games/${gameId}/finishedAt`]: serverTimestamp(),
+  });
 }
 
 export function submitClassicAnswer(gameId, questionIndex, userUid, optionIndex) {

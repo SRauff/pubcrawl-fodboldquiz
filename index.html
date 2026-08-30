@@ -210,6 +210,54 @@
         <p class="quiz-status" id="quiz-answer-status" role="status" aria-live="polite"></p>
       </section>
 
+      <section class="screen quiz-screen" id="who-clue-screen" aria-labelledby="who-clue-title" hidden>
+        <div class="quiz-topline">
+          <p class="eyebrow" id="who-round-progress">Gæt hvem jeg er</p>
+          <span class="quiz-category" id="who-clue-progress">Ledetråd 1 / 10</span>
+        </div>
+        <h2 class="quiz-question who-clue" id="who-clue-title"></h2>
+
+        <div class="who-lives" aria-live="polite">
+          <span>Dine liv</span>
+          <strong id="who-lives-value">❤️ ❤️</strong>
+        </div>
+
+        <div class="quiz-timer" aria-live="off">
+          <div class="quiz-timer__heading">
+            <span id="who-timer-label">Tid til næste ledetråd</span>
+            <strong id="who-timer-text">10,0 sek.</strong>
+          </div>
+          <div class="quiz-timer__track" aria-hidden="true">
+            <span id="who-timer-bar"></span>
+          </div>
+        </div>
+
+        <div class="last-player-panel" id="last-player-panel" hidden>
+          <strong id="last-player-title"></strong>
+          <p id="last-player-description"></p>
+        </div>
+
+        <button class="button button--primary" id="open-guess-button" type="button">
+          <span>Gæt spilleren</span><span aria-hidden="true">→</span>
+        </button>
+
+        <form class="guess-form" id="guess-form" hidden novalidate>
+          <label for="player-guess">Hvem er spilleren?</label>
+          <input
+            id="player-guess"
+            type="text"
+            maxlength="80"
+            autocomplete="off"
+            enterkeyhint="send"
+            placeholder="Skriv spillerens navn"
+          >
+          <button class="button button--primary" id="submit-guess-button" type="submit">
+            <span>Send gæt</span><span aria-hidden="true">→</span>
+          </button>
+        </form>
+        <p class="quiz-status" id="who-guess-status" role="status" aria-live="polite"></p>
+      </section>
+
       <section class="screen quiz-screen" id="quiz-reveal-screen" aria-labelledby="quiz-reveal-title" hidden>
         <p class="eyebrow">Resultat</p>
         <h2 class="screen-title" id="quiz-reveal-title">Sådan gik det</h2>
@@ -223,7 +271,7 @@
       </section>
 
       <section class="screen quiz-screen" id="quiz-standings-screen" aria-labelledby="quiz-standings-title" hidden>
-        <p class="eyebrow">Efter spørgsmålet</p>
+        <p class="eyebrow" id="standings-context">Efter spørgsmålet</p>
         <h2 class="screen-title" id="quiz-standings-title">Stilling</h2>
         <div class="leaderboard" id="quiz-standings-list"></div>
         <p class="connection-message" id="quiz-standings-message" role="status" aria-live="polite"></p>
