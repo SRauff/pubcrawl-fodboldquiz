@@ -296,6 +296,7 @@ input[aria-invalid="true"] {
 .button:focus-visible,
 .back-button:focus-visible,
 .choice-card:focus-visible,
+.answer-option:focus-visible,
 .invite-option:focus-within,
 .text-button:focus-visible,
 select:focus-visible {
@@ -732,6 +733,215 @@ select {
   font-size: 1.4rem;
   font-weight: 950;
   box-shadow: 0 0 0 5px rgba(230, 173, 69, 0.1);
+}
+
+.quiz-screen {
+  width: 100%;
+}
+
+.quiz-topline,
+.quiz-timer__heading,
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.quiz-topline .eyebrow {
+  margin-bottom: 0;
+}
+
+.quiz-category {
+  padding: 0.35rem 0.55rem;
+  color: var(--green);
+  border: 1px solid rgba(98, 200, 120, 0.28);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.quiz-question {
+  margin: 1.5rem 0;
+  font-size: clamp(2rem, 9vw, 3.2rem);
+  line-height: 1.06;
+}
+
+.quiz-timer {
+  margin-bottom: 1.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.quiz-timer__heading {
+  margin-bottom: 0.65rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.quiz-timer__heading strong {
+  color: var(--gold-light);
+  font-size: 1rem;
+}
+
+.quiz-timer__track {
+  height: 0.45rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.quiz-timer__track span {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--green), var(--gold));
+  transform-origin: left center;
+}
+
+.answer-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.answer-option {
+  width: 100%;
+  min-height: 4.25rem;
+  padding: 0.9rem 1rem;
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(145deg, var(--surface-light), var(--surface));
+  font-weight: 750;
+  text-align: left;
+  cursor: pointer;
+}
+
+.answer-option:hover:not(:disabled) {
+  border-color: rgba(230, 173, 69, 0.55);
+}
+
+.answer-option--selected {
+  border-color: var(--gold);
+  background: rgba(230, 173, 69, 0.11);
+}
+
+.answer-option__letter {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  color: var(--gold-light);
+  border: 1px solid rgba(230, 173, 69, 0.3);
+  border-radius: 7px;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.quiz-status,
+.quiz-points,
+.winner-message {
+  min-height: 1.4rem;
+  margin: 1rem 0;
+  color: var(--green);
+  font-weight: 800;
+  text-align: center;
+}
+
+.result-panel,
+.leaderboard {
+  margin: 1.4rem 0 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-top-color: rgba(230, 173, 69, 0.5);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.result-line {
+  padding: 1rem;
+}
+
+.result-line + .result-line,
+.leaderboard-row + .leaderboard-row {
+  border-top: 1px solid var(--border);
+}
+
+.result-line span,
+.result-line strong {
+  display: block;
+}
+
+.result-line span {
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.result-line strong {
+  font-size: 1rem;
+}
+
+.result-line--correct strong {
+  color: var(--green);
+}
+
+.result-line--wrong strong {
+  color: var(--danger);
+}
+
+.leaderboard-row {
+  min-height: 3.75rem;
+  padding: 0.8rem 1rem;
+}
+
+.leaderboard-row--self {
+  background: rgba(230, 173, 69, 0.065);
+}
+
+.leaderboard-rank {
+  width: 2rem;
+  flex: 0 0 auto;
+  color: var(--gold);
+  font-weight: 900;
+}
+
+.leaderboard-name {
+  min-width: 0;
+  flex: 1;
+  font-weight: 750;
+}
+
+.leaderboard-score {
+  color: var(--green);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.trophy-mark {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 1.8rem;
+  display: grid;
+  place-items: center;
+  color: var(--gold-ink);
+  border-radius: 50%;
+  background: var(--gold);
+  font-size: 1.45rem;
+  box-shadow: 0 0 0 5px rgba(230, 173, 69, 0.1);
+}
+
+.winner-message {
+  color: var(--gold-light);
+  font-size: 1.15rem;
 }
 
 .modal-backdrop[hidden] {

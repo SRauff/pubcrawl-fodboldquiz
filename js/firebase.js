@@ -294,18 +294,100 @@ export function subscribeToGame(gameId, onGame, onError) {
   );
 }
 
-export function startGame(gameId, game) {
-  const updates = {
-    [`games/${gameId}/status`]: "started",
-  };
+export function subscribeToServerTimeOffset(onOffset, onError) {
+  return onValue(
+    ref(database, ".info/serverTimeOffset"),
+    (snapshot) => onOffset(Number(snapshot.val()) || 0),
+    onError,
+  );
+}
 
+function addPendingInvitationCleanup(updates, gameId, game) {
   Object.entries(game.invitedPlayers || {}).forEach(([uid, player]) => {
     if (player.status === "pending") {
       updates[`invitations/${uid}/${gameId}`] = null;
     }
   });
+}
+
+export function startGame(gameId, game) {
+  const updates = {
+    [`games/${gameId}/status`]: "started",
+  };
+
+  addPendingInvitationCleanup(updates, gameId, game);
 
   return update(ref(database), updates);
+}
+
+export function startClassicGame(gameId, game, selectedQuestionIds) {
+  const players = {
+    [game.hostUid]: { name: game.hostName },
+  };
+
+  Object.entries(game.invitedPlayers || {}).forEach(([uid, player]) => {
+    if (player.status === "accepted") {
+      players[uid] = { name: player.name };
+    }
+  });
+
+  const scores = Object.fromEntries(Object.keys(players).map((uid) => [uid, 0]));
+  const updates = {
+    [`games/${gameId}/status`]: "started",
+    [`games/${gameId}/phase`]: "question",
+    [`games/${gameId}/selectedQuestionIds`]: selectedQuestionIds,
+    [`games/${gameId}/totalQuestions`]: selectedQuestionIds.length,
+    [`games/${gameId}/currentQuestionIndex`]: 0,
+    [`games/${gameId}/questionStartedAt`]: serverTimestamp(),
+    [`games/${gameId}/players`]: players,
+    [`games/${gameId}/scores`]: scores,
+  };
+
+  addPendingInvitationCleanup(updates, gameId, game);
+  return update(ref(database), updates);
+}
+
+export function submitClassicAnswer(gameId, questionIndex, userUid, optionIndex) {
+  return set(ref(database, `games/${gameId}/answers/${questionIndex}/${userUid}`), {
+    optionIndex,
+    answeredAt: serverTimestamp(),
+  });
+}
+
+export function revealClassicQuestion(gameId, questionIndex, scores, awardedPoints, correctAnswerIndex) {
+  const updates = {
+    [`games/${gameId}/phase`]: "reveal",
+    [`games/${gameId}/scores`]: scores,
+    [`games/${gameId}/questionResults/${questionIndex}`]: {
+      correctAnswerIndex,
+      awardedPoints,
+      finalizedAt: serverTimestamp(),
+    },
+  };
+
+  return update(ref(database), updates);
+}
+
+export function showClassicStandings(gameId) {
+  return update(ref(database), {
+    [`games/${gameId}/phase`]: "standings",
+  });
+}
+
+export function startNextClassicQuestion(gameId, questionIndex) {
+  return update(ref(database), {
+    [`games/${gameId}/phase`]: "question",
+    [`games/${gameId}/currentQuestionIndex`]: questionIndex,
+    [`games/${gameId}/questionStartedAt`]: serverTimestamp(),
+  });
+}
+
+export function finishClassicGame(gameId) {
+  return update(ref(database), {
+    [`games/${gameId}/status`]: "finished",
+    [`games/${gameId}/phase`]: "finished",
+    [`games/${gameId}/finishedAt`]: serverTimestamp(),
+  });
 }
 
 export function cancelGame(gameId, game) {
@@ -313,14 +395,10 @@ export function cancelGame(gameId, game) {
     [`games/${gameId}`]: null,
   };
 
-  Object.entries(game.invitedPlayers || {}).forEach(([uid, player]) => {
-    // Accepterede og afviste invitationer er allerede fjernet, når spilleren
-    // svarer. En null-skrivning til en sti, der ikke findes, afvises af de
-    // afgrænsede Security Rules og ville annullere hele multi-path-opdateringen.
-    if (player.status === "pending") {
-      updates[`invitations/${uid}/${gameId}`] = null;
-    }
-  });
+  // Accepterede og afviste invitationer er allerede fjernet, når spilleren
+  // svarer. En null-skrivning til en sti, der ikke findes, kan afvise hele
+  // multi-path-opdateringen.
+  addPendingInvitationCleanup(updates, gameId, game);
 
   return update(ref(database), updates);
 }

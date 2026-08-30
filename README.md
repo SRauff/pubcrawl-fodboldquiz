@@ -1,15 +1,16 @@
 # Pubcrawl fodboldquiz
 
-En mobile-first dansk multiplayer-fodboldquiz med pubcrawl-stemning. Spillere mødes i en realtime-lobby, kan oprette et spil, invitere hinanden og samles i en pre-game lobby. Selve quizzen kommer i en senere milepæl.
+En mobile-first dansk multiplayer-fodboldquiz med pubcrawl-stemning. Spillere mødes i en realtime-lobby, opretter et spil, inviterer hinanden og kan spille **Klassisk quiz** sammen. Formatet **Gæt hvem jeg er** har fortsat kun den eksisterende placeholder.
 
 ## Projektstruktur
 
 ```text
-index.html       Sidens indhold, skærme og invitationsoverlay
-css/style.css    Mobile-first design og layout
-js/app.js        Navigation, validering og brugerflade
-js/firebase.js   Firebase-konfiguration, login, presence og spildata
-README.md        Projektdokumentation
+index.html           Skærme, invitationsoverlay og quiz-UI
+css/style.css        Mobile-first design og layout
+js/app.js            Navigation, quizmotor og brugerflade
+js/firebase.js       Firebase-login, presence og realtime game-state
+data/questions.json  Lille pool med testspørgsmål
+README.md            Projektdokumentation
 ```
 
 ## Test lokalt
@@ -25,38 +26,70 @@ python3 -m http.server 8000
 ## Arkitektur
 
 - Firebase Authentication identificerer automatisk hver browser med en anonym bruger.
-- `lobbyPlayers/{uid}` indeholder online spillere. `onDisconnect()` registreres før online-posten skrives og fjerner den ved tabt forbindelse. Aktiv navigation ud af lobbyen venter desuden på en eventuel igangværende reconnect-skrivning, før posten fjernes.
-- `games/{gameId}` indeholder host, format, indstilling, status og inviterede spilleres svar.
-- `invitations/{playerUid}/{gameId}` indeholder den enkelte spillers aktive invitationer.
-- Realtime-listeners opdaterer lobby, invitationsoverlay og pre-game lobby uden sidegenindlæsning.
+- `lobbyPlayers/{uid}` indeholder online spillere. `onDisconnect()` registreres før online-posten skrives.
+- `invitations/{playerUid}/{gameId}` indeholder aktive invitationer.
+- `games/{gameId}` indeholder format, deltagere og den fælles quiz-state.
+- `data/questions.json` indeholder spørgsmålstekst, svarmuligheder og facit. Firebase gemmer kun de valgte spørgsmåls-ID'er.
+- Firebase `.info/serverTimeOffset` bruges sammen med `questionStartedAt`, så alle klienter beregner den samme 10-sekunders svarfrist.
 
-Spil og invitationer oprettes med en atomisk Firebase-opdatering, så de relaterede databaseplaceringer enten skrives samlet eller slet ikke. Derfor skal reglerne tillade både hostens skrivning til `games/{gameId}` og hostens oprettelse under den inviterede spillers `invitations/{uid}/{gameId}`. Hvis én af stierne afvises, returnerer Firebase `PERMISSION_DENIED`, og hele opdateringen annulleres.
+Et startet klassisk spil indeholder blandt andet:
 
-## Spilflow
+```text
+status: "started"
+phase: "question" | "reveal" | "standings" | "finished"
+selectedQuestionIds
+totalQuestions
+currentQuestionIndex
+questionStartedAt
+players
+scores
+answers/{questionIndex}/{uid}
+questionResults/{questionIndex}
+```
 
-Hosten vælger **Klassisk quiz** med 5–30 spørgsmål eller **Gæt hvem jeg er** med 1–15 runder. Derefter vælges mindst én anden online spiller. Inviterede spillere kan acceptere eller afvise i hjemmesidens invitationsoverlay.
+Kun host-klienten vælger spørgsmål, afslutter et spørgsmål, beregner point og skifter fælles fase. Hver deltager kan kun oprette sit eget svar én gang. Korrekte svar sorteres efter Firebase-tidspunkt og derefter UID, så identiske timestamps håndteres deterministisk.
 
-Accepterede spillere vises som klar i pre-game lobbyen. Når mindst én spiller har accepteret, kan hosten starte. Alle deltagere sendes da til en placeholder-skærm; quizspørgsmål og point er ikke implementeret endnu.
+## Klassisk quiz-flow
 
-## Test Milepæl 3
+1. Hosten vælger format, antal spørgsmål og deltagere.
+2. Ved start vælges tilfældige spørgsmål uden dubletter. Et valg over poolens størrelse begrænses automatisk.
+3. Alle ser samme spørgsmål og samme 10-sekunders periode.
+4. Svaret låses efter første klik. Spørgsmålet afsluttes, når alle har svaret, eller tiden er gået.
+5. Alle ser facit, eget svar og optjente point.
+6. Hosten viser stillingen og starter næste spørgsmål.
+7. Efter sidste spørgsmål vises en fælles slutstilling og vinder.
+8. Hver deltager kan rydde sin lokale game-state og gå tilbage til lobbyen uden at ændre presence.
 
-Brug to separate browser-sessioner, så Firebase Authentication opretter forskellige anonyme brugere. To almindelige faner i samme browserprofil kan genbruge samme UID og er ikke en pålidelig multiplayer-test.
+Point gives kun for korrekte svar. Hvis `N` spillere svarer korrekt, får den hurtigste `N × 100`, den næste `(N - 1) × 100` og så videre.
 
-1. Åbn localhost i eksempelvis Chrome og Safari eller Chrome normal og Chrome inkognito.
-2. Gå i lobbyen som **Sebastian** og **Martin**.
-3. Kontrollér, at begge kan se hinanden.
-4. Lad Sebastian oprette en klassisk quiz med 10 spørgsmål og invitere Martin.
-5. Accepter invitationen som Martin.
-6. Kontrollér, at begge ser pre-game lobbyen, og at Martin står som klar.
-7. Start spillet som Sebastian, og kontrollér, at begge ser **Spillet er klar!**.
+## Test Milepæl 4
 
-Gentag desuden med **Afvis**, og kontrollér at spilleren bliver i lobbyen. Opret et nyt spil og vælg **Annuller spil** som host; begge sessioner skal vende tilbage til lobbyen. Prøv også spillervalg uden andre online og knappen uden valgte spillere.
+Brug to separate browser-sessioner, så Firebase Authentication opretter forskellige anonyme brugere, eksempelvis Chrome normal + inkognito eller Chrome + Safari.
+
+1. Gå i lobbyen som **Sebastian** og **Martin**.
+2. Lad Sebastian oprette Klassisk quiz og invitere Martin.
+3. Lad Martin acceptere, og start som Sebastian.
+4. Kontrollér, at begge ser samme spørgsmål og næsten samme tid.
+5. Test korrekte svar med forskellig hastighed, forkert svar, dobbeltklik og en timeout uden svar.
+6. Kontrollér facit, point og fælles stilling efter hvert spørgsmål.
+7. Spil sidste spørgsmål og kontrollér slutstillingen.
+8. Gå tilbage til lobbyen i begge sessioner, opret et nyt spil og kontrollér, at invitationen kun vises én gang.
+
+Test også det eksisterende flow for afvisning, annullering og **Gæt hvem jeg er**-placeholderen.
+
+## Kendte begrænsninger
+
+- Spørgsmålspoolen indeholder kun 10 testspørgsmål.
+- **Gæt hvem jeg er** har endnu ingen quizmotor.
+- Hosten er autoritativ. Hvis hosten lukker browseren under quizzen, stopper progressionen.
+- Quizlogik og facit ligger i frontend, fordi projektet ikke har en backend. Det er passende til denne prototype, men beskytter ikke mod bevidst snyd.
+- Afsluttede game-noder bevares i Firebase, så alle deltagere kan se slutstillingen og forlade i eget tempo. Automatisk server-side oprydning er ikke implementeret endnu.
 
 ## Firebase Console
 
-Anonymous Authentication skal være aktiveret. Realtime Database-reglerne skal give autentificerede brugere den nødvendige, begrænsede adgang til `lobbyPlayers`, `games` og deres egne invitationer. Databasen må ikke gøres globalt åben.
+Anonymous Authentication skal være aktiveret. Milepæl 4 kræver udvidede regler, fordi hosten skriver fælles quiz-state og scores, mens hver spiller skriver sit eget svar. Databasen må ikke gøres globalt åben.
 
-Milepæl 3 kræver, at hosten kan oprette et spil og skrive invitationer til de valgte spilleres stier, mens kun den inviterede spiller kan ændre sit eget svar. Game-reglens `!data.exists()` gør det desuden muligt for en eksisterende listener at modtage et tomt snapshot, når hosten med vilje sletter spillet. En tom node indeholder ingen spildata og er fortsat kun læsbar for autentificerede brugere. Indsæt følgende afgrænsede regler i Firebase Console under **Realtime Database → Rules** og klik **Publish**:
+Indsæt hele denne regelblok under **Realtime Database → Rules** og klik **Publish**:
 
 ```json
 {
@@ -73,10 +106,13 @@ Milepæl 3 kræver, at hosten kan oprette et spil og skrive invitationer til de 
     "games": {
       "$gameId": {
         ".read": "auth != null && (!data.exists() || data.child('hostUid').val() === auth.uid || data.child('invitedPlayers').child(auth.uid).exists())",
-        ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || (data.exists() && data.child('hostUid').val() === auth.uid && !newData.exists()))",
-        ".validate": "!newData.exists() || (newData.hasChildren(['hostUid', 'hostName', 'format', 'status', 'createdAt', 'invitedPlayers']) && newData.child('hostUid').isString() && newData.child('hostName').isString() && newData.child('hostName').val().length > 0 && newData.child('hostName').val().length <= 30 && (newData.child('format').val() === 'classic' || newData.child('format').val() === 'whoAmI') && (newData.child('status').val() === 'waiting' || newData.child('status').val() === 'started') && newData.child('createdAt').isNumber() && ((newData.child('format').val() === 'classic' && newData.child('questionCount').isNumber() && newData.child('questionCount').val() >= 5 && newData.child('questionCount').val() <= 30 && !newData.child('roundCount').exists()) || (newData.child('format').val() === 'whoAmI' && newData.child('roundCount').isNumber() && newData.child('roundCount').val() >= 1 && newData.child('roundCount').val() <= 15 && !newData.child('questionCount').exists())))",
+        ".write": "auth != null && ((!data.exists() && newData.child('hostUid').val() === auth.uid) || (data.exists() && data.child('hostUid').val() === auth.uid && (!newData.exists() || newData.child('hostUid').val() === auth.uid)))",
+        ".validate": "!newData.exists() || (newData.hasChildren(['hostUid', 'hostName', 'format', 'status', 'createdAt', 'invitedPlayers']) && newData.child('hostUid').isString() && newData.child('hostName').isString() && newData.child('hostName').val().length > 0 && newData.child('hostName').val().length <= 30 && (newData.child('format').val() === 'classic' || newData.child('format').val() === 'whoAmI') && (newData.child('status').val() === 'waiting' || newData.child('status').val() === 'started' || newData.child('status').val() === 'finished') && newData.child('createdAt').isNumber() && ((newData.child('format').val() === 'classic' && newData.child('questionCount').isNumber() && newData.child('questionCount').val() >= 5 && newData.child('questionCount').val() <= 30 && !newData.child('roundCount').exists()) || (newData.child('format').val() === 'whoAmI' && newData.child('roundCount').isNumber() && newData.child('roundCount').val() >= 1 && newData.child('roundCount').val() <= 15 && !newData.child('questionCount').exists())) && (newData.child('status').val() === 'waiting' || newData.child('format').val() === 'whoAmI' || (newData.hasChildren(['phase', 'selectedQuestionIds', 'totalQuestions', 'currentQuestionIndex', 'questionStartedAt', 'players', 'scores']) && (newData.child('phase').val() === 'question' || newData.child('phase').val() === 'reveal' || newData.child('phase').val() === 'standings' || newData.child('phase').val() === 'finished') && newData.child('totalQuestions').isNumber() && newData.child('totalQuestions').val() >= 1 && newData.child('totalQuestions').val() <= 30 && newData.child('currentQuestionIndex').isNumber() && newData.child('currentQuestionIndex').val() >= 0 && newData.child('currentQuestionIndex').val() < newData.child('totalQuestions').val() && newData.child('questionStartedAt').isNumber())))",
+        "hostUid": {
+          ".validate": "newData.isString() && (!data.exists() || newData.val() === data.val())"
+        },
         "status": {
-          ".write": "auth != null && root.child('games').child($gameId).child('hostUid').val() === auth.uid && data.val() === 'waiting' && newData.val() === 'started'"
+          ".validate": "newData.val() === 'waiting' || newData.val() === 'started' || newData.val() === 'finished'"
         },
         "invitedPlayers": {
           "$uid": {
@@ -84,6 +120,34 @@ Milepæl 3 kræver, at hosten kan oprette et spil og skrive invitationer til de 
             "status": {
               ".write": "auth != null && auth.uid === $uid && data.val() === 'pending' && (newData.val() === 'accepted' || newData.val() === 'declined')"
             }
+          }
+        },
+        "selectedQuestionIds": {
+          "$index": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 40"
+          }
+        },
+        "players": {
+          "$uid": {
+            ".validate": "newData.hasChildren(['name']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 30"
+          }
+        },
+        "scores": {
+          "$uid": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          }
+        },
+        "answers": {
+          "$questionIndex": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && !data.exists() && root.child('games').child($gameId).child('status').val() === 'started' && root.child('games').child($gameId).child('phase').val() === 'question' && $questionIndex === root.child('games').child($gameId).child('currentQuestionIndex').val() + '' && now <= root.child('games').child($gameId).child('questionStartedAt').val() + 10000",
+              ".validate": "auth != null && auth.uid === $uid && !data.exists() && newData.hasChildren(['optionIndex', 'answeredAt']) && newData.child('optionIndex').isNumber() && newData.child('optionIndex').val() >= 0 && newData.child('optionIndex').val() <= 3 && newData.child('answeredAt').isNumber() && root.child('games').child($gameId).child('phase').val() === 'question' && $questionIndex === root.child('games').child($gameId).child('currentQuestionIndex').val() + '' && now <= root.child('games').child($gameId).child('questionStartedAt').val() + 10000"
+            }
+          }
+        },
+        "questionResults": {
+          "$questionIndex": {
+            ".validate": "newData.hasChildren(['correctAnswerIndex', 'awardedPoints', 'finalizedAt']) && newData.child('correctAnswerIndex').isNumber() && newData.child('correctAnswerIndex').val() >= 0 && newData.child('correctAnswerIndex').val() <= 3 && newData.child('finalizedAt').isNumber()"
           }
         }
       }

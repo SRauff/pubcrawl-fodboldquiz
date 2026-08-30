@@ -1,5 +1,7 @@
 const STORAGE_KEY = "pubcrawlPlayerName";
 const CONNECTION_ERROR_MESSAGE = "Der kunne ikke oprettes forbindelse. Prøv igen.";
+const QUESTION_DURATION_MS = 10000;
+const ANSWER_LETTERS = ["A", "B", "C", "D"];
 
 // Alle justerbare formatgrænser er samlet her.
 const FORMAT_CONFIG = {
@@ -35,6 +37,10 @@ const screens = {
   invite: document.querySelector("#invite-screen"),
   pregame: document.querySelector("#pregame-screen"),
   ready: document.querySelector("#ready-screen"),
+  question: document.querySelector("#quiz-question-screen"),
+  reveal: document.querySelector("#quiz-reveal-screen"),
+  standings: document.querySelector("#quiz-standings-screen"),
+  finished: document.querySelector("#quiz-finished-screen"),
 };
 
 const playerForm = document.querySelector("#player-form");
@@ -78,6 +84,26 @@ const cancelGameButton = document.querySelector("#cancel-game-button");
 const readySummary = document.querySelector("#ready-summary");
 const readyPlayerList = document.querySelector("#ready-player-list");
 
+const quizProgress = document.querySelector("#quiz-progress");
+const quizCategory = document.querySelector("#quiz-category");
+const quizQuestionTitle = document.querySelector("#quiz-question-title");
+const quizTimerText = document.querySelector("#quiz-timer-text");
+const quizTimerBar = document.querySelector("#quiz-timer-bar");
+const quizAnswerOptions = document.querySelector("#quiz-answer-options");
+const quizAnswerStatus = document.querySelector("#quiz-answer-status");
+const quizResultPanel = document.querySelector("#quiz-result-panel");
+const quizEarnedPoints = document.querySelector("#quiz-earned-points");
+const quizRevealMessage = document.querySelector("#quiz-reveal-message");
+const showStandingsButton = document.querySelector("#show-standings-button");
+const revealWaitingMessage = document.querySelector("#reveal-waiting-message");
+const quizStandingsList = document.querySelector("#quiz-standings-list");
+const quizStandingsMessage = document.querySelector("#quiz-standings-message");
+const nextQuestionButton = document.querySelector("#next-question-button");
+const standingsWaitingMessage = document.querySelector("#standings-waiting-message");
+const quizWinnerMessage = document.querySelector("#quiz-winner-message");
+const quizFinalList = document.querySelector("#quiz-final-list");
+const returnToLobbyButton = document.querySelector("#return-to-lobby-button");
+
 const invitationModal = document.querySelector("#invitation-modal");
 const invitationTitle = document.querySelector("#invitation-title");
 const invitationDetails = document.querySelector("#invitation-details");
@@ -101,6 +127,45 @@ let stopInvitationsListener;
 let stopGameListener;
 let isJoiningLobby = false;
 let isCancelingGame = false;
+let questions = [];
+let questionsById = new Map();
+let serverTimeOffset = 0;
+let questionTimerId;
+let renderedQuizStateKey = "";
+let isSubmittingAnswer = false;
+let hostTransitionKey = "";
+
+const questionsReady = fetch("data/questions.json")
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Testspørgsmålene kunne ikke indlæses.");
+    }
+
+    return response.json();
+  })
+  .then((loadedQuestions) => {
+    if (!Array.isArray(loadedQuestions) || loadedQuestions.length === 0) {
+      throw new Error("Spørgsmålspoolen er tom.");
+    }
+
+    loadedQuestions.forEach((question) => {
+      if (
+        !question?.id
+        || typeof question.question !== "string"
+        || !Array.isArray(question.options)
+        || question.options.length !== 4
+        || !Number.isInteger(question.correctAnswerIndex)
+        || question.correctAnswerIndex < 0
+        || question.correctAnswerIndex > 3
+      ) {
+        throw new Error(`Ugyldigt testspørgsmål: ${question?.id || "ukendt ID"}`);
+      }
+    });
+
+    questions = loadedQuestions;
+    questionsById = new Map(loadedQuestions.map((question) => [question.id, question]));
+    return loadedQuestions;
+  });
 
 function showConnectionError(error, target = startConnectionMessage) {
   console.error("Firebase-fejl:", error);
@@ -137,6 +202,12 @@ const firebaseReady = import("./firebase.js")
   .then(async (service) => {
     firebaseService = service;
     firebaseUser = await service.ensureAnonymousUser();
+    service.subscribeToServerTimeOffset(
+      (offset) => {
+        serverTimeOffset = offset;
+      },
+      (error) => console.error("Kunne ikke hente Firebase-servertid:", error),
+    );
     return service;
   })
   .catch((error) => {
@@ -447,6 +518,8 @@ function createGamePlayerRow(name, status, statusClass = "") {
 }
 
 function renderPregame(game) {
+  window.clearInterval(questionTimerId);
+  questionTimerId = undefined;
   const invitedPlayers = Object.values(game.invitedPlayers || {});
   const acceptedPlayers = invitedPlayers.filter((player) => player.status === "accepted");
   const isHost = game.hostUid === firebaseUser.uid;
@@ -472,6 +545,10 @@ function renderPregame(game) {
   pregameMessage.textContent = isHost && acceptedPlayers.length === 0
     ? "Mindst én inviteret spiller skal acceptere, før spillet kan startes."
     : "";
+
+  if (currentScreen !== "pregame") {
+    showScreen("pregame");
+  }
 }
 
 function renderReady(game) {
@@ -490,12 +567,414 @@ function renderReady(game) {
   showScreen("ready");
 }
 
+function getSelectedQuestionIds(game) {
+  if (Array.isArray(game.selectedQuestionIds)) {
+    return game.selectedQuestionIds;
+  }
+
+  return Object.entries(game.selectedQuestionIds || {})
+    .sort(([firstIndex], [secondIndex]) => Number(firstIndex) - Number(secondIndex))
+    .map(([, questionId]) => questionId);
+}
+
+function getQuestionAnswers(game, questionIndex = game.currentQuestionIndex) {
+  return game.answers?.[questionIndex] || {};
+}
+
+function getQuestionResult(game, questionIndex = game.currentQuestionIndex) {
+  return game.questionResults?.[questionIndex] || null;
+}
+
+function getServerNow() {
+  return Date.now() + serverTimeOffset;
+}
+
+function getRemainingQuestionTime(game) {
+  const startedAt = Number(game.questionStartedAt);
+
+  if (!startedAt) {
+    return QUESTION_DURATION_MS;
+  }
+
+  return Math.max(0, startedAt + QUESTION_DURATION_MS - getServerNow());
+}
+
+function selectRandomQuestionIds(pool, requestedCount) {
+  const shuffledIds = pool.map((question) => question.id);
+
+  for (let index = shuffledIds.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffledIds[index], shuffledIds[randomIndex]] = [shuffledIds[randomIndex], shuffledIds[index]];
+  }
+
+  return shuffledIds.slice(0, Math.min(requestedCount, shuffledIds.length));
+}
+
+function sortPlayersByScore(game) {
+  return Object.entries(game.players || {})
+    .map(([uid, player]) => ({
+      uid,
+      name: player.name,
+      score: Number(game.scores?.[uid]) || 0,
+    }))
+    .sort((firstPlayer, secondPlayer) => (
+      secondPlayer.score - firstPlayer.score
+      || firstPlayer.name.localeCompare(secondPlayer.name, "da")
+      || firstPlayer.uid.localeCompare(secondPlayer.uid)
+    ));
+}
+
+function renderLeaderboard(container, game) {
+  const players = sortPlayersByScore(game);
+  const fragment = document.createDocumentFragment();
+  let previousScore;
+  let displayedRank = 0;
+
+  players.forEach((player, index) => {
+    if (player.score !== previousScore) {
+      displayedRank = index + 1;
+      previousScore = player.score;
+    }
+
+    const row = document.createElement("div");
+    const rank = document.createElement("span");
+    const name = document.createElement("span");
+    const score = document.createElement("span");
+
+    row.className = "leaderboard-row";
+    if (player.uid === firebaseUser.uid) {
+      row.classList.add("leaderboard-row--self");
+    }
+    rank.className = "leaderboard-rank";
+    name.className = "leaderboard-name";
+    score.className = "leaderboard-score";
+    rank.textContent = String(displayedRank);
+    name.textContent = player.uid === firebaseUser.uid ? `${player.name} · Dig` : player.name;
+    score.textContent = `${player.score.toLocaleString("da-DK")} point`;
+    row.append(rank, name, score);
+    fragment.append(row);
+  });
+
+  container.replaceChildren(fragment);
+  return players;
+}
+
+function createResultLine(label, value, stateClass = "") {
+  const line = document.createElement("div");
+  const labelElement = document.createElement("span");
+  const valueElement = document.createElement("strong");
+
+  line.className = `result-line ${stateClass}`.trim();
+  labelElement.textContent = label;
+  valueElement.textContent = value;
+  line.append(labelElement, valueElement);
+  return line;
+}
+
+function calculateQuestionOutcome(game, question) {
+  const questionIndex = game.currentQuestionIndex;
+  const answers = getQuestionAnswers(game, questionIndex);
+  const deadline = Number(game.questionStartedAt) + QUESTION_DURATION_MS;
+  const correctAnswers = Object.entries(answers)
+    .filter(([uid, answer]) => (
+      game.players?.[uid]
+      && answer.optionIndex === question.correctAnswerIndex
+      && Number(answer.answeredAt) <= deadline
+    ))
+    .sort(([firstUid, firstAnswer], [secondUid, secondAnswer]) => (
+      Number(firstAnswer.answeredAt) - Number(secondAnswer.answeredAt)
+      || firstUid.localeCompare(secondUid)
+    ));
+
+  const scores = { ...(game.scores || {}) };
+  const awardedPoints = Object.fromEntries(Object.keys(game.players || {}).map((uid) => [uid, 0]));
+
+  correctAnswers.forEach(([uid], index) => {
+    const points = (correctAnswers.length - index) * 100;
+    awardedPoints[uid] = points;
+    scores[uid] = (Number(scores[uid]) || 0) + points;
+  });
+
+  return { scores, awardedPoints };
+}
+
+async function maybeFinalizeQuestion(game) {
+  if (
+    game.hostUid !== firebaseUser.uid
+    || game.phase !== "question"
+    || getQuestionResult(game)
+  ) {
+    return;
+  }
+
+  const playerUids = Object.keys(game.players || {});
+  const answers = getQuestionAnswers(game);
+  const everyoneAnswered = playerUids.length > 0 && playerUids.every((uid) => answers[uid]);
+  const timeExpired = getRemainingQuestionTime(game) <= 0;
+
+  if (!everyoneAnswered && !timeExpired) {
+    return;
+  }
+
+  const transitionKey = `reveal:${game.currentQuestionIndex}`;
+  if (hostTransitionKey === transitionKey) {
+    return;
+  }
+
+  const questionId = getSelectedQuestionIds(game)[game.currentQuestionIndex];
+  const question = questionsById.get(questionId);
+  if (!question) {
+    showConnectionError(new Error(`Spørgsmålet ${questionId} mangler.`), quizAnswerStatus);
+    return;
+  }
+
+  hostTransitionKey = transitionKey;
+  const { scores, awardedPoints } = calculateQuestionOutcome(game, question);
+
+  try {
+    await firebaseService.revealClassicQuestion(
+      activeGameId,
+      game.currentQuestionIndex,
+      scores,
+      awardedPoints,
+      question.correctAnswerIndex,
+    );
+  } catch (error) {
+    hostTransitionKey = "";
+    showConnectionError(error, quizAnswerStatus);
+  }
+}
+
+function updateQuestionTimer(game) {
+  const remainingMs = getRemainingQuestionTime(game);
+  const remainingSeconds = (remainingMs / 1000).toLocaleString("da-DK", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
+  const ratio = Math.max(0, Math.min(1, remainingMs / QUESTION_DURATION_MS));
+
+  quizTimerText.textContent = `${remainingSeconds} sek.`;
+  quizTimerBar.style.transform = `scaleX(${ratio})`;
+
+  if (remainingMs <= 0) {
+    quizAnswerOptions.querySelectorAll("button").forEach((button) => {
+      button.disabled = true;
+    });
+
+    if (!getQuestionAnswers(game)[firebaseUser.uid]) {
+      quizAnswerStatus.textContent = "Tiden er gået.";
+    }
+
+    maybeFinalizeQuestion(game);
+  }
+}
+
+function startQuestionTimer(game) {
+  window.clearInterval(questionTimerId);
+  updateQuestionTimer(game);
+  questionTimerId = window.setInterval(() => {
+    if (activeGame?.phase !== "question" || activeGame.currentQuestionIndex !== game.currentQuestionIndex) {
+      window.clearInterval(questionTimerId);
+      questionTimerId = undefined;
+      return;
+    }
+
+    updateQuestionTimer(activeGame);
+  }, 100);
+}
+
+function updateAnswerButtons(game) {
+  const ownAnswer = getQuestionAnswers(game)[firebaseUser.uid];
+  const timeExpired = getRemainingQuestionTime(game) <= 0;
+
+  quizAnswerOptions.querySelectorAll("button").forEach((button) => {
+    const isSelected = Number(button.dataset.optionIndex) === ownAnswer?.optionIndex;
+    button.disabled = Boolean(ownAnswer) || isSubmittingAnswer || timeExpired;
+    button.classList.toggle("answer-option--selected", isSelected);
+  });
+
+  if (ownAnswer) {
+    quizAnswerStatus.textContent = "Svar registreret ✓";
+  }
+}
+
+async function submitQuizAnswer(optionIndex) {
+  if (
+    isSubmittingAnswer
+    || activeGame?.phase !== "question"
+    || getQuestionAnswers(activeGame)[firebaseUser.uid]
+    || getRemainingQuestionTime(activeGame) <= 0
+  ) {
+    return;
+  }
+
+  isSubmittingAnswer = true;
+  quizAnswerStatus.textContent = "Registrerer svar…";
+  updateAnswerButtons(activeGame);
+
+  try {
+    await firebaseService.submitClassicAnswer(
+      activeGameId,
+      activeGame.currentQuestionIndex,
+      firebaseUser.uid,
+      optionIndex,
+    );
+  } catch (error) {
+    isSubmittingAnswer = false;
+    showConnectionError(error, quizAnswerStatus);
+    updateAnswerButtons(activeGame);
+  }
+}
+
+function renderQuestionPhase(game, question, selectedQuestionIds) {
+  const stateKey = `${game.id}:question:${game.currentQuestionIndex}:${game.questionStartedAt}`;
+
+  if (renderedQuizStateKey !== stateKey) {
+    renderedQuizStateKey = stateKey;
+    hostTransitionKey = "";
+    isSubmittingAnswer = false;
+    quizProgress.textContent = `Spørgsmål ${game.currentQuestionIndex + 1} / ${selectedQuestionIds.length}`;
+    quizCategory.textContent = question.league;
+    quizQuestionTitle.textContent = question.question;
+    quizAnswerStatus.textContent = "";
+    quizAnswerOptions.replaceChildren();
+
+    question.options.forEach((option, optionIndex) => {
+      const button = document.createElement("button");
+      const letter = document.createElement("span");
+      const text = document.createElement("span");
+
+      button.type = "button";
+      button.className = "answer-option";
+      button.dataset.optionIndex = String(optionIndex);
+      letter.className = "answer-option__letter";
+      letter.setAttribute("aria-hidden", "true");
+      letter.textContent = ANSWER_LETTERS[optionIndex];
+      text.textContent = option;
+      button.append(letter, text);
+      button.addEventListener("click", () => submitQuizAnswer(optionIndex));
+      quizAnswerOptions.append(button);
+    });
+
+    showScreen("question");
+    startQuestionTimer(game);
+  }
+
+  updateAnswerButtons(game);
+  maybeFinalizeQuestion(game);
+}
+
+function renderRevealPhase(game, question) {
+  const stateKey = `${game.id}:reveal:${game.currentQuestionIndex}`;
+  if (renderedQuizStateKey === stateKey) {
+    return;
+  }
+
+  renderedQuizStateKey = stateKey;
+  window.clearInterval(questionTimerId);
+  questionTimerId = undefined;
+  const ownAnswer = getQuestionAnswers(game)[firebaseUser.uid];
+  const ownAnswerText = ownAnswer ? question.options[ownAnswer.optionIndex] : "Du nåede ikke at svare";
+  const wasCorrect = ownAnswer?.optionIndex === question.correctAnswerIndex;
+  const points = Number(getQuestionResult(game)?.awardedPoints?.[firebaseUser.uid]) || 0;
+
+  quizResultPanel.replaceChildren(
+    createResultLine("Rigtigt svar", `${question.options[question.correctAnswerIndex]} ✓`, "result-line--correct"),
+    createResultLine(
+      "Dit svar",
+      ownAnswer ? `${ownAnswerText} ${wasCorrect ? "✓" : "✕"}` : ownAnswerText,
+      wasCorrect ? "result-line--correct" : "result-line--wrong",
+    ),
+  );
+  quizEarnedPoints.textContent = wasCorrect ? `+${points.toLocaleString("da-DK")} point` : "0 point";
+  clearMessage(quizRevealMessage);
+  const isHost = game.hostUid === firebaseUser.uid;
+  showStandingsButton.disabled = false;
+  showStandingsButton.hidden = !isHost;
+  revealWaitingMessage.hidden = isHost;
+  showScreen("reveal");
+}
+
+function renderStandingsPhase(game, selectedQuestionIds) {
+  const stateKey = `${game.id}:standings:${game.currentQuestionIndex}`;
+  if (renderedQuizStateKey === stateKey) {
+    return;
+  }
+
+  renderedQuizStateKey = stateKey;
+  renderLeaderboard(quizStandingsList, game);
+  clearMessage(quizStandingsMessage);
+  const isHost = game.hostUid === firebaseUser.uid;
+  const isLastQuestion = game.currentQuestionIndex >= selectedQuestionIds.length - 1;
+  const label = nextQuestionButton.querySelector("span");
+
+  label.textContent = isLastQuestion ? "Se slutstilling" : "Næste spørgsmål";
+  nextQuestionButton.disabled = false;
+  nextQuestionButton.hidden = !isHost;
+  standingsWaitingMessage.hidden = isHost;
+  showScreen("standings");
+}
+
+function renderFinishedPhase(game) {
+  const stateKey = `${game.id}:finished`;
+  if (renderedQuizStateKey === stateKey) {
+    return;
+  }
+
+  renderedQuizStateKey = stateKey;
+  const players = renderLeaderboard(quizFinalList, game);
+  const topScore = players[0]?.score;
+  const winners = players.filter((player) => player.score === topScore).map((player) => player.name);
+
+  quizWinnerMessage.textContent = winners.length === 1
+    ? `${winners[0]} vinder!`
+    : `${winners.join(" og ")} deler sejren!`;
+  showScreen("finished");
+}
+
+async function renderClassicGame(game) {
+  try {
+    await questionsReady;
+  } catch (error) {
+    showConnectionError(error, pregameMessage);
+    return;
+  }
+
+  if (game.id !== activeGameId) {
+    return;
+  }
+
+  const selectedQuestionIds = getSelectedQuestionIds(game);
+  const questionId = selectedQuestionIds[game.currentQuestionIndex];
+  const question = questionsById.get(questionId);
+
+  if (game.phase !== "finished" && !question) {
+    showConnectionError(new Error(`Spørgsmålet ${questionId || "ukendt"} mangler.`), pregameMessage);
+    return;
+  }
+
+  if (game.phase === "question") {
+    renderQuestionPhase(game, question, selectedQuestionIds);
+  } else if (game.phase === "reveal") {
+    renderRevealPhase(game, question);
+  } else if (game.phase === "standings") {
+    renderStandingsPhase(game, selectedQuestionIds);
+  } else if (game.phase === "finished") {
+    renderFinishedPhase(game);
+  }
+}
+
 function clearActiveGame() {
   stopGameListener?.();
   stopGameListener = undefined;
+  window.clearInterval(questionTimerId);
+  questionTimerId = undefined;
   activeGame = null;
   activeGameId = null;
   isCancelingGame = false;
+  isSubmittingAnswer = false;
+  renderedQuizStateKey = "";
+  hostTransitionKey = "";
 }
 
 function handleGameUpdate(game) {
@@ -515,9 +994,12 @@ function handleGameUpdate(game) {
 
   activeGame = game;
 
+  if ((game.status === "started" || game.status === "finished") && game.format === "classic") {
+    renderClassicGame(game);
+    return;
+  }
+
   if (game.status === "started") {
-    stopGameListener?.();
-    stopGameListener = undefined;
     renderReady(game);
     return;
   }
@@ -563,12 +1045,28 @@ async function startActiveGame() {
     return;
   }
 
+  const gameBeforeStart = activeGame;
   setButtonBusy(startGameButton, true, "Starter…");
 
   try {
-    await firebaseService.startGame(activeGameId, activeGame);
+    if (activeGame.format === "classic") {
+      const questionPool = await questionsReady;
+      const selectedQuestionIds = selectRandomQuestionIds(questionPool, activeGame.questionCount);
+
+      if (selectedQuestionIds.length === 0) {
+        throw new Error("Der er ingen spørgsmål i spørgsmålspoolen.");
+      }
+
+      await firebaseService.startClassicGame(activeGameId, activeGame, selectedQuestionIds);
+    } else {
+      await firebaseService.startGame(activeGameId, activeGame);
+    }
   } catch (error) {
+    activeGame = gameBeforeStart;
+    renderedQuizStateKey = "";
+    renderPregame(gameBeforeStart);
     showConnectionError(error, pregameMessage);
+  } finally {
     setButtonBusy(startGameButton, false, "Starter…");
   }
 }
@@ -591,6 +1089,49 @@ async function cancelActiveGame() {
   } finally {
     cancelGameButton.disabled = false;
   }
+}
+
+async function openStandings() {
+  if (activeGame?.hostUid !== firebaseUser.uid || activeGame.phase !== "reveal") {
+    return;
+  }
+
+  showStandingsButton.disabled = true;
+  clearMessage(quizRevealMessage);
+
+  try {
+    await firebaseService.showClassicStandings(activeGameId);
+  } catch (error) {
+    showConnectionError(error, quizRevealMessage);
+    showStandingsButton.disabled = false;
+  }
+}
+
+async function advanceClassicGame() {
+  if (activeGame?.hostUid !== firebaseUser.uid || activeGame.phase !== "standings") {
+    return;
+  }
+
+  nextQuestionButton.disabled = true;
+  clearMessage(quizStandingsMessage);
+  const selectedQuestionIds = getSelectedQuestionIds(activeGame);
+  const isLastQuestion = activeGame.currentQuestionIndex >= selectedQuestionIds.length - 1;
+
+  try {
+    if (isLastQuestion) {
+      await firebaseService.finishClassicGame(activeGameId);
+    } else {
+      await firebaseService.startNextClassicQuestion(activeGameId, activeGame.currentQuestionIndex + 1);
+    }
+  } catch (error) {
+    showConnectionError(error, quizStandingsMessage);
+    nextQuestionButton.disabled = false;
+  }
+}
+
+function returnToLobbyAfterQuiz() {
+  clearActiveGame();
+  showLobby("Quizzen er afsluttet.");
 }
 
 function showInvitation(invitation) {
@@ -694,6 +1235,9 @@ inviteBackButton.addEventListener("click", () => showScreen("settings"));
 sendInvitationsButton.addEventListener("click", sendInvitations);
 startGameButton.addEventListener("click", startActiveGame);
 cancelGameButton.addEventListener("click", cancelActiveGame);
+showStandingsButton.addEventListener("click", openStandings);
+nextQuestionButton.addEventListener("click", advanceClassicGame);
+returnToLobbyButton.addEventListener("click", returnToLobbyAfterQuiz);
 acceptInvitationButton.addEventListener("click", () => respondToCurrentInvitation("accepted"));
 declineInvitationButton.addEventListener("click", () => respondToCurrentInvitation("declined"));
 

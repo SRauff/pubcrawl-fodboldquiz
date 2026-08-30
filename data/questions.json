@@ -1,0 +1,92 @@
+[
+  {
+    "id": "TEST-001",
+    "league": "Premier League",
+    "difficulty": "easy",
+    "season": "2015/16",
+    "question": "Hvilken klub vandt Premier League i sæsonen 2015/16?",
+    "options": ["Arsenal", "Chelsea", "Leicester City", "Manchester City"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "TEST-002",
+    "league": "Champions League",
+    "difficulty": "easy",
+    "season": "1998/99",
+    "question": "Hvilken klub vandt Champions League-finalen i 1999?",
+    "options": ["Bayern München", "Juventus", "Manchester United", "Real Madrid"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "TEST-003",
+    "league": "La Liga",
+    "difficulty": "medium",
+    "season": "Testdata",
+    "question": "På hvilket stadion spiller FC Barcelona traditionelt sine hjemmekampe?",
+    "options": ["Mestalla", "Camp Nou", "San Mamés", "Benito Villamarín"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "TEST-004",
+    "league": "Landshold",
+    "difficulty": "easy",
+    "season": "1992",
+    "question": "Hvilket land vandt EM i fodbold i 1992?",
+    "options": ["Danmark", "Tyskland", "Nederlandene", "Sverige"],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "TEST-005",
+    "league": "Serie A",
+    "difficulty": "medium",
+    "season": "Testdata",
+    "question": "Hvilken klub spiller sine hjemmekampe på San Siro sammen med AC Milan?",
+    "options": ["Inter", "Napoli", "Roma", "Lazio"],
+    "correctAnswerIndex": 0
+  },
+  {
+    "id": "TEST-006",
+    "league": "Bundesliga",
+    "difficulty": "medium",
+    "season": "Testdata",
+    "question": "Hvilken tysk klub kaldes ofte BVB?",
+    "options": ["Bayer Leverkusen", "Borussia Dortmund", "Bayern München", "Werder Bremen"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "TEST-007",
+    "league": "Premier League",
+    "difficulty": "hard",
+    "season": "2003/04",
+    "question": "Hvilken klub gik ubesejret gennem Premier League-sæsonen 2003/04?",
+    "options": ["Liverpool", "Manchester United", "Chelsea", "Arsenal"],
+    "correctAnswerIndex": 3
+  },
+  {
+    "id": "TEST-008",
+    "league": "Landshold",
+    "difficulty": "medium",
+    "season": "2018",
+    "question": "Hvilket land vandt VM i fodbold i 2018?",
+    "options": ["Kroatien", "Frankrig", "Belgien", "Argentina"],
+    "correctAnswerIndex": 1
+  },
+  {
+    "id": "TEST-009",
+    "league": "Champions League",
+    "difficulty": "hard",
+    "season": "2004/05",
+    "question": "Hvilken klub vandt Champions League-finalen i Istanbul i 2005?",
+    "options": ["AC Milan", "Barcelona", "Liverpool", "Chelsea"],
+    "correctAnswerIndex": 2
+  },
+  {
+    "id": "TEST-010",
+    "league": "Superligaen",
+    "difficulty": "medium",
+    "season": "Testdata",
+    "question": "Hvilken by kommer fodboldklubben AGF fra?",
+    "options": ["Aalborg", "Odense", "Aarhus", "Esbjerg"],
+    "correctAnswerIndex": 2
+  }
+]

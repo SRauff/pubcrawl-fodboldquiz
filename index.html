@@ -178,7 +178,7 @@
         <div class="ready-mark" aria-hidden="true">✓</div>
         <p class="eyebrow">Holdene er klar</p>
         <h2 class="screen-title" id="ready-title">Spillet er klar!</h2>
-        <p class="screen-intro">Quizzen bliver implementeret i næste milepæl.</p>
+        <p class="screen-intro">Dette quizformat får sin quizmotor i en senere milepæl.</p>
         <div class="game-summary" id="ready-summary"></div>
         <div class="player-panel">
           <div class="panel-accent" aria-hidden="true"></div>
@@ -187,6 +187,61 @@
           </div>
           <div class="game-player-list" id="ready-player-list"></div>
         </div>
+      </section>
+
+      <section class="screen quiz-screen" id="quiz-question-screen" aria-labelledby="quiz-question-title" hidden>
+        <div class="quiz-topline">
+          <p class="eyebrow" id="quiz-progress">Spørgsmål</p>
+          <span class="quiz-category" id="quiz-category"></span>
+        </div>
+        <h2 class="quiz-question" id="quiz-question-title"></h2>
+
+        <div class="quiz-timer" aria-live="off">
+          <div class="quiz-timer__heading">
+            <span>Tid</span>
+            <strong id="quiz-timer-text">10,0 sek.</strong>
+          </div>
+          <div class="quiz-timer__track" aria-hidden="true">
+            <span id="quiz-timer-bar"></span>
+          </div>
+        </div>
+
+        <div class="answer-grid" id="quiz-answer-options"></div>
+        <p class="quiz-status" id="quiz-answer-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="screen quiz-screen" id="quiz-reveal-screen" aria-labelledby="quiz-reveal-title" hidden>
+        <p class="eyebrow">Resultat</p>
+        <h2 class="screen-title" id="quiz-reveal-title">Sådan gik det</h2>
+        <div class="result-panel" id="quiz-result-panel"></div>
+        <p class="quiz-points" id="quiz-earned-points"></p>
+        <p class="connection-message" id="quiz-reveal-message" role="status" aria-live="polite"></p>
+        <button class="button button--primary" id="show-standings-button" type="button" hidden>
+          <span>Vis stilling</span><span aria-hidden="true">→</span>
+        </button>
+        <p class="waiting-note" id="reveal-waiting-message" hidden>Venter på værten…</p>
+      </section>
+
+      <section class="screen quiz-screen" id="quiz-standings-screen" aria-labelledby="quiz-standings-title" hidden>
+        <p class="eyebrow">Efter spørgsmålet</p>
+        <h2 class="screen-title" id="quiz-standings-title">Stilling</h2>
+        <div class="leaderboard" id="quiz-standings-list"></div>
+        <p class="connection-message" id="quiz-standings-message" role="status" aria-live="polite"></p>
+        <button class="button button--primary" id="next-question-button" type="button" hidden>
+          <span>Næste spørgsmål</span><span aria-hidden="true">→</span>
+        </button>
+        <p class="waiting-note" id="standings-waiting-message" hidden>Venter på værten…</p>
+      </section>
+
+      <section class="screen quiz-screen" id="quiz-finished-screen" aria-labelledby="quiz-finished-title" hidden>
+        <div class="trophy-mark" aria-hidden="true">★</div>
+        <p class="eyebrow">Slutfløjt</p>
+        <h2 class="screen-title" id="quiz-finished-title">Slutstilling</h2>
+        <p class="winner-message" id="quiz-winner-message"></p>
+        <div class="leaderboard" id="quiz-final-list"></div>
+        <button class="button button--primary" id="return-to-lobby-button" type="button">
+          <span>Tilbage til lobby</span><span aria-hidden="true">→</span>
+        </button>
       </section>
     </main>
 
