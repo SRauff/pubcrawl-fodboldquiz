@@ -945,6 +945,111 @@ select {
   background: var(--surface);
 }
 
+.final-table-wrap {
+  margin: 1.4rem 0 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-top-color: rgba(230, 173, 69, 0.5);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.final-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.final-table th,
+.final-table td {
+  padding: 0.72rem 0.28rem;
+  border-bottom: 1px solid var(--border);
+  font-size: clamp(0.66rem, 2.6vw, 0.82rem);
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.final-table thead th {
+  color: var(--muted);
+  background: rgba(7, 18, 11, 0.36);
+  font-size: clamp(0.58rem, 2.25vw, 0.7rem);
+  font-weight: 850;
+}
+
+.final-table tbody th {
+  color: var(--text);
+  font-weight: 800;
+  text-align: left;
+}
+
+.final-table tbody td {
+  color: var(--green);
+  font-weight: 850;
+}
+
+.final-table tbody tr:last-child th,
+.final-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.final-table__first-place {
+  background: rgba(230, 173, 69, 0.1);
+}
+
+.final-table__first-place td:first-child {
+  color: var(--gold-light);
+}
+
+.final-table__self th {
+  color: var(--gold-light);
+}
+
+.final-table--classic th:nth-child(1),
+.final-table--classic td:nth-child(1) {
+  width: 17%;
+}
+
+.final-table--classic th:nth-child(2),
+.final-table--classic td:nth-child(2) {
+  width: 25%;
+  text-align: center;
+}
+
+.final-table--classic th:nth-child(3),
+.final-table--classic td:nth-child(3) {
+  width: 17%;
+}
+
+.final-table--classic th:nth-child(4),
+.final-table--classic td:nth-child(4) {
+  width: 13%;
+}
+
+.final-table--classic th:nth-child(5),
+.final-table--classic td:nth-child(5),
+.final-table--classic th:nth-child(6),
+.final-table--classic td:nth-child(6) {
+  width: 14%;
+}
+
+.final-table--who-am-i th:nth-child(1),
+.final-table--who-am-i td:nth-child(1) {
+  width: 22%;
+}
+
+.final-table--who-am-i th:nth-child(2),
+.final-table--who-am-i td:nth-child(2) {
+  width: 38%;
+  text-align: center;
+}
+
+.final-table--who-am-i th:nth-child(3),
+.final-table--who-am-i td:nth-child(3) {
+  width: 40%;
+}
+
 .result-line {
   padding: 1rem;
 }

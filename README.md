@@ -26,11 +26,12 @@ python3 -m http.server 8000
 
 ## Arkitektur
 
-- Single Player bruger samme quizmotor og produktionsdata som multiplayer, men holder game-state lokalt i browseren og skriver ikke lobbyer, invitationer eller spil til Firebase.
+- Single Player bruger samme quizmotor og produktionsdata som multiplayer, men holder game-state lokalt i browseren og skriver ikke lobbyer, invitationer eller spil til Firebase. Kun den globale brugsstatistik for udvalgt quizindhold opdateres.
 - Firebase Authentication identificerer automatisk hver browser anonymt.
 - `lobbyPlayers/{uid}/connections/{connectionId}` indeholder hver aktiv browserforbindelse. Hver forbindelse registrerer sin egen `onDisconnect().remove()`, og lobbyen viser højst én række pr. anonym bruger.
 - `invitations/{playerUid}/{gameId}` indeholder aktive invitationer.
 - `games/{gameId}` indeholder deltagere, scores og fælles quiz-state.
+- `contentUsage/classic/{questionId}` og `contentUsage/whoAmI/{playerId}` indeholder globalt `count` og `lastUsedAt`, så nyligt og ofte brugt indhold vælges sjældnere.
 - Firebase `.info/serverTimeOffset` og fælles timestamps synkroniserer quiztiderne.
 - Hosten styrer progression, resultater og stillinger. Hver spiller skriver kun egne svar/forsøg.
 - Et aktivt multiplayer-spil registrerer `games/{gameId}/departure` med Firebase `onDisconnect()`. Hvis en deltager mister forbindelsen eller forlader siden, afsluttes spillet for alle deltagere.
@@ -45,11 +46,13 @@ Efter valg af **Spil alene** indtaster spilleren sit navn, vælger format og ant
 
 ## Klassisk quiz
 
-`data/questions.json` indeholder 130 produktionsspørgsmål med fire svarmuligheder og facit. Hosten vælger tilfældige ID'er uden dubletter. Alle ser samme spørgsmål og en fælles 15-sekunders timer. Korrekte svar giver point efter svarhastighed. Efter hvert spørgsmål vises facit og stilling, og efter sidste spørgsmål vises slutstillingen.
+`data/questions.json` indeholder 130 produktionsspørgsmål med fire svarmuligheder og facit. Udvælgelsen er uden dubletter og prioriterer laveste globale brugstal, derefter ældste `lastUsedAt` og til sidst en tilfældig rækkefølge ved helt ens statistik. Alle ser samme spørgsmål og en fælles 15-sekunders timer. Korrekte svar giver point efter svarhastighed. Efter hvert spørgsmål vises facit og stilling. Slutskærmen viser den eksisterende pointplacering i en ligatabel med antal spørgsmål, rigtige, forkerte og den allerede beregnede slutscore.
 
 ## Gæt hvem jeg er
 
 `data/who-am-i.json` indeholder 40 produktionsspillere med unikt ID, canonical navn, aliases og præcis 10 ledetråde. Et rundeantal over poolens størrelse begrænses automatisk.
+
+Spiller-ID'erne vælges efter samme globale brugsprioritet som Klassisk quiz og uden dubletter. Manglende statistik behandles som `count: 0` og aldrig brugt. Single Player opdaterer statistikken én gang, når spillet startes. I multiplayer udfører hosten spilstart og brugsoptælling i samme atomiske multi-path update. Optællingen bruger Firebase `increment(1)`, så samtidige starter ikke overskriver hinanden; refresh og realtime-listeners skriver ikke statistik.
 
 ```text
 phase: "clue" | "lastChance" | "reveal" | "standings" | "finished"
@@ -72,6 +75,8 @@ Alle starter hver runde med to liv. Et forkert gæt koster ét liv. Første korr
 Den sidste spiller kan også vælge **Jeg aner det ikke**. Valget bruger samme atomiske `roundClaims`-transaktion som et korrekt gæt, så korrekt svar, timeout og opgivelse ikke kan afgøre runden flere gange.
 
 Spillerens identitet vises kun i multiplayer, når en deltager gætter korrekt. Ved opgivelse, timeout, forkert sidste gæt eller andre runder uden en vinder vises kun en neutral resultatbesked.
+
+WhoAmI-slutskærmen bevarer den officielle pointplacering og viser som statistik, hvor mange runder hver spiller vandt. Statistikken beregnes fra de eksisterende `roundResults` og ændrer ikke scoring eller tie-breaking.
 
 Når en spiller klikker **Gæt spilleren**, claimer klienten atomisk `guessControl/{roundIndex}`. Her gemmes den aktive gætter, den aktuelle ledetråd og den resterende ledetrådstid. Alle klienter pauser derfor samme timer. Gætteren får en separat periode på 25 sekunder; efter et forkert gæt eller timeout trækker host-klienten ét liv og genoptager ledetråden med den gemte resttid.
 
@@ -107,7 +112,7 @@ Kun rundens ene vinder får point.
 
 ## Firebase Console
 
-Milepæl 5 kræver udvidede regler til den atomiske gætte-ret, egne gæt og vinder-claim. Databasen er fortsat lukket som udgangspunkt.
+Den aktuelle frontend kræver også autentificeret læse- og skriveadgang til den globale brugsstatistik. Databasen er fortsat lukket som udgangspunkt.
 
 Erstat hele blokken under **Firebase → Realtime Database → Rules** og klik **Publish**:
 
@@ -124,6 +129,15 @@ Erstat hele blokken under **Firebase → Realtime Database → Rules** og klik *
             ".write": "auth != null && auth.uid === $uid",
             ".validate": "!newData.exists() || (newData.hasChildren(['name', 'joinedAt']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 30 && newData.child('joinedAt').isNumber())"
           }
+        }
+      }
+    },
+    "contentUsage": {
+      ".read": "auth != null",
+      "$format": {
+        "$contentId": {
+          ".write": "auth != null && ($format === 'classic' || $format === 'whoAmI')",
+          ".validate": "newData.hasChildren(['count', 'lastUsedAt']) && newData.child('count').isNumber() && newData.child('count').val() >= 1 && newData.child('lastUsedAt').isNumber() && ((!data.exists() && newData.child('count').val() === 1) || (data.child('count').isNumber() && newData.child('count').val() === data.child('count').val() + 1))"
         }
       }
     },

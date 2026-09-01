@@ -305,7 +305,7 @@ function setButtonBusy(button, isBusy, busyText) {
   label.textContent = isBusy ? busyText : button.dataset.defaultLabel;
 }
 
-const firebaseReady = import("./firebase.js?v=20260901")
+const firebaseReady = import("./firebase.js?v=20260901-usage")
   .then(async (service) => {
     firebaseService = service;
     firebaseUser = await service.ensureAnonymousUser();
@@ -451,13 +451,22 @@ async function enterLobby(playerName) {
 
 async function startSinglePlayerGame() {
   const pool = gameDraft.format === "classic" ? await questionsReady : await whoAmIReady;
+  const service = await firebaseReady;
+
+  if (!service || !firebaseUser) {
+    throw new Error("Firebase Authentication er ikke tilgængelig.");
+  }
+
+  const contentUsage = await service.getContentUsage(gameDraft.format);
   const selectedIds = gameDraft.format === "classic"
-    ? selectRandomQuestionIds(pool, gameDraft.count)
-    : selectRandomPlayerIds(pool, gameDraft.count);
+    ? selectQuestionIds(pool, gameDraft.count, contentUsage)
+    : selectPlayerIds(pool, gameDraft.count, contentUsage);
 
   if (selectedIds.length === 0) {
     throw new Error("Der er ikke nok data til at starte quizzen.");
   }
+
+  await service.recordContentUsage(gameDraft.format, selectedIds);
 
   const player = { name: currentPlayerName };
   singleGame = {
@@ -773,15 +782,33 @@ function getRemainingQuestionTime(game) {
   return Math.max(0, startedAt + QUESTION_DURATION_MS - getServerNow());
 }
 
-function selectRandomQuestionIds(pool, requestedCount) {
-  const shuffledIds = pool.map((question) => question.id);
+function selectLeastUsedIds(ids, requestedCount, usage) {
+  const candidates = [...new Set(ids)].map((id) => {
+    const usageEntry = usage?.[id];
+    const count = Number(usageEntry?.count);
+    const lastUsedAt = Number(usageEntry?.lastUsedAt);
 
-  for (let index = shuffledIds.length - 1; index > 0; index -= 1) {
-    const randomIndex = Math.floor(Math.random() * (index + 1));
-    [shuffledIds[index], shuffledIds[randomIndex]] = [shuffledIds[randomIndex], shuffledIds[index]];
-  }
+    return {
+      id,
+      count: Number.isFinite(count) && count >= 0 ? count : 0,
+      lastUsedAt: Number.isFinite(lastUsedAt) && lastUsedAt >= 0 ? lastUsedAt : 0,
+      tieBreaker: Math.random(),
+    };
+  });
 
-  return shuffledIds.slice(0, Math.min(requestedCount, shuffledIds.length));
+  candidates.sort((first, second) => (
+    first.count - second.count
+    || first.lastUsedAt - second.lastUsedAt
+    || first.tieBreaker - second.tieBreaker
+  ));
+
+  return candidates
+    .slice(0, Math.min(requestedCount, candidates.length))
+    .map((candidate) => candidate.id);
+}
+
+function selectQuestionIds(pool, requestedCount, usage) {
+  return selectLeastUsedIds(pool.map((question) => question.id), requestedCount, usage);
 }
 
 function getSelectedPlayerIds(game) {
@@ -794,15 +821,8 @@ function getSelectedPlayerIds(game) {
     .map(([, playerId]) => playerId);
 }
 
-function selectRandomPlayerIds(pool, requestedCount) {
-  const shuffledIds = pool.map((player) => player.id);
-
-  for (let index = shuffledIds.length - 1; index > 0; index -= 1) {
-    const randomIndex = Math.floor(Math.random() * (index + 1));
-    [shuffledIds[index], shuffledIds[randomIndex]] = [shuffledIds[randomIndex], shuffledIds[index]];
-  }
-
-  return shuffledIds.slice(0, Math.min(requestedCount, shuffledIds.length));
+function selectPlayerIds(pool, requestedCount, usage) {
+  return selectLeastUsedIds(pool.map((player) => player.id), requestedCount, usage);
 }
 
 function getWhoAmIAttempt(game, uid = getCurrentPlayerUid()) {
@@ -878,18 +898,25 @@ function sortPlayersByScore(game) {
     ));
 }
 
-function renderLeaderboard(container, game) {
-  const players = sortPlayersByScore(game);
-  const fragment = document.createDocumentFragment();
+function addOfficialRanks(players) {
   let previousScore;
   let displayedRank = 0;
 
-  players.forEach((player, index) => {
+  return players.map((player, index) => {
     if (player.score !== previousScore) {
       displayedRank = index + 1;
       previousScore = player.score;
     }
 
+    return { ...player, rank: displayedRank };
+  });
+}
+
+function renderLeaderboard(container, game) {
+  const players = addOfficialRanks(sortPlayersByScore(game));
+  const fragment = document.createDocumentFragment();
+
+  players.forEach((player) => {
     const row = document.createElement("div");
     const rank = document.createElement("span");
     const name = document.createElement("span");
@@ -902,7 +929,7 @@ function renderLeaderboard(container, game) {
     rank.className = "leaderboard-rank";
     name.className = "leaderboard-name";
     score.className = "leaderboard-score";
-    rank.textContent = String(displayedRank);
+    rank.textContent = String(player.rank);
     name.textContent = player.uid === getCurrentPlayerUid() ? `${player.name} · Dig` : player.name;
     score.textContent = `${player.score.toLocaleString("da-DK")} point`;
     row.append(rank, name, score);
@@ -911,6 +938,105 @@ function renderLeaderboard(container, game) {
 
   container.replaceChildren(fragment);
   return players;
+}
+
+function createFinalTable(headers, rows, format) {
+  const table = document.createElement("table");
+  const head = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  const body = document.createElement("tbody");
+
+  table.className = `final-table final-table--${format}`;
+
+  headers.forEach((header) => {
+    const cell = document.createElement("th");
+    cell.scope = "col";
+    cell.textContent = header;
+    headRow.append(cell);
+  });
+
+  rows.forEach((rowData) => {
+    const row = document.createElement("tr");
+    if (rowData.rank === 1) {
+      row.classList.add("final-table__first-place");
+    }
+    if (rowData.uid === getCurrentPlayerUid()) {
+      row.classList.add("final-table__self");
+    }
+
+    rowData.cells.forEach((value, index) => {
+      const cell = document.createElement(index === 1 ? "th" : "td");
+      if (index === 1) {
+        cell.scope = "row";
+      }
+      cell.textContent = value;
+      row.append(cell);
+    });
+    body.append(row);
+  });
+
+  head.append(headRow);
+  table.append(head, body);
+  return table;
+}
+
+function renderClassicFinalTable(container, game, rankedPlayers) {
+  const totalQuestions = getSelectedQuestionIds(game).length;
+  const rows = rankedPlayers.map((player) => {
+    let correctAnswers = 0;
+
+    for (let questionIndex = 0; questionIndex < totalQuestions; questionIndex += 1) {
+      const answer = getQuestionAnswers(game, questionIndex)[player.uid];
+      const result = getQuestionResult(game, questionIndex);
+      if (answer && result && answer.optionIndex === result.correctAnswerIndex) {
+        correctAnswers += 1;
+      }
+    }
+
+    return {
+      uid: player.uid,
+      rank: player.rank,
+      cells: [
+        String(player.rank),
+        player.uid === getCurrentPlayerUid() ? `${player.name} · Dig` : player.name,
+        String(totalQuestions),
+        String(correctAnswers),
+        String(totalQuestions - correctAnswers),
+        player.score.toLocaleString("da-DK"),
+      ],
+    };
+  });
+
+  container.replaceChildren(createFinalTable(
+    ["Placering", "Spiller", "Spørgsmål", "Rigtige", "Forkerte", "Point"],
+    rows,
+    "classic",
+  ));
+}
+
+function renderWhoAmIFinalTable(container, game, rankedPlayers) {
+  const roundWins = {};
+  Object.values(game.roundResults || {}).forEach((result) => {
+    if (result?.winnerUid && game.players?.[result.winnerUid]) {
+      roundWins[result.winnerUid] = (roundWins[result.winnerUid] || 0) + 1;
+    }
+  });
+
+  const rows = rankedPlayers.map((player) => ({
+    uid: player.uid,
+    rank: player.rank,
+    cells: [
+      String(player.rank),
+      player.uid === getCurrentPlayerUid() ? `${player.name} · Dig` : player.name,
+      String(roundWins[player.uid] || 0),
+    ],
+  }));
+
+  container.replaceChildren(createFinalTable(
+    ["Placering", "Spiller", "Antal vundne runder"],
+    rows,
+    "who-am-i",
+  ));
 }
 
 function createResultLine(label, value, stateClass = "") {
@@ -1863,9 +1989,15 @@ function renderFinishedPhase(game) {
   }
 
   renderedQuizStateKey = stateKey;
-  const players = renderLeaderboard(quizFinalList, game);
+  const players = addOfficialRanks(sortPlayersByScore(game));
   const topScore = players[0]?.score;
   const winners = players.filter((player) => player.score === topScore).map((player) => player.name);
+
+  if (game.format === "classic") {
+    renderClassicFinalTable(quizFinalList, game, players);
+  } else {
+    renderWhoAmIFinalTable(quizFinalList, game, players);
+  }
 
   quizWinnerMessage.textContent = winners.length === 1
     ? `${winners[0]} vinder!`
@@ -2100,7 +2232,12 @@ async function startActiveGame() {
   try {
     if (activeGame.format === "classic") {
       const questionPool = await questionsReady;
-      const selectedQuestionIds = selectRandomQuestionIds(questionPool, activeGame.questionCount);
+      const contentUsage = await firebaseService.getContentUsage("classic");
+      const selectedQuestionIds = selectQuestionIds(
+        questionPool,
+        activeGame.questionCount,
+        contentUsage,
+      );
 
       if (selectedQuestionIds.length === 0) {
         throw new Error("Der er ingen spørgsmål i spørgsmålspoolen.");
@@ -2109,7 +2246,12 @@ async function startActiveGame() {
       await firebaseService.startClassicGame(activeGameId, activeGame, selectedQuestionIds);
     } else if (activeGame.format === "whoAmI") {
       const playerPool = await whoAmIReady;
-      const selectedPlayerIds = selectRandomPlayerIds(playerPool, activeGame.roundCount);
+      const contentUsage = await firebaseService.getContentUsage("whoAmI");
+      const selectedPlayerIds = selectPlayerIds(
+        playerPool,
+        activeGame.roundCount,
+        contentUsage,
+      );
 
       if (selectedPlayerIds.length === 0) {
         throw new Error("Der er ingen spillere i spillerpoolen.");

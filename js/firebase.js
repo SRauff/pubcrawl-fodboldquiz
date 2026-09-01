@@ -5,7 +5,9 @@ import {
   signInAnonymously,
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import {
+  get,
   getDatabase,
+  increment,
   onDisconnect,
   onValue,
   push,
@@ -333,6 +335,24 @@ export function subscribeToServerTimeOffset(onOffset, onError) {
   );
 }
 
+export async function getContentUsage(format) {
+  const snapshot = await get(ref(database, `contentUsage/${format}`));
+  return snapshot.val() || {};
+}
+
+function addContentUsageUpdates(updates, format, selectedIds) {
+  [...new Set(selectedIds)].forEach((contentId) => {
+    updates[`contentUsage/${format}/${contentId}/count`] = increment(1);
+    updates[`contentUsage/${format}/${contentId}/lastUsedAt`] = serverTimestamp();
+  });
+}
+
+export function recordContentUsage(format, selectedIds) {
+  const updates = {};
+  addContentUsageUpdates(updates, format, selectedIds);
+  return update(ref(database), updates);
+}
+
 function addPendingInvitationCleanup(updates, gameId, game) {
   Object.entries(game.invitedPlayers || {}).forEach(([uid, player]) => {
     if (player.status === "pending") {
@@ -375,6 +395,7 @@ export function startClassicGame(gameId, game, selectedQuestionIds) {
   };
 
   addPendingInvitationCleanup(updates, gameId, game);
+  addContentUsageUpdates(updates, "classic", selectedQuestionIds);
   return update(ref(database), updates);
 }
 
@@ -408,6 +429,7 @@ export function startWhoAmIGame(gameId, game, selectedPlayerIds) {
   };
 
   addPendingInvitationCleanup(updates, gameId, game);
+  addContentUsageUpdates(updates, "whoAmI", selectedPlayerIds);
   return update(ref(database), updates);
 }
 
