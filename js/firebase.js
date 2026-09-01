@@ -76,13 +76,28 @@ export function subscribeToLobbyPlayers(onPlayers, onError) {
       const players = [];
 
       snapshot.forEach((playerSnapshot) => {
-        const player = playerSnapshot.val();
+        let activeConnection;
 
-        if (player?.name) {
+        playerSnapshot.child("connections").forEach((connectionSnapshot) => {
+          const connection = connectionSnapshot.val();
+          const joinedAt = Number(connection?.joinedAt) || 0;
+
+          if (
+            connection?.name
+            && (!activeConnection || joinedAt > activeConnection.joinedAt)
+          ) {
+            activeConnection = {
+              name: connection.name,
+              joinedAt,
+            };
+          }
+        });
+
+        if (activeConnection) {
           players.push({
             uid: playerSnapshot.key,
-            name: player.name,
-            joinedAt: player.joinedAt,
+            name: activeConnection.name,
+            joinedAt: activeConnection.joinedAt,
           });
         }
       });
@@ -101,7 +116,7 @@ export function subscribeToLobbyPlayers(onPlayers, onError) {
 }
 
 export function joinLobbyPresence(user, playerName, onError) {
-  const playerRef = ref(database, `lobbyPlayers/${user.uid}`);
+  const connectionRef = push(ref(database, `lobbyPlayers/${user.uid}/connections`));
   const connectedRef = ref(database, ".info/connected");
 
   let activeDisconnectOperation;
@@ -139,7 +154,7 @@ export function joinLobbyPresence(user, playerName, onError) {
 
         const registerPresence = async () => {
           try {
-            const disconnectOperation = onDisconnect(playerRef);
+            const disconnectOperation = onDisconnect(connectionRef);
             activeDisconnectOperation = disconnectOperation;
 
             // Registrér oprydningen på serveren, før spilleren markeres online.
@@ -150,7 +165,7 @@ export function joinLobbyPresence(user, playerName, onError) {
               return;
             }
 
-            await set(playerRef, {
+            await set(connectionRef, {
               name: playerName,
               joinedAt: serverTimestamp(),
             });
@@ -158,7 +173,7 @@ export function joinLobbyPresence(user, playerName, onError) {
             // Hvis spilleren trykkede "Tilbage", mens set() stadig var i gang,
             // må den sene skrivning ikke oprette lobby-posten igen.
             if (hasLeftLobby) {
-              await remove(playerRef);
+              await remove(connectionRef);
               await disconnectOperation.cancel();
               return;
             }
@@ -178,7 +193,7 @@ export function joinLobbyPresence(user, playerName, onError) {
 
                   // Fjern først online-posten. Hvis det fejler, bevares
                   // onDisconnect som sikkerhedsnet.
-                  await remove(playerRef);
+                  await remove(connectionRef);
                   await activeDisconnectOperation?.cancel();
                 },
               });
@@ -293,6 +308,21 @@ export function subscribeToGame(gameId, onGame, onError) {
     },
     onError,
   );
+}
+
+export async function registerGameDepartureOnDisconnect(user, gameId, playerName) {
+  const departureRef = ref(database, `games/${gameId}/departure`);
+  const disconnectOperation = onDisconnect(departureRef);
+
+  await disconnectOperation.set({
+    uid: user.uid,
+    name: playerName,
+    leftAt: serverTimestamp(),
+  });
+
+  return {
+    cancel: () => disconnectOperation.cancel(),
+  };
 }
 
 export function subscribeToServerTimeOffset(onOffset, onError) {

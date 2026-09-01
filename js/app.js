@@ -1,4 +1,5 @@
 const STORAGE_KEY = "pubcrawlPlayerName";
+const SINGLE_PLAYER_UID = "singleplayer";
 const CONNECTION_ERROR_MESSAGE = "Der kunne ikke oprettes forbindelse. Prøv igen.";
 const QUESTION_DURATION_MS = 15000;
 const CLUE_DURATION_MS = 10000;
@@ -33,6 +34,7 @@ const FORMAT_CONFIG = {
 };
 
 const screens = {
+  mode: document.querySelector("#mode-screen"),
   start: document.querySelector("#start-screen"),
   lobby: document.querySelector("#lobby-screen"),
   format: document.querySelector("#format-screen"),
@@ -45,9 +47,14 @@ const screens = {
   reveal: document.querySelector("#quiz-reveal-screen"),
   standings: document.querySelector("#quiz-standings-screen"),
   finished: document.querySelector("#quiz-finished-screen"),
+  singleGameOver: document.querySelector("#single-game-over-screen"),
+  playerLeft: document.querySelector("#player-left-screen"),
 };
 
 const playerForm = document.querySelector("#player-form");
+const singlePlayerButton = document.querySelector("#single-player-button");
+const multiplayerButton = document.querySelector("#multiplayer-button");
+const modeBackButton = document.querySelector("#mode-back-button");
 const playerNameInput = document.querySelector("#player-name");
 const nameError = document.querySelector("#name-error");
 const welcomeMessage = document.querySelector("#welcome-message");
@@ -62,6 +69,7 @@ const lobbyConnectionMessage = document.querySelector("#lobby-connection-message
 const lobbyActionMessage = document.querySelector("#lobby-action-message");
 
 const formatBackButton = document.querySelector("#format-back-button");
+const formatBackLabel = document.querySelector("#format-back-label");
 const formatButtons = document.querySelectorAll("[data-format]");
 const settingsBackButton = document.querySelector("#settings-back-button");
 const settingsFormatDescription = document.querySelector("#settings-format-description");
@@ -109,6 +117,7 @@ const openGuessButton = document.querySelector("#open-guess-button");
 const guessForm = document.querySelector("#guess-form");
 const playerGuessInput = document.querySelector("#player-guess");
 const submitGuessButton = document.querySelector("#submit-guess-button");
+const lastChanceGiveUpButton = document.querySelector("#last-chance-give-up-button");
 const whoGuessStatus = document.querySelector("#who-guess-status");
 const quizResultPanel = document.querySelector("#quiz-result-panel");
 const quizEarnedPoints = document.querySelector("#quiz-earned-points");
@@ -123,6 +132,10 @@ const standingsWaitingMessage = document.querySelector("#standings-waiting-messa
 const quizWinnerMessage = document.querySelector("#quiz-winner-message");
 const quizFinalList = document.querySelector("#quiz-final-list");
 const returnToLobbyButton = document.querySelector("#return-to-lobby-button");
+const returnToLobbyLabel = document.querySelector("#return-to-lobby-label");
+const singleGameOverButton = document.querySelector("#single-game-over-button");
+const playerLeftMessage = document.querySelector("#player-left-message");
+const playerLeftButton = document.querySelector("#player-left-button");
 
 const invitationModal = document.querySelector("#invitation-modal");
 const invitationTitle = document.querySelector("#invitation-title");
@@ -133,7 +146,8 @@ const acceptInvitationButton = document.querySelector("#accept-invitation-button
 
 let firebaseService;
 let firebaseUser;
-let currentScreen = "start";
+let currentScreen = "mode";
+let gameMode = null;
 let currentPlayerName = "";
 let lobbyPlayers = [];
 let selectedPlayerUids = new Set();
@@ -141,6 +155,9 @@ let gameDraft = { format: null, count: null };
 let currentInvitation = null;
 let activeGame = null;
 let activeGameId = null;
+let singleGame = null;
+let gameDepartureController;
+let gameDepartureRegistrationId;
 let presenceController;
 let stopPlayersListener;
 let stopInvitationsListener;
@@ -246,6 +263,37 @@ function showScreen(screenName) {
   window.scrollTo({ top: 0, behavior: "auto" });
 }
 
+function isSinglePlayer() {
+  return gameMode === "singleplayer";
+}
+
+function getCurrentPlayerUid() {
+  return isSinglePlayer() ? SINGLE_PLAYER_UID : firebaseUser?.uid;
+}
+
+function isCurrentPlayerHost(game = activeGame) {
+  return game?.hostUid === getCurrentPlayerUid();
+}
+
+function updateSingleGame(mutator) {
+  if (!isSinglePlayer() || !singleGame) {
+    return;
+  }
+
+  const nextGame = structuredClone(singleGame);
+  mutator(nextGame);
+  singleGame = nextGame;
+  handleGameUpdate(nextGame);
+}
+
+function endSinglePlayerWhoAmI() {
+  window.clearInterval(questionTimerId);
+  questionTimerId = undefined;
+  clearActiveGame();
+  showScreen("singleGameOver");
+  singleGameOverButton.focus();
+}
+
 function setButtonBusy(button, isBusy, busyText) {
   const label = button.querySelector("span") || button;
 
@@ -257,7 +305,7 @@ function setButtonBusy(button, isBusy, busyText) {
   label.textContent = isBusy ? busyText : button.dataset.defaultLabel;
 }
 
-const firebaseReady = import("./firebase.js")
+const firebaseReady = import("./firebase.js?v=20260901")
   .then(async (service) => {
     firebaseService = service;
     firebaseUser = await service.ensureAnonymousUser();
@@ -270,7 +318,7 @@ const firebaseReady = import("./firebase.js")
     return service;
   })
   .catch((error) => {
-    showConnectionError(error);
+    console.error("Firebase kunne ikke initialiseres:", error);
     return null;
   });
 
@@ -301,7 +349,7 @@ function createLobbyPlayerRow(player) {
   name.textContent = player.name;
   status.className = "status-dot";
   statusDot.setAttribute("aria-hidden", "true");
-  status.append(statusDot, document.createTextNode(player.uid === firebaseUser.uid ? " Dig" : " Online"));
+  status.append(statusDot, document.createTextNode(player.uid === getCurrentPlayerUid() ? " Dig" : " Online"));
   row.append(avatar, name, status);
 
   return row;
@@ -353,10 +401,24 @@ function startLobbyListeners() {
   );
 
   stopInvitationsListener = firebaseService.subscribeToInvitations(
-    firebaseUser.uid,
+    getCurrentPlayerUid(),
     handleInvitations,
     (error) => showConnectionError(error, lobbyConnectionMessage),
   );
+}
+
+function selectGameMode(mode) {
+  gameMode = mode;
+  clearMessage(startConnectionMessage);
+  clearNameError();
+  showScreen("start");
+  playerNameInput.focus();
+}
+
+function returnToModeSelection() {
+  clearMessage(startConnectionMessage);
+  clearNameError();
+  showScreen("mode");
 }
 
 async function enterLobby(playerName) {
@@ -387,6 +449,54 @@ async function enterLobby(playerName) {
   }
 }
 
+async function startSinglePlayerGame() {
+  const pool = gameDraft.format === "classic" ? await questionsReady : await whoAmIReady;
+  const selectedIds = gameDraft.format === "classic"
+    ? selectRandomQuestionIds(pool, gameDraft.count)
+    : selectRandomPlayerIds(pool, gameDraft.count);
+
+  if (selectedIds.length === 0) {
+    throw new Error("Der er ikke nok data til at starte quizzen.");
+  }
+
+  const player = { name: currentPlayerName };
+  singleGame = {
+    id: "singleplayer",
+    hostUid: SINGLE_PLAYER_UID,
+    hostName: currentPlayerName,
+    format: gameDraft.format,
+    status: "started",
+    phase: gameDraft.format === "classic" ? "question" : "clue",
+    players: { [SINGLE_PLAYER_UID]: player },
+    scores: { [SINGLE_PLAYER_UID]: 0 },
+    ...(gameDraft.format === "classic"
+      ? {
+        questionCount: gameDraft.count,
+        selectedQuestionIds: selectedIds,
+        totalQuestions: selectedIds.length,
+        currentQuestionIndex: 0,
+        questionStartedAt: getServerNow(),
+      }
+      : {
+        roundCount: gameDraft.count,
+        selectedPlayerIds: selectedIds,
+        totalRounds: selectedIds.length,
+        currentRoundIndex: 0,
+        currentClueIndex: 0,
+        clueStartedAt: getServerNow(),
+        whoAmIAttempts: {
+          0: { [SINGLE_PLAYER_UID]: { remainingLives: 2, guessCount: 0 } },
+        },
+      }),
+  };
+
+  activeGameId = singleGame.id;
+  activeGame = singleGame;
+  renderedQuizStateKey = "";
+  hostTransitionKey = "";
+  handleGameUpdate(singleGame);
+}
+
 async function leaveLobby() {
   backButton.disabled = true;
   clearMessage(lobbyConnectionMessage);
@@ -412,6 +522,7 @@ function openFormatSelection() {
   gameDraft = { format: null, count: null };
   selectedPlayerUids = new Set();
   clearMessage(lobbyActionMessage);
+  formatBackLabel.textContent = isSinglePlayer() ? "Tilbage" : "Til lobby";
   showScreen("format");
 }
 
@@ -433,6 +544,10 @@ function configureGameSettings(format) {
     option.selected = count === config.defaultCount;
     gameCountSelect.append(option);
   }
+
+  continueToInvitesButton.querySelector("span").textContent = isSinglePlayer()
+    ? "Start quiz"
+    : "Vælg spillere";
 
   showScreen("settings");
   gameCountSelect.focus();
@@ -468,7 +583,7 @@ function createInviteOption(player) {
 }
 
 function renderInvitePlayers() {
-  const availablePlayers = lobbyPlayers.filter((player) => player.uid !== firebaseUser.uid);
+  const availablePlayers = lobbyPlayers.filter((player) => player.uid !== getCurrentPlayerUid());
   const availableUids = new Set(availablePlayers.map((player) => player.uid));
 
   selectedPlayerUids = new Set([...selectedPlayerUids].filter((uid) => availableUids.has(uid)));
@@ -581,7 +696,7 @@ function renderPregame(game) {
   questionTimerId = undefined;
   const invitedPlayers = Object.values(game.invitedPlayers || {});
   const acceptedPlayers = invitedPlayers.filter((player) => player.status === "accepted");
-  const isHost = game.hostUid === firebaseUser.uid;
+  const isHost = isCurrentPlayerHost(game);
 
   renderGameSummary(pregameSummary, game);
   pregamePlayerList.replaceChildren();
@@ -690,7 +805,7 @@ function selectRandomPlayerIds(pool, requestedCount) {
   return shuffledIds.slice(0, Math.min(requestedCount, shuffledIds.length));
 }
 
-function getWhoAmIAttempt(game, uid = firebaseUser.uid) {
+function getWhoAmIAttempt(game, uid = getCurrentPlayerUid()) {
   return game.whoAmIAttempts?.[game.currentRoundIndex]?.[uid] || {
     remainingLives: 2,
     guessCount: 0,
@@ -781,14 +896,14 @@ function renderLeaderboard(container, game) {
     const score = document.createElement("span");
 
     row.className = "leaderboard-row";
-    if (player.uid === firebaseUser.uid) {
+    if (player.uid === getCurrentPlayerUid()) {
       row.classList.add("leaderboard-row--self");
     }
     rank.className = "leaderboard-rank";
     name.className = "leaderboard-name";
     score.className = "leaderboard-score";
     rank.textContent = String(displayedRank);
-    name.textContent = player.uid === firebaseUser.uid ? `${player.name} · Dig` : player.name;
+    name.textContent = player.uid === getCurrentPlayerUid() ? `${player.name} · Dig` : player.name;
     score.textContent = `${player.score.toLocaleString("da-DK")} point`;
     row.append(rank, name, score);
     fragment.append(row);
@@ -839,7 +954,7 @@ function calculateQuestionOutcome(game, question) {
 
 async function maybeFinalizeQuestion(game) {
   if (
-    game.hostUid !== firebaseUser.uid
+    !isCurrentPlayerHost(game)
     || game.phase !== "question"
     || getQuestionResult(game)
   ) {
@@ -871,6 +986,22 @@ async function maybeFinalizeQuestion(game) {
   const { scores, awardedPoints } = calculateQuestionOutcome(game, question);
 
   try {
+    if (isSinglePlayer()) {
+      updateSingleGame((nextGame) => {
+        nextGame.phase = "reveal";
+        nextGame.scores = scores;
+        nextGame.questionResults = {
+          ...(nextGame.questionResults || {}),
+          [nextGame.currentQuestionIndex]: {
+            correctAnswerIndex: question.correctAnswerIndex,
+            awardedPoints,
+            finalizedAt: getServerNow(),
+          },
+        };
+      });
+      return;
+    }
+
     await firebaseService.revealClassicQuestion(
       activeGameId,
       game.currentQuestionIndex,
@@ -900,7 +1031,7 @@ function updateQuestionTimer(game) {
       button.disabled = true;
     });
 
-    if (!getQuestionAnswers(game)[firebaseUser.uid]) {
+    if (!getQuestionAnswers(game)[getCurrentPlayerUid()]) {
       quizAnswerStatus.textContent = "Tiden er gået.";
     }
 
@@ -923,7 +1054,7 @@ function startQuestionTimer(game) {
 }
 
 function updateAnswerButtons(game) {
-  const ownAnswer = getQuestionAnswers(game)[firebaseUser.uid];
+  const ownAnswer = getQuestionAnswers(game)[getCurrentPlayerUid()];
   const timeExpired = getRemainingQuestionTime(game) <= 0;
 
   quizAnswerOptions.querySelectorAll("button").forEach((button) => {
@@ -941,7 +1072,7 @@ async function submitQuizAnswer(optionIndex) {
   if (
     isSubmittingAnswer
     || activeGame?.phase !== "question"
-    || getQuestionAnswers(activeGame)[firebaseUser.uid]
+    || getQuestionAnswers(activeGame)[getCurrentPlayerUid()]
     || getRemainingQuestionTime(activeGame) <= 0
   ) {
     return;
@@ -952,10 +1083,23 @@ async function submitQuizAnswer(optionIndex) {
   updateAnswerButtons(activeGame);
 
   try {
+    if (isSinglePlayer()) {
+      updateSingleGame((nextGame) => {
+        nextGame.answers = {
+          ...(nextGame.answers || {}),
+          [nextGame.currentQuestionIndex]: {
+            ...(nextGame.answers?.[nextGame.currentQuestionIndex] || {}),
+            [SINGLE_PLAYER_UID]: { optionIndex, answeredAt: getServerNow() },
+          },
+        };
+      });
+      return;
+    }
+
     await firebaseService.submitClassicAnswer(
       activeGameId,
       activeGame.currentQuestionIndex,
-      firebaseUser.uid,
+      getCurrentPlayerUid(),
       optionIndex,
     );
   } catch (error) {
@@ -1012,10 +1156,10 @@ function renderRevealPhase(game, question) {
   renderedQuizStateKey = stateKey;
   window.clearInterval(questionTimerId);
   questionTimerId = undefined;
-  const ownAnswer = getQuestionAnswers(game)[firebaseUser.uid];
+  const ownAnswer = getQuestionAnswers(game)[getCurrentPlayerUid()];
   const ownAnswerText = ownAnswer ? question.options[ownAnswer.optionIndex] : "Du nåede ikke at svare";
   const wasCorrect = ownAnswer?.optionIndex === question.correctAnswerIndex;
-  const points = Number(getQuestionResult(game)?.awardedPoints?.[firebaseUser.uid]) || 0;
+  const points = Number(getQuestionResult(game)?.awardedPoints?.[getCurrentPlayerUid()]) || 0;
 
   quizResultPanel.replaceChildren(
     createResultLine("Rigtigt svar", `${question.options[question.correctAnswerIndex]} ✓`, "result-line--correct"),
@@ -1027,7 +1171,7 @@ function renderRevealPhase(game, question) {
   );
   quizEarnedPoints.textContent = wasCorrect ? `+${points.toLocaleString("da-DK")} point` : "0 point";
   clearMessage(quizRevealMessage);
-  const isHost = game.hostUid === firebaseUser.uid;
+  const isHost = isCurrentPlayerHost(game);
   showStandingsButton.disabled = false;
   showStandingsButton.hidden = !isHost;
   revealWaitingMessage.hidden = isHost;
@@ -1042,6 +1186,22 @@ async function finalizeWhoAmIRound(game, result) {
   const scores = { ...(game.scores || {}) };
   if (result.winnerUid) {
     scores[result.winnerUid] = (Number(scores[result.winnerUid]) || 0) + result.points;
+  }
+
+  if (isSinglePlayer()) {
+    updateSingleGame((nextGame) => {
+      nextGame.phase = "reveal";
+      nextGame.scores = scores;
+      nextGame.roundResults = {
+        ...(nextGame.roundResults || {}),
+        [nextGame.currentRoundIndex]: { ...result, finalizedAt: getServerNow() },
+      };
+      nextGame.guessControl = {
+        ...(nextGame.guessControl || {}),
+        [nextGame.currentRoundIndex]: null,
+      };
+    });
+    return;
   }
 
   await firebaseService.finalizeWhoAmIRound(
@@ -1068,7 +1228,7 @@ async function runWhoAmIHostTransition(key, action) {
 
 async function maybeProgressWhoAmIRound(game, player) {
   if (
-    game.hostUid !== firebaseUser.uid
+    !isCurrentPlayerHost(game)
     || game.status !== "started"
     || getWhoAmIRoundResult(game)
   ) {
@@ -1078,12 +1238,19 @@ async function maybeProgressWhoAmIRound(game, player) {
   const claim = getWhoAmIRoundClaim(game);
   if (claim) {
     const transitionKey = `who-reveal:${game.currentRoundIndex}:${claim.uid}`;
+    const gaveUp = claim.mode === "lastChanceGiveUp";
+    const timedOut = claim.mode === "lastChanceTimeout";
+    const hasNoWinner = gaveUp || timedOut;
     await runWhoAmIHostTransition(transitionKey, () => finalizeWhoAmIRound(game, {
       playerId: player.id,
-      reason: claim.mode === "lastChance" ? "lastChanceCorrect" : "correct",
-      winnerUid: claim.uid,
+      reason: hasNoWinner
+        ? claim.mode
+        : claim.mode === "lastChance" ? "lastChanceCorrect" : "correct",
+      ...(hasNoWinner
+        ? { lastPlayerUid: game.lastPlayerStandingUid }
+        : { winnerUid: claim.uid }),
       winningClueIndex: Number(claim.clueIndex),
-      points: getWhoAmIPoints(Number(claim.clueIndex)),
+      points: hasNoWinner ? 0 : getWhoAmIPoints(Number(claim.clueIndex)),
     }));
     return;
   }
@@ -1096,12 +1263,38 @@ async function maybeProgressWhoAmIRound(game, player) {
       const transitionKey = `who-guess-${reason}:${game.currentRoundIndex}:${guessControl.uid}:${guessControl.startedAt}`;
       await runWhoAmIHostTransition(
         transitionKey,
-        () => firebaseService.resolveFailedWhoAmIGuess(
-          activeGameId,
-          game,
-          { uid: guessControl.uid, reason },
-          getServerNow(),
-        ),
+        () => {
+          if (isSinglePlayer()) {
+            const pausedMs = Number(guessControl.remainingClueMs) || 0;
+            const currentLives = Number(game.whoAmIAttempts?.[game.currentRoundIndex]?.[SINGLE_PLAYER_UID]?.remainingLives) || 0;
+
+            if (currentLives <= 1) {
+              endSinglePlayerWhoAmI();
+              return Promise.resolve();
+            }
+
+            updateSingleGame((nextGame) => {
+              const roundIndex = nextGame.currentRoundIndex;
+              const attempt = nextGame.whoAmIAttempts?.[roundIndex]?.[SINGLE_PLAYER_UID];
+              const remainingLives = Math.max(0, (Number(attempt?.remainingLives) || 0) - 1);
+              nextGame.whoAmIAttempts[roundIndex][SINGLE_PLAYER_UID] = {
+                ...attempt,
+                remainingLives,
+                guessCount: (Number(attempt?.guessCount) || 0) + 1,
+              };
+              nextGame.guessControl = { ...(nextGame.guessControl || {}), [roundIndex]: null };
+              nextGame.clueStartedAt = getServerNow() - (CLUE_DURATION_MS - pausedMs);
+            });
+            return Promise.resolve();
+          }
+
+          return firebaseService.resolveFailedWhoAmIGuess(
+            activeGameId,
+            game,
+            { uid: guessControl.uid, reason },
+            getServerNow(),
+          );
+        },
       );
     }
     return;
@@ -1112,7 +1305,7 @@ async function maybeProgressWhoAmIRound(game, player) {
       Number(getWhoAmIAttempt(game, uid).remainingLives) > 0
     ));
 
-    if (activePlayerUids.length === 1 && Object.keys(game.players || {}).length > 1) {
+    if (!isSinglePlayer() && activePlayerUids.length === 1 && Object.keys(game.players || {}).length > 1) {
       const lastUid = activePlayerUids[0];
       const transitionKey = `who-last:${game.currentRoundIndex}:${game.currentClueIndex}:${lastUid}`;
       await runWhoAmIHostTransition(
@@ -1122,7 +1315,7 @@ async function maybeProgressWhoAmIRound(game, player) {
       return;
     }
 
-    if (activePlayerUids.length === 0) {
+    if (!isSinglePlayer() && activePlayerUids.length === 0) {
       const transitionKey = `who-no-lives:${game.currentRoundIndex}`;
       await runWhoAmIHostTransition(transitionKey, () => finalizeWhoAmIRound(game, {
         playerId: player.id,
@@ -1138,7 +1331,17 @@ async function maybeProgressWhoAmIRound(game, player) {
         const transitionKey = `who-clue:${game.currentRoundIndex}:${nextClueIndex}`;
         await runWhoAmIHostTransition(
           transitionKey,
-          () => firebaseService.advanceWhoAmIClue(activeGameId, nextClueIndex),
+          () => {
+            if (isSinglePlayer()) {
+              updateSingleGame((nextGame) => {
+                nextGame.currentClueIndex = nextClueIndex;
+                nextGame.clueStartedAt = getServerNow();
+              });
+              return Promise.resolve();
+            }
+
+            return firebaseService.advanceWhoAmIClue(activeGameId, nextClueIndex);
+          },
         );
       } else {
         const transitionKey = `who-empty:${game.currentRoundIndex}`;
@@ -1164,12 +1367,18 @@ async function maybeProgressWhoAmIRound(game, player) {
       }));
     } else if (getRemainingWhoAmITime(game) <= 0) {
       const transitionKey = `who-last-timeout:${game.currentRoundIndex}`;
-      await runWhoAmIHostTransition(transitionKey, () => finalizeWhoAmIRound(game, {
-        playerId: player.id,
-        reason: "lastChanceTimeout",
-        lastPlayerUid: game.lastPlayerStandingUid,
-        points: 0,
-      }));
+      await runWhoAmIHostTransition(transitionKey, () => firebaseService.claimWhoAmIRound(
+        activeGameId,
+        game.currentRoundIndex,
+        {
+          uid: getCurrentPlayerUid(),
+          guess: "Tiden udløb",
+          guessedAt: getServerNow(),
+          clueIndex: game.currentClueIndex,
+          mode: "lastChanceTimeout",
+          points: 0,
+        },
+      ));
     }
   }
 }
@@ -1244,8 +1453,8 @@ function renderWhoAmICluePhase(game, player, selectedPlayerIds) {
     hostTransitionKey = "";
     isSubmittingGuess = false;
     const isLastChance = game.phase === "lastChance";
-    const isLastPlayer = game.lastPlayerStandingUid === firebaseUser.uid;
-    const isActiveGuesser = guessControl?.uid === firebaseUser.uid;
+    const isLastPlayer = game.lastPlayerStandingUid === getCurrentPlayerUid();
+    const isActiveGuesser = guessControl?.uid === getCurrentPlayerUid();
     const remainingLives = Number(attempt.remainingLives) || 0;
 
     whoRoundProgress.textContent = `Gæt hvem jeg er · Runde ${game.currentRoundIndex + 1} / ${selectedPlayerIds.length}`;
@@ -1259,6 +1468,8 @@ function renderWhoAmICluePhase(game, player, selectedPlayerIds) {
       : isLastChance ? "Tid til sidste gæt" : "Tid til næste ledetråd";
     lastPlayerPanel.hidden = !isLastChance;
     guessForm.hidden = true;
+    lastChanceGiveUpButton.hidden = true;
+    lastChanceGiveUpButton.disabled = false;
     playerGuessInput.value = "";
     playerGuessInput.disabled = false;
     submitGuessButton.disabled = false;
@@ -1293,6 +1504,7 @@ function renderWhoAmICluePhase(game, player, selectedPlayerIds) {
       lastPlayerDescription.textContent = "Kan du gætte spilleren? Du har præcis ét sidste forsøg.";
       openGuessButton.hidden = true;
       guessForm.hidden = false;
+      lastChanceGiveUpButton.hidden = isSinglePlayer();
       submitGuessButton.querySelector("span").textContent = "Afgiv dit sidste gæt";
       playerGuessInput.focus();
     } else if (isLastChance) {
@@ -1316,7 +1528,12 @@ function renderWhoAmICluePhase(game, player, selectedPlayerIds) {
     }
 
     showScreen("whoClue");
-    startWhoAmITimer(game, player);
+    if (claim) {
+      window.clearInterval(questionTimerId);
+      questionTimerId = undefined;
+    } else {
+      startWhoAmITimer(game, player);
+    }
   }
 
   maybeProgressWhoAmIRound(game, player);
@@ -1340,9 +1557,9 @@ async function submitWhoAmIGuess(event) {
   const guessControl = getWhoAmIGuessControl(activeGame);
   const mode = activeGame.phase === "lastChance" ? "lastChance" : "normal";
   const canGuess = mode === "lastChance"
-    ? activeGame.lastPlayerStandingUid === firebaseUser.uid && !attempt.lastChanceUsed
+    ? activeGame.lastPlayerStandingUid === getCurrentPlayerUid() && !attempt.lastChanceUsed
     : guessControl?.state === "active"
-      && guessControl.uid === firebaseUser.uid
+      && guessControl.uid === getCurrentPlayerUid()
       && getRemainingWhoAmIGuessTime(activeGame) > 0;
 
   if (
@@ -1363,11 +1580,28 @@ async function submitWhoAmIGuess(event) {
 
   try {
     if (isCorrectPlayerGuess(player, guess)) {
+      if (isSinglePlayer()) {
+        updateSingleGame((nextGame) => {
+          nextGame.roundClaims = {
+            ...(nextGame.roundClaims || {}),
+            [nextGame.currentRoundIndex]: {
+              uid: SINGLE_PLAYER_UID,
+              guess,
+              guessedAt,
+              clueIndex: nextGame.currentClueIndex,
+              mode: "normal",
+            },
+          };
+        });
+        whoGuessStatus.textContent = "Korrekt! Runden afgøres…";
+        return;
+      }
+
       const committed = await firebaseService.claimWhoAmIRound(
         activeGameId,
         activeGame.currentRoundIndex,
         {
-          uid: firebaseUser.uid,
+          uid: getCurrentPlayerUid(),
           guess,
           guessedAt,
           clueIndex: activeGame.currentClueIndex,
@@ -1380,17 +1614,47 @@ async function submitWhoAmIGuess(event) {
         ? "Korrekt! Runden afgøres…"
         : "En anden spiller nåede først.";
     } else {
+      if (isSinglePlayer()) {
+        const pausedMs = Number(guessControl?.remainingClueMs) || 0;
+        const currentLives = Number(attempt?.remainingLives) || 0;
+
+        if (currentLives <= 1) {
+          endSinglePlayerWhoAmI();
+          return;
+        }
+
+        updateSingleGame((nextGame) => {
+          const roundIndex = nextGame.currentRoundIndex;
+          const currentAttempt = nextGame.whoAmIAttempts?.[roundIndex]?.[SINGLE_PLAYER_UID];
+          const guessCount = Number(currentAttempt?.guessCount) || 0;
+          const remainingLives = Math.max(0, (Number(currentAttempt?.remainingLives) || 0) - 1);
+          nextGame.whoAmIAttempts[roundIndex][SINGLE_PLAYER_UID] = {
+            ...currentAttempt,
+            remainingLives,
+            guessCount: guessCount + 1,
+            guesses: {
+              ...(currentAttempt?.guesses || {}),
+              [guessCount]: { guess, guessedAt, correct: false, mode: "normal" },
+            },
+          };
+          nextGame.guessControl = { ...(nextGame.guessControl || {}), [roundIndex]: null };
+          nextGame.clueStartedAt = getServerNow() - (CLUE_DURATION_MS - pausedMs);
+        });
+        whoGuessStatus.textContent = "Forkert gæt";
+        return;
+      }
+
       const committed = mode === "lastChance"
         ? await firebaseService.submitWrongWhoAmIGuess(
           activeGameId,
           activeGame.currentRoundIndex,
-          firebaseUser.uid,
+          getCurrentPlayerUid(),
           { guess, guessedAt, correct: false, mode },
         )
         : await firebaseService.markWhoAmIGuessWrong(
           activeGameId,
           activeGame.currentRoundIndex,
-          firebaseUser.uid,
+          getCurrentPlayerUid(),
           guess,
           guessedAt,
         );
@@ -1406,11 +1670,54 @@ async function submitWhoAmIGuess(event) {
     const currentGuessControl = activeGame && getWhoAmIGuessControl(activeGame);
     if (
       activeGame?.phase === "lastChance"
-      || (activeGame?.phase === "clue" && currentGuessControl?.uid === firebaseUser.uid)
+      || (activeGame?.phase === "clue" && currentGuessControl?.uid === getCurrentPlayerUid())
     ) {
       playerGuessInput.disabled = false;
       submitGuessButton.disabled = false;
     }
+  }
+}
+
+async function giveUpLastChance() {
+  if (
+    isSinglePlayer()
+    || !activeGame
+    || activeGame.format !== "whoAmI"
+    || activeGame.phase !== "lastChance"
+    || activeGame.lastPlayerStandingUid !== getCurrentPlayerUid()
+    || getWhoAmIRoundClaim(activeGame)
+    || getRemainingWhoAmITime(activeGame) <= 0
+  ) {
+    return;
+  }
+
+  lastChanceGiveUpButton.disabled = true;
+  submitGuessButton.disabled = true;
+  playerGuessInput.disabled = true;
+  whoGuessStatus.textContent = "Afslutter runden…";
+
+  try {
+    const committed = await firebaseService.claimWhoAmIRound(
+      activeGameId,
+      activeGame.currentRoundIndex,
+      {
+        uid: getCurrentPlayerUid(),
+        guess: "Jeg aner det ikke",
+        guessedAt: getServerNow(),
+        clueIndex: activeGame.currentClueIndex,
+        mode: "lastChanceGiveUp",
+        points: 0,
+      },
+    );
+
+    whoGuessStatus.textContent = committed
+      ? "Runden afsluttes uden en vinder…"
+      : "Runden er allerede blevet afgjort.";
+  } catch (error) {
+    showConnectionError(error, whoGuessStatus);
+    lastChanceGiveUpButton.disabled = false;
+    submitGuessButton.disabled = false;
+    playerGuessInput.disabled = false;
   }
 }
 
@@ -1429,13 +1736,31 @@ async function claimWhoAmIGuess() {
   clearMessage(whoGuessStatus);
 
   try {
+    if (isSinglePlayer()) {
+      updateSingleGame((nextGame) => {
+        const roundIndex = nextGame.currentRoundIndex;
+        nextGame.guessControl = {
+          ...(nextGame.guessControl || {}),
+          [roundIndex]: {
+            state: "active",
+            uid: SINGLE_PLAYER_UID,
+            name: currentPlayerName,
+            clueIndex: nextGame.currentClueIndex,
+            remainingClueMs: Math.max(1, Math.round(remainingClueMs)),
+            startedAt: getServerNow(),
+          },
+        };
+      });
+      return;
+    }
+
     const committed = await firebaseService.claimWhoAmIGuess(
       activeGameId,
       activeGame.currentRoundIndex,
       {
         state: "active",
-        uid: firebaseUser.uid,
-        name: activeGame.players?.[firebaseUser.uid]?.name || currentPlayerName,
+        uid: getCurrentPlayerUid(),
+        name: activeGame.players?.[getCurrentPlayerUid()]?.name || currentPlayerName,
         clueIndex: activeGame.currentClueIndex,
         remainingClueMs: Math.max(1, Math.round(remainingClueMs)),
         startedAt: getServerNow(),
@@ -1473,12 +1798,17 @@ function renderWhoAmIRevealPhase(game, player) {
     outcomeText = `${lastPlayerName} gættede forkert på sidste chance`;
   } else if (result.reason === "lastChanceTimeout") {
     outcomeText = `${lastPlayerName} nåede ikke at afgive sit sidste gæt`;
+  } else if (result.reason === "lastChanceGiveUp") {
+    outcomeText = `${lastPlayerName} valgte at afslutte sidste chance`;
   }
 
-  const resultLines = [
-    createResultLine("Spilleren var", player.player, "result-line--correct"),
-    createResultLine("Runderesultat", outcomeText, result.winnerUid ? "result-line--correct" : "result-line--wrong"),
-  ];
+  const hideMultiplayerAnswer = !isSinglePlayer() && !result.winnerUid;
+  const resultLines = hideMultiplayerAnswer
+    ? [createResultLine("Runderesultat", "Ingen gættede spilleren", "result-line--wrong")]
+    : [
+      createResultLine("Spilleren var", player.player, "result-line--correct"),
+      createResultLine("Runderesultat", outcomeText, result.winnerUid ? "result-line--correct" : "result-line--wrong"),
+    ];
   if (result.winnerUid) {
     resultLines.push(createResultLine(
       "Point",
@@ -1489,12 +1819,12 @@ function renderWhoAmIRevealPhase(game, player) {
 
   quizResultPanel.replaceChildren(...resultLines);
   quizEarnedPoints.textContent = result.winnerUid
-    ? result.winnerUid === firebaseUser.uid
+    ? result.winnerUid === getCurrentPlayerUid()
       ? `Du fik +${Number(result.points).toLocaleString("da-DK")} point`
       : "Ingen point til dig i denne runde"
     : "Ingen fik point i denne runde";
   clearMessage(quizRevealMessage);
-  const isHost = game.hostUid === firebaseUser.uid;
+  const isHost = isCurrentPlayerHost(game);
   showStandingsButton.disabled = false;
   showStandingsButton.hidden = !isHost;
   revealWaitingMessage.hidden = isHost;
@@ -1512,7 +1842,7 @@ function renderStandingsPhase(game, selectedIds) {
   renderedQuizStateKey = stateKey;
   renderLeaderboard(quizStandingsList, game);
   clearMessage(quizStandingsMessage);
-  const isHost = game.hostUid === firebaseUser.uid;
+  const isHost = isCurrentPlayerHost(game);
   const isLastItem = currentIndex >= selectedIds.length - 1;
   const label = nextQuestionButton.querySelector("span");
 
@@ -1540,6 +1870,7 @@ function renderFinishedPhase(game) {
   quizWinnerMessage.textContent = winners.length === 1
     ? `${winners[0]} vinder!`
     : `${winners.join(" og ")} deler sejren!`;
+  returnToLobbyLabel.textContent = isSinglePlayer() ? "Spil igen" : "Tilbage til lobby";
   showScreen("finished");
 }
 
@@ -1607,13 +1938,76 @@ async function renderWhoAmIGame(game) {
   }
 }
 
+async function cancelGameDepartureRegistration() {
+  const controller = gameDepartureController;
+  gameDepartureController = undefined;
+  gameDepartureRegistrationId = undefined;
+
+  if (controller) {
+    await controller.cancel();
+  }
+}
+
+async function registerGameDeparture(game) {
+  if (
+    isSinglePlayer()
+    || game.status !== "started"
+    || game.departure
+    || gameDepartureRegistrationId === game.id
+  ) {
+    return;
+  }
+
+  await cancelGameDepartureRegistration();
+  gameDepartureRegistrationId = game.id;
+
+  try {
+    const controller = await firebaseService.registerGameDepartureOnDisconnect(
+      firebaseUser,
+      game.id,
+      game.players?.[getCurrentPlayerUid()]?.name || currentPlayerName,
+    );
+
+    if (
+      isSinglePlayer()
+      || activeGameId !== game.id
+      || activeGame?.status !== "started"
+      || activeGame?.departure
+      || gameDepartureRegistrationId !== game.id
+    ) {
+      await controller.cancel();
+      return;
+    }
+
+    gameDepartureController = controller;
+  } catch (error) {
+    console.error("Kunne ikke registrere game-disconnect:", error);
+    showConnectionError(error, game.format === "whoAmI" ? whoGuessStatus : quizAnswerStatus);
+  }
+}
+
+function showPlayerDeparture(departure) {
+  const playerName = typeof departure?.name === "string" && departure.name.trim()
+    ? departure.name.trim()
+    : "Den anden spiller";
+
+  clearActiveGame();
+  playerLeftMessage.textContent = `${playerName} har forladt spillet.`;
+  showScreen("playerLeft");
+  playerLeftButton.focus();
+}
+
 function clearActiveGame() {
+  void cancelGameDepartureRegistration().catch((error) => {
+    console.error("Kunne ikke annullere game-disconnect:", error);
+  });
   stopGameListener?.();
   stopGameListener = undefined;
   window.clearInterval(questionTimerId);
   questionTimerId = undefined;
   activeGame = null;
   activeGameId = null;
+  singleGame = null;
   isCancelingGame = false;
   isSubmittingAnswer = false;
   isSubmittingGuess = false;
@@ -1636,9 +2030,21 @@ function handleGameUpdate(game) {
     return;
   }
 
+  if (!isSinglePlayer() && game.departure) {
+    showPlayerDeparture(game.departure);
+    return;
+  }
+
   activeGame = game;
 
   if (game.status === "started" || game.status === "finished") {
+    if (game.status === "started") {
+      void registerGameDeparture(game);
+    } else {
+      void cancelGameDepartureRegistration().catch((error) => {
+        console.error("Kunne ikke annullere game-disconnect:", error);
+      });
+    }
     if (game.format === "classic") {
       renderClassicGame(game);
     } else if (game.format === "whoAmI") {
@@ -1676,7 +2082,7 @@ function openActiveGame(gameId) {
 }
 
 async function startActiveGame() {
-  if (!activeGame || activeGame.hostUid !== firebaseUser.uid) {
+  if (!activeGame || !isCurrentPlayerHost(activeGame)) {
     return;
   }
 
@@ -1722,7 +2128,7 @@ async function startActiveGame() {
 }
 
 async function cancelActiveGame() {
-  if (!activeGame || activeGame.hostUid !== firebaseUser.uid) {
+  if (!activeGame || !isCurrentPlayerHost(activeGame)) {
     return;
   }
 
@@ -1730,6 +2136,7 @@ async function cancelActiveGame() {
   isCancelingGame = true;
 
   try {
+    await cancelGameDepartureRegistration();
     await firebaseService.cancelGame(activeGameId, activeGame);
     clearActiveGame();
     showLobby("Spillet blev annulleret.");
@@ -1742,7 +2149,7 @@ async function cancelActiveGame() {
 }
 
 async function openStandings() {
-  if (activeGame?.hostUid !== firebaseUser.uid || activeGame.phase !== "reveal") {
+  if (!isCurrentPlayerHost(activeGame) || activeGame.phase !== "reveal") {
     return;
   }
 
@@ -1750,6 +2157,13 @@ async function openStandings() {
   clearMessage(quizRevealMessage);
 
   try {
+    if (isSinglePlayer()) {
+      updateSingleGame((nextGame) => {
+        nextGame.phase = "standings";
+      });
+      return;
+    }
+
     if (activeGame.format === "whoAmI") {
       await firebaseService.showWhoAmIStandings(activeGameId);
     } else {
@@ -1762,7 +2176,7 @@ async function openStandings() {
 }
 
 async function advanceActiveGame() {
-  if (activeGame?.hostUid !== firebaseUser.uid || activeGame.phase !== "standings") {
+  if (!isCurrentPlayerHost(activeGame) || activeGame.phase !== "standings") {
     return;
   }
 
@@ -1778,6 +2192,31 @@ async function advanceActiveGame() {
   const isLastItem = currentIndex >= selectedIds.length - 1;
 
   try {
+    if (isSinglePlayer()) {
+      updateSingleGame((nextGame) => {
+        if (isLastItem) {
+          nextGame.status = "finished";
+          nextGame.phase = "finished";
+          nextGame.finishedAt = getServerNow();
+        } else if (isWhoAmI) {
+          const nextRoundIndex = nextGame.currentRoundIndex + 1;
+          nextGame.phase = "clue";
+          nextGame.currentRoundIndex = nextRoundIndex;
+          nextGame.currentClueIndex = 0;
+          nextGame.clueStartedAt = getServerNow();
+          nextGame.whoAmIAttempts = {
+            ...(nextGame.whoAmIAttempts || {}),
+            [nextRoundIndex]: { [SINGLE_PLAYER_UID]: { remainingLives: 2, guessCount: 0 } },
+          };
+        } else {
+          nextGame.phase = "question";
+          nextGame.currentQuestionIndex += 1;
+          nextGame.questionStartedAt = getServerNow();
+        }
+      });
+      return;
+    }
+
     if (isLastItem) {
       if (isWhoAmI) {
         await firebaseService.finishWhoAmIGame(activeGameId);
@@ -1801,6 +2240,11 @@ async function advanceActiveGame() {
 
 function returnToLobbyAfterQuiz() {
   clearActiveGame();
+  if (isSinglePlayer()) {
+    showScreen("format");
+    return;
+  }
+
   showLobby("Quizzen er afsluttet.");
 }
 
@@ -1847,7 +2291,7 @@ async function respondToCurrentInvitation(response) {
   invitationError.textContent = "";
 
   try {
-    await firebaseService.respondToInvitation(firebaseUser.uid, invitation.gameId, response);
+    await firebaseService.respondToInvitation(getCurrentPlayerUid(), invitation.gameId, response);
     hideInvitation();
 
     if (isAccepted) {
@@ -1885,6 +2329,14 @@ playerForm.addEventListener("submit", (event) => {
   }
 
   clearNameError();
+  currentPlayerName = playerName;
+  localStorage.setItem(STORAGE_KEY, playerName);
+
+  if (isSinglePlayer()) {
+    openFormatSelection();
+    return;
+  }
+
   enterLobby(playerName);
 });
 
@@ -1893,14 +2345,41 @@ playerNameInput.addEventListener("input", () => {
   clearMessage(startConnectionMessage);
 });
 
+singlePlayerButton.addEventListener("click", () => selectGameMode("singleplayer"));
+multiplayerButton.addEventListener("click", () => selectGameMode("multiplayer"));
+modeBackButton.addEventListener("click", returnToModeSelection);
 backButton.addEventListener("click", leaveLobby);
 createGameButton.addEventListener("click", openFormatSelection);
-formatBackButton.addEventListener("click", () => showLobby());
+formatBackButton.addEventListener("click", () => {
+  if (isSinglePlayer()) {
+    showScreen("start");
+    return;
+  }
+
+  showLobby();
+});
 formatButtons.forEach((button) => {
   button.addEventListener("click", () => configureGameSettings(button.dataset.format));
 });
 settingsBackButton.addEventListener("click", () => showScreen("format"));
-continueToInvitesButton.addEventListener("click", openInviteSelection);
+continueToInvitesButton.addEventListener("click", async () => {
+  gameDraft.count = Number(gameCountSelect.value);
+
+  if (!isSinglePlayer()) {
+    openInviteSelection();
+    return;
+  }
+
+  setButtonBusy(continueToInvitesButton, true, "Starter…");
+  try {
+    await startSinglePlayerGame();
+  } catch (error) {
+    showConnectionError(error, startConnectionMessage);
+    showScreen("settings");
+  } finally {
+    setButtonBusy(continueToInvitesButton, false, "Starter…");
+  }
+});
 inviteBackButton.addEventListener("click", () => showScreen("settings"));
 sendInvitationsButton.addEventListener("click", sendInvitations);
 startGameButton.addEventListener("click", startActiveGame);
@@ -1908,10 +2387,24 @@ cancelGameButton.addEventListener("click", cancelActiveGame);
 showStandingsButton.addEventListener("click", openStandings);
 nextQuestionButton.addEventListener("click", advanceActiveGame);
 returnToLobbyButton.addEventListener("click", returnToLobbyAfterQuiz);
+singleGameOverButton.addEventListener("click", () => {
+  clearActiveGame();
+  gameMode = null;
+  returnToModeSelection();
+});
+playerLeftButton.addEventListener("click", () => showLobby());
 openGuessButton.addEventListener("click", claimWhoAmIGuess);
+lastChanceGiveUpButton.addEventListener("click", giveUpLastChance);
 guessForm.addEventListener("submit", submitWhoAmIGuess);
 acceptInvitationButton.addEventListener("click", () => respondToCurrentInvitation("accepted"));
 declineInvitationButton.addEventListener("click", () => respondToCurrentInvitation("declined"));
+
+window.addEventListener("beforeunload", (event) => {
+  if (!isSinglePlayer() && activeGame?.status === "started" && !activeGame.departure) {
+    event.preventDefault();
+    event.returnValue = "";
+  }
+});
 
 const savedPlayerName = localStorage.getItem(STORAGE_KEY);
 

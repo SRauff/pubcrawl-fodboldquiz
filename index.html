@@ -10,7 +10,34 @@
   </head>
   <body>
     <main class="app-shell">
-      <section class="screen screen--start" id="start-screen" aria-labelledby="start-title">
+      <section class="screen" id="mode-screen" aria-labelledby="mode-title">
+        <div class="masthead">
+          <div class="brand-mark" aria-hidden="true"><span></span></div>
+          <span class="match-badge"><span aria-hidden="true"></span> Quiz night</span>
+        </div>
+
+        <p class="eyebrow">Vælg kampform</p>
+        <h1 id="mode-title">Pubcrawl<br><span>fodboldquiz</span></h1>
+        <p class="subtitle">Tag en hurtig solokamp, eller saml holdet til quiz night.</p>
+
+        <div class="choice-grid mode-choice-grid">
+          <button class="choice-card" id="single-player-button" type="button">
+            <span class="choice-card__number" aria-hidden="true">01</span>
+            <span class="choice-card__content"><strong>Spil alene</strong><span>Test din fodboldviden i dit eget tempo</span></span>
+            <span class="choice-card__arrow" aria-hidden="true">→</span>
+          </button>
+          <button class="choice-card" id="multiplayer-button" type="button">
+            <span class="choice-card__number" aria-hidden="true">02</span>
+            <span class="choice-card__content"><strong>Spil mod andre</strong><span>Opret et spil og invitér venner</span></span>
+            <span class="choice-card__arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="screen screen--start" id="start-screen" aria-labelledby="start-title" hidden>
+        <button class="back-button" id="mode-back-button" type="button">
+          <span aria-hidden="true">←</span> Vælg spilform
+        </button>
         <div class="masthead">
           <div class="brand-mark" aria-hidden="true">
             <span></span>
@@ -79,7 +106,7 @@
 
       <section class="screen" id="format-screen" aria-labelledby="format-title" hidden>
         <button class="back-button" id="format-back-button" type="button">
-          <span aria-hidden="true">←</span> Til lobby
+          <span aria-hidden="true">←</span> <span id="format-back-label">Til lobby</span>
         </button>
 
         <p class="eyebrow">Næste kamp</p>
@@ -254,6 +281,9 @@
           <button class="button button--primary" id="submit-guess-button" type="submit">
             <span>Send gæt</span><span aria-hidden="true">→</span>
           </button>
+          <button class="button button--primary" id="last-chance-give-up-button" type="button" hidden>
+            <span>Jeg aner det ikke</span><span aria-hidden="true">→</span>
+          </button>
         </form>
         <p class="quiz-status" id="who-guess-status" role="status" aria-live="polite"></p>
       </section>
@@ -288,7 +318,27 @@
         <p class="winner-message" id="quiz-winner-message"></p>
         <div class="leaderboard" id="quiz-final-list"></div>
         <button class="button button--primary" id="return-to-lobby-button" type="button">
-          <span>Tilbage til lobby</span><span aria-hidden="true">→</span>
+          <span id="return-to-lobby-label">Tilbage til lobby</span><span aria-hidden="true">→</span>
+        </button>
+      </section>
+
+      <section class="screen quiz-screen" id="single-game-over-screen" aria-labelledby="single-game-over-title" hidden>
+        <div class="ready-mark" aria-hidden="true">×</div>
+        <p class="eyebrow">Game over</p>
+        <h2 class="screen-title" id="single-game-over-title">Du har mistet begge liv</h2>
+        <p class="screen-intro">Bedre held næste gang!</p>
+        <button class="button button--primary" id="single-game-over-button" type="button">
+          <span>Tilbage til hovedmenu</span><span aria-hidden="true">→</span>
+        </button>
+      </section>
+
+      <section class="screen quiz-screen" id="player-left-screen" aria-labelledby="player-left-title" hidden>
+        <div class="ready-mark" aria-hidden="true">!</div>
+        <p class="eyebrow">Spillet er afbrudt</p>
+        <h2 class="screen-title" id="player-left-title">En spiller har forladt spillet</h2>
+        <p class="screen-intro" id="player-left-message"></p>
+        <button class="button button--primary" id="player-left-button" type="button">
+          <span>Tilbage til lobbyen</span><span aria-hidden="true">→</span>
         </button>
       </section>
     </main>
@@ -309,6 +359,6 @@
     </div>
 
     <footer>90 minutter. Flere stop. Én vinder.</footer>
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/app.js?v=20260901"></script>
   </body>
 </html>
