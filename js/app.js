@@ -176,7 +176,7 @@ let isSubmittingAnswer = false;
 let isSubmittingGuess = false;
 let hostTransitionKey = "";
 
-const questionsReady = fetch("data/questions.json")
+const questionsReady = fetch("data/questions.json?v=20260902-production-data")
   .then((response) => {
     if (!response.ok) {
       throw new Error("Testspørgsmålene kunne ikke indlæses.");
@@ -209,7 +209,7 @@ const questionsReady = fetch("data/questions.json")
     return loadedQuestions;
   });
 
-const whoAmIReady = fetch("data/who-am-i.json")
+const whoAmIReady = fetch("data/who-am-i.json?v=20260902-production-data")
   .then((response) => {
     if (!response.ok) {
       throw new Error("Spillerpoolen kunne ikke indlæses.");
@@ -222,8 +222,12 @@ const whoAmIReady = fetch("data/who-am-i.json")
       throw new Error("Spillerpoolen er tom.");
     }
 
+    const normalizedPlayers = loadedPlayers.map((player) => ({
+      ...player,
+      player: player.player ?? player.name,
+    }));
     const ids = new Set();
-    loadedPlayers.forEach((player) => {
+    normalizedPlayers.forEach((player) => {
       if (
         !player?.id
         || ids.has(player.id)
@@ -240,9 +244,9 @@ const whoAmIReady = fetch("data/who-am-i.json")
       ids.add(player.id);
     });
 
-    whoAmIPlayers = loadedPlayers;
-    whoAmIPlayersById = new Map(loadedPlayers.map((player) => [player.id, player]));
-    return loadedPlayers;
+    whoAmIPlayers = normalizedPlayers;
+    whoAmIPlayersById = new Map(normalizedPlayers.map((player) => [player.id, player]));
+    return normalizedPlayers;
   });
 
 function showConnectionError(error, target = startConnectionMessage) {

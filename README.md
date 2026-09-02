@@ -46,11 +46,11 @@ Efter valg af **Spil alene** indtaster spilleren sit navn, vælger format og ant
 
 ## Klassisk quiz
 
-`data/questions.json` indeholder 130 produktionsspørgsmål med fire svarmuligheder og facit: 40 easy, 50 medium og 40 hard. Hver quiz fordeler først spørgsmålene så ligeligt som muligt mellem de tre difficulties. Eventuelle restpladser fordeles tilfældigt, hvorefter konkrete spørgsmål vælges uden dubletter inden for hver difficulty efter laveste globale brugstal, ældste `lastUsedAt` og tilfældig tie-break. Det samlede sæt shuffles til sidst. Alle ser samme spørgsmål og en fælles 15-sekunders timer. Korrekte svar giver point efter svarhastighed. Efter hvert spørgsmål vises facit og stilling. Slutskærmen viser den eksisterende pointplacering i en ligatabel med antal spørgsmål, rigtige, forkerte og den allerede beregnede slutscore.
+`data/questions.json` indeholder 300 produktionsspørgsmål med fire svarmuligheder og facit: 150 fra Premier League og 150 fra Superligaen samt 100 easy, 100 medium og 100 hard. Hver quiz fordeler først spørgsmålene så ligeligt som muligt mellem de tre difficulties. Eventuelle restpladser fordeles tilfældigt, hvorefter konkrete spørgsmål vælges uden dubletter inden for hver difficulty efter laveste globale brugstal, ældste `lastUsedAt` og tilfældig tie-break. Det samlede sæt shuffles til sidst. Alle ser samme spørgsmål og en fælles 15-sekunders timer. Korrekte svar giver point efter svarhastighed. Efter hvert spørgsmål vises facit og stilling. Slutskærmen viser den eksisterende pointplacering i en ligatabel med antal spørgsmål, rigtige, forkerte og den allerede beregnede slutscore.
 
 ## Gæt hvem jeg er
 
-`data/who-am-i.json` indeholder 40 produktionsspillere med unikt ID, canonical navn, aliases og præcis 10 ledetråde. Et rundeantal over poolens størrelse begrænses automatisk.
+`data/who-am-i.json` indeholder 100 produktionsspillere, fordelt ligeligt mellem Premier League og Superligaen, med unikt ID, canonical navn, aliases og præcis 10 ledetråde. Et rundeantal over poolens størrelse begrænses automatisk.
 
 Spiller-ID'erne vælges efter samme globale brugsprioritet som Klassisk quiz og uden dubletter. Manglende statistik behandles som `count: 0` og aldrig brugt. Single Player opdaterer statistikken én gang, når spillet startes. I multiplayer udfører hosten spilstart og brugsoptælling i samme atomiske multi-path update. Optællingen bruger Firebase `increment(1)`, så samtidige starter ikke overskriver hinanden; refresh og realtime-listeners skriver ikke statistik.
 
