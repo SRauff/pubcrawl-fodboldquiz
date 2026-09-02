@@ -115,6 +115,14 @@ h1 span {
   text-align: center;
 }
 
+.screen--start .back-button {
+  margin-bottom: 1.5rem;
+}
+
+.start-heading {
+  margin-bottom: 1.4rem;
+}
+
 h2 {
   font-size: clamp(3.5rem, 16vw, 5rem);
 }
@@ -156,15 +164,72 @@ form {
 .entry-card__heading {
   margin-bottom: 1.15rem;
   padding-bottom: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
   color: #7f8b82;
   border-bottom: 1px solid var(--border);
   font-size: 0.64rem;
   font-weight: 800;
   letter-spacing: 0.12em;
+  text-align: center;
   text-transform: uppercase;
+}
+
+.jersey-preview {
+  min-width: 0;
+  margin: -0.1rem 0 0.9rem;
+  display: grid;
+  place-items: center;
+}
+
+.jersey-preview__shirt {
+  width: min(68%, 13rem);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0.8rem 0.8rem rgba(0, 0, 0, 0.28));
+}
+
+.jersey-preview__shadow {
+  fill: rgba(0, 0, 0, 0.32);
+  transform: translateY(4px);
+}
+
+.jersey-preview__body {
+  fill: url("#jersey-fill");
+  stroke: rgba(242, 197, 109, 0.78);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.jersey-preview__seam {
+  fill: none;
+  stroke: rgba(247, 244, 235, 0.19);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.jersey-preview__trim {
+  fill: rgba(230, 173, 69, 0.78);
+}
+
+.jersey-preview__name {
+  fill: var(--text);
+  stroke: rgba(7, 16, 10, 0.7);
+  stroke-width: 2px;
+  paint-order: stroke fill;
+  font-family: inherit;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.jersey-preview__number {
+  fill: var(--text);
+  stroke: rgba(7, 16, 10, 0.7);
+  stroke-width: 3px;
+  paint-order: stroke fill;
+  font-family: inherit;
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: -0.06em;
 }
 
 label {

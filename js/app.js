@@ -57,6 +57,10 @@ const singlePlayerButton = document.querySelector("#single-player-button");
 const multiplayerButton = document.querySelector("#multiplayer-button");
 const modeBackButton = document.querySelector("#mode-back-button");
 const playerNameInput = document.querySelector("#player-name");
+const jerseyPlayerName = document.querySelector("#jersey-player-name");
+const jerseyNameText = document.querySelector("#jersey-name-text");
+const jerseyNamePath = document.querySelector("#jersey-name-path");
+const jerseyPlayerNumber = document.querySelector("#jersey-player-number");
 const nameError = document.querySelector("#name-error");
 const welcomeMessage = document.querySelector("#welcome-message");
 const playersList = document.querySelector("#players-list");
@@ -333,6 +337,30 @@ function clearNameError() {
   playerNameInput.removeAttribute("aria-invalid");
 }
 
+function updateJerseyPlayerName() {
+  const displayName = playerNameInput.value.trim().toLocaleUpperCase("da-DK") || "SPILLER";
+  const characterCount = [...displayName].length;
+  const fontSize = characterCount <= 8 ? 21 : characterCount <= 11 ? 18 : characterCount <= 16 ? 15 : 12;
+  const curveDepth = Math.min(18, Math.max(2, (characterCount - 7) * 1.7));
+
+  jerseyPlayerName.textContent = displayName;
+  jerseyNameText.style.fontSize = `${fontSize}px`;
+  jerseyNamePath.setAttribute("d", `M58 58 Q120 ${58 - curveDepth} 182 58`);
+  jerseyNameText.removeAttribute("textLength");
+  jerseyNameText.removeAttribute("lengthAdjust");
+
+  if (characterCount > 10 || jerseyNameText.getComputedTextLength() > 126) {
+    jerseyNameText.setAttribute("textLength", "126");
+    jerseyNameText.setAttribute("lengthAdjust", "spacingAndGlyphs");
+  }
+}
+
+function assignRandomJerseyNumber() {
+  const randomIndex = Math.floor(Math.random() * 19);
+  const jerseyNumber = randomIndex >= 12 ? randomIndex + 2 : randomIndex + 1;
+  jerseyPlayerNumber.textContent = String(jerseyNumber);
+}
+
 function setJoiningState(isJoining) {
   isJoiningLobby = isJoining;
   lobbyButton.disabled = isJoining;
@@ -417,7 +445,9 @@ function selectGameMode(mode) {
   gameMode = mode;
   clearMessage(startConnectionMessage);
   clearNameError();
+  assignRandomJerseyNumber();
   showScreen("start");
+  updateJerseyPlayerName();
   playerNameInput.focus();
 }
 
@@ -524,7 +554,9 @@ async function leaveLobby() {
     stopInvitationsListener?.();
     stopInvitationsListener = undefined;
     hideInvitation();
+    assignRandomJerseyNumber();
     showScreen("start");
+    updateJerseyPlayerName();
     playerNameInput.focus();
   } catch (error) {
     showConnectionError(error, lobbyConnectionMessage);
@@ -2571,6 +2603,7 @@ playerForm.addEventListener("submit", (event) => {
 });
 
 playerNameInput.addEventListener("input", () => {
+  updateJerseyPlayerName();
   clearNameError();
   clearMessage(startConnectionMessage);
 });
@@ -2582,7 +2615,9 @@ backButton.addEventListener("click", leaveLobby);
 createGameButton.addEventListener("click", openFormatSelection);
 formatBackButton.addEventListener("click", () => {
   if (isSinglePlayer()) {
+    assignRandomJerseyNumber();
     showScreen("start");
+    updateJerseyPlayerName();
     return;
   }
 
@@ -2641,3 +2676,5 @@ const savedPlayerName = localStorage.getItem(STORAGE_KEY);
 if (savedPlayerName) {
   playerNameInput.value = savedPlayerName;
 }
+
+updateJerseyPlayerName();
