@@ -6,6 +6,7 @@ const CLUE_DURATION_MS = 10000;
 const GUESS_DURATION_MS = 25000;
 const CLUES_PER_ROUND = 10;
 const ANSWER_LETTERS = ["A", "B", "C", "D"];
+const QUESTION_DIFFICULTIES = ["easy", "medium", "hard"];
 
 // Alle justerbare formatgrænser er samlet her.
 const FORMAT_CONFIG = {
@@ -194,6 +195,7 @@ const questionsReady = fetch("data/questions.json")
         || typeof question.question !== "string"
         || !Array.isArray(question.options)
         || question.options.length !== 4
+        || !QUESTION_DIFFICULTIES.includes(question.difficulty)
         || !Number.isInteger(question.correctAnswerIndex)
         || question.correctAnswerIndex < 0
         || question.correctAnswerIndex > 3
@@ -807,8 +809,90 @@ function selectLeastUsedIds(ids, requestedCount, usage) {
     .map((candidate) => candidate.id);
 }
 
+function shuffleValues(values) {
+  const shuffledValues = [...values];
+
+  for (let index = shuffledValues.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffledValues[index], shuffledValues[randomIndex]] = [
+      shuffledValues[randomIndex],
+      shuffledValues[index],
+    ];
+  }
+
+  return shuffledValues;
+}
+
+function createDifficultyQuotas(questionCount) {
+  const baseCount = Math.floor(questionCount / QUESTION_DIFFICULTIES.length);
+  const quotas = Object.fromEntries(
+    QUESTION_DIFFICULTIES.map((difficulty) => [difficulty, baseCount]),
+  );
+  const remainderDifficulties = shuffleValues(QUESTION_DIFFICULTIES);
+
+  for (let index = 0; index < questionCount % QUESTION_DIFFICULTIES.length; index += 1) {
+    quotas[remainderDifficulties[index]] += 1;
+  }
+
+  return quotas;
+}
+
 function selectQuestionIds(pool, requestedCount, usage) {
-  return selectLeastUsedIds(pool.map((question) => question.id), requestedCount, usage);
+  const uniqueQuestions = [...new Map(pool.map((question) => [question.id, question])).values()];
+  const targetCount = Math.min(requestedCount, uniqueQuestions.length);
+  const quotas = createDifficultyQuotas(targetCount);
+  const orderedIdsByDifficulty = {};
+  const selectedIdsByDifficulty = {};
+  const shortages = [];
+  let missingSlots = 0;
+
+  QUESTION_DIFFICULTIES.forEach((difficulty) => {
+    const difficultyIds = uniqueQuestions
+      .filter((question) => question.difficulty === difficulty)
+      .map((question) => question.id);
+    const orderedIds = selectLeastUsedIds(difficultyIds, difficultyIds.length, usage);
+    const selectedIds = orderedIds.slice(0, quotas[difficulty]);
+
+    orderedIdsByDifficulty[difficulty] = orderedIds;
+    selectedIdsByDifficulty[difficulty] = selectedIds;
+
+    if (selectedIds.length < quotas[difficulty]) {
+      const shortage = quotas[difficulty] - selectedIds.length;
+      missingSlots += shortage;
+      shortages.push(`${difficulty}: ${shortage}`);
+    }
+  });
+
+  if (missingSlots > 0) {
+    console.warn(
+      `Spørgsmålspoolen mangler difficulty-kapacitet (${shortages.join(", ")}). `
+      + "De ledige pladser fordeles på de øvrige difficulties.",
+    );
+  }
+
+  while (missingSlots > 0) {
+    const difficultiesWithCapacity = shuffleValues(QUESTION_DIFFICULTIES.filter((difficulty) => (
+      selectedIdsByDifficulty[difficulty].length < orderedIdsByDifficulty[difficulty].length
+    )));
+
+    if (difficultiesWithCapacity.length === 0) {
+      break;
+    }
+
+    for (const difficulty of difficultiesWithCapacity) {
+      const nextIndex = selectedIdsByDifficulty[difficulty].length;
+      selectedIdsByDifficulty[difficulty].push(orderedIdsByDifficulty[difficulty][nextIndex]);
+      missingSlots -= 1;
+
+      if (missingSlots === 0) {
+        break;
+      }
+    }
+  }
+
+  return shuffleValues(QUESTION_DIFFICULTIES.flatMap(
+    (difficulty) => selectedIdsByDifficulty[difficulty],
+  ));
 }
 
 function getSelectedPlayerIds(game) {

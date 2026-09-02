@@ -46,7 +46,7 @@ Efter valg af **Spil alene** indtaster spilleren sit navn, vælger format og ant
 
 ## Klassisk quiz
 
-`data/questions.json` indeholder 130 produktionsspørgsmål med fire svarmuligheder og facit. Udvælgelsen er uden dubletter og prioriterer laveste globale brugstal, derefter ældste `lastUsedAt` og til sidst en tilfældig rækkefølge ved helt ens statistik. Alle ser samme spørgsmål og en fælles 15-sekunders timer. Korrekte svar giver point efter svarhastighed. Efter hvert spørgsmål vises facit og stilling. Slutskærmen viser den eksisterende pointplacering i en ligatabel med antal spørgsmål, rigtige, forkerte og den allerede beregnede slutscore.
+`data/questions.json` indeholder 130 produktionsspørgsmål med fire svarmuligheder og facit: 40 easy, 50 medium og 40 hard. Hver quiz fordeler først spørgsmålene så ligeligt som muligt mellem de tre difficulties. Eventuelle restpladser fordeles tilfældigt, hvorefter konkrete spørgsmål vælges uden dubletter inden for hver difficulty efter laveste globale brugstal, ældste `lastUsedAt` og tilfældig tie-break. Det samlede sæt shuffles til sidst. Alle ser samme spørgsmål og en fælles 15-sekunders timer. Korrekte svar giver point efter svarhastighed. Efter hvert spørgsmål vises facit og stilling. Slutskærmen viser den eksisterende pointplacering i en ligatabel med antal spørgsmål, rigtige, forkerte og den allerede beregnede slutscore.
 
 ## Gæt hvem jeg er
 
