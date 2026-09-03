@@ -341,17 +341,19 @@ function updateJerseyPlayerName() {
   const displayName = playerNameInput.value.trim().toLocaleUpperCase("da-DK") || "SPILLER";
   const characterCount = [...displayName].length;
   const fontSize = characterCount <= 8 ? 21 : characterCount <= 11 ? 18 : characterCount <= 16 ? 15 : 12;
+  const letterSpacing = characterCount <= 8 ? 0.08 : characterCount <= 11 ? 0.06 : characterCount <= 16 ? 0.035 : 0.015;
   const curveDepth = Math.min(18, Math.max(2, (characterCount - 7) * 1.7));
 
   jerseyPlayerName.textContent = displayName;
   jerseyNameText.style.fontSize = `${fontSize}px`;
-  jerseyNamePath.setAttribute("d", `M58 58 Q120 ${58 - curveDepth} 182 58`);
-  jerseyNameText.removeAttribute("textLength");
-  jerseyNameText.removeAttribute("lengthAdjust");
+  jerseyNameText.style.letterSpacing = `${letterSpacing}em`;
+  jerseyNamePath.setAttribute("d", `M45 58 Q120 ${58 - curveDepth} 195 58`);
+  jerseyPlayerName.removeAttribute("textLength");
+  jerseyPlayerName.removeAttribute("lengthAdjust");
 
-  if (characterCount > 10 || jerseyNameText.getComputedTextLength() > 126) {
-    jerseyNameText.setAttribute("textLength", "126");
-    jerseyNameText.setAttribute("lengthAdjust", "spacingAndGlyphs");
+  if (jerseyNameText.getComputedTextLength() > 132) {
+    jerseyPlayerName.setAttribute("textLength", "132");
+    jerseyPlayerName.setAttribute("lengthAdjust", "spacingAndGlyphs");
   }
 }
 
